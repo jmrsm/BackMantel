@@ -136,10 +136,17 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.0</version>
 		</dependency>
+<!-- 		encriptar passwords  -->
 		<dependency>
 			<groupId>org.mindrot</groupId>
 			<artifactId>jbcrypt</artifactId>
 			<version>0.3m</version>
+		</dependency>
+<!-- 		mapper  -->
+		<dependency>
+			<groupId>ma.glasnost.orika</groupId>
+			<artifactId>orika-core</artifactId>
+			<version>1.4.6</version>
 		</dependency>
 
 	</dependencies>

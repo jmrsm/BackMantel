@@ -1,5 +1,7 @@
 package com.tsijee01.persistence.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,7 +13,11 @@ import javax.persistence.Table;
 @Table(name = "usuario")
 public class Usuario {
 
-
+	
+//	List<PaqueteContenido> contenidoAccesible;
+//	
+//	List<HistorialContenido> historialContenido;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -19,7 +25,7 @@ public class Usuario {
 
 	@Column(length = 50, nullable = false)
 	private String email;
-	
+		
 	@Column(length = 512, nullable = false)
 	private String passowd;
 	
