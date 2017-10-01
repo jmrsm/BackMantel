@@ -21,9 +21,5 @@ public class AdminTenantServiceBean implements AdminTenantService {
 		
 	}
 
-	@PostConstruct
-	public void ini(){
-		System.out.println("AAAAAAAAAAAAAAA");
-	}
 	
 }
