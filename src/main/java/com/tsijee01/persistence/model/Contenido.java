@@ -13,17 +13,17 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.Transient;
+import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Contenido {
-	
-	
-	@ManyToOne(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
-	@JoinColumn(name = "proveedorId")
-	ProveedorContenido proveedorContenido;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,25 +39,49 @@ public abstract class Contenido {
 	@Column(length = 512, nullable = false)
 	private String descipcion;
 	
-	@Transient
+	@ManyToMany
+	@JoinTable(name = "categoria_contenido",
+			joinColumns=@JoinColumn(name="categoria_id", referencedColumnName="id"),
+			inverseJoinColumns=@JoinColumn(name="contenido_id", referencedColumnName="id"))
 	private List<Categoria> categorias;
 	
+	@ManyToMany
+	@JoinTable(name = "director_contenido",
+			joinColumns=@JoinColumn(name="contenido_id", referencedColumnName="id"),
+			inverseJoinColumns=@JoinColumn(name="director_id", referencedColumnName="id"))
+	private List <Director> directores;
+	
+	@ManyToMany
+	@JoinTable(name = "actor_contenido",
+			joinColumns=@JoinColumn(name="contenido_id", referencedColumnName="id"),
+			inverseJoinColumns=@JoinColumn(name="actor_id", referencedColumnName="id"))
+	private List <Actor> actores;
+	
+	@Column (nullable = false)
 	private int ranking;
 	
-	@Transient
-	private List<String> elenco;
-	
-	@Transient
-	private List<String> directores;
-	
-	
+	@Column (nullable = false)
 	private String fotoPortada;
 	
-	@Transient
-	private List<String> comentarios;
+	@Column (nullable = false)
+	private String path;
 	
-	@Transient
+	@OneToMany(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
+	@JoinColumn(name = "id")
+	@Fetch (FetchMode.SELECT)
+	private List<Comentario> comentarios;
+	
+	// se contempla que la relación similar puede no ser simétrica
+	@ManyToMany
+	@JoinTable(name = "contenidos_similares",
+			joinColumns=@JoinColumn(name="contenido_id", referencedColumnName="id"),
+			inverseJoinColumns=@JoinColumn(name="similar_contenido_id", referencedColumnName="id"))
 	private List<Contenido> similares;
+	
+	
+	@ManyToOne(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
+	@JoinColumn(name = "proveedorId")
+	ProveedorContenido proveedorContenido;
 
 	public Long getId() {
 		return id;
@@ -107,20 +131,20 @@ public abstract class Contenido {
 		this.ranking = ranking;
 	}
 
-	public List<String> getElenco() {
-		return elenco;
-	}
-
-	public void setElenco(List<String> elenco) {
-		this.elenco = elenco;
-	}
-
-	public List<String> getDirectores() {
+	public List<Director> getDirectores() {
 		return directores;
 	}
 
-	public void setDirectores(List<String> directores) {
+	public void setDirectores(List<Director> directores) {
 		this.directores = directores;
+	}
+
+	public List<Actor> getActores() {
+		return actores;
+	}
+
+	public void setActores(List<Actor> actores) {
+		this.actores = actores;
 	}
 
 	public String getFotoPortada() {
@@ -131,11 +155,19 @@ public abstract class Contenido {
 		this.fotoPortada = fotoPortada;
 	}
 
-	public List<String> getComentarios() {
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+	public List<Comentario> getComentarios() {
 		return comentarios;
 	}
 
-	public void setComentarios(List<String> comentarios) {
+	public void setComentarios(List<Comentario> comentarios) {
 		this.comentarios = comentarios;
 	}
 
@@ -158,5 +190,5 @@ public abstract class Contenido {
 	public void setId(long id) {
 		this.id = id;
 	}
-	
+
 }

@@ -8,4 +8,6 @@ public class Pelicula extends Contenido {
 
 	@Column(nullable = false)
 	private int cantMinutos;
+	
+	
 }

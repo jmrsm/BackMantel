@@ -12,11 +12,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tsijee01.persistence.service.SuperAdminService;
 
+import ma.glasnost.orika.MapperFacade;
+
 @RestController
 public class SuperAdminController {
 
 	@Autowired
 	private SuperAdminService administradorService;
+	
+	@Autowired
+	private MapperFacade mepper;
 
 	@RequestMapping(path = "/loginAdministradorTenant/", method = RequestMethod.GET)
 	public ResponseEntity<?> loginAdministradorTenant(HttpServletRequest request,

@@ -38,7 +38,7 @@ public class MapperConfig extends ConfigurableMapper {
 						// esto es a modo de ejemplo si lo que se va a mapear
 						// tiene el mismo nombre en las propiedades se mapea
 						// bien solo, aca definimos cuando el mapeo no es directo
-						// b.setApellido(a.getApellido());
+						
 
 					}
 

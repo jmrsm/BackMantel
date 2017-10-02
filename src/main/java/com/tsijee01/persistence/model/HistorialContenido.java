@@ -1,18 +1,38 @@
 package com.tsijee01.persistence.model;
 
-import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
+@Entity
 public class HistorialContenido {
 
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private long id;
+	
+	@Column
 	private boolean visto;
 	
+	@ManyToOne(fetch = FetchType.LAZY, cascade={CascadeType.REMOVE})
+	@JoinColumn(name = "id_responde_comentario")
 	private Contenido contenido;
 		
+	@Column(nullable = true)
 	private int puntuacion;
 	
+	@Column(nullable = true)
 	private boolean favorito;
 	
-	private List<Comentario> comentarios;
+	
 	
 	public boolean isVisto() {
 		return visto;
@@ -46,13 +66,5 @@ public class HistorialContenido {
 		this.favorito = favorito;
 	}
 
-	public List<Comentario> getComentarios() {
-		return comentarios;
-	}
-
-	public void setComentarios(List<Comentario> comentarios) {
-		this.comentarios = comentarios;
-	}
-	
 	
 }
