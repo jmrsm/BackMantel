@@ -10,7 +10,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Fetch;
@@ -20,27 +22,48 @@ import org.hibernate.annotations.FetchMode;
 @Table(name = "usuario")
 public class Usuario {
 
-	@OneToMany(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
-	@JoinColumn(name = "id_espectaculo")
-	@Fetch (FetchMode.SELECT)
-	List<HistorialContenido> historialContenido;
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private long id;
 
+	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+	@JoinColumn(name = "id_historial_ontenido")
+	@Fetch(FetchMode.SELECT)
+	List<HistorialContenido> historialContenido;
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+	@JoinColumn(name = "id_historial_pagos")
+	@Fetch(FetchMode.SELECT)
+	List<HistorialPagos> historialPagos;
+
+	// el medio de pago que está usando actualmente, el que se va a user para
+	// realizar el siguiente pago
+	@ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
+	@JoinColumn(name = "id_medio_pago")
+	private MedioDePago medioDePago;
+
+	// el ultimo pago realizado se usa para ver si está en al dia con los pagos,
+	// también forma parte del historial de pagos
+	@OneToOne
+	@JoinColumn(name = "id_ultimo_pago")
+	@Fetch(FetchMode.SELECT)
+	private HistorialPagos ultimoPago;
+
 	@Column(length = 50, nullable = false)
 	private String email;
-		
+
 	@Column(length = 512, nullable = false)
 	private String passowd;
-	
+
 	@Column(length = 50, nullable = false)
 	private String nombre;
-	
+
 	@Column(length = 50, nullable = false)
 	private String apellido;
+
+	@Column
+	private boolean habilitado;
 
 	public long getId() {
 		return id;
@@ -81,5 +104,45 @@ public class Usuario {
 	public void setApellido(String apellido) {
 		this.apellido = apellido;
 	}
-	
+
+	public List<HistorialContenido> getHistorialContenido() {
+		return historialContenido;
+	}
+
+	public void setHistorialContenido(List<HistorialContenido> historialContenido) {
+		this.historialContenido = historialContenido;
+	}
+
+	public List<HistorialPagos> getHistorialPagos() {
+		return historialPagos;
+	}
+
+	public void setHistorialPagos(List<HistorialPagos> historialPagos) {
+		this.historialPagos = historialPagos;
+	}
+
+	public MedioDePago getMedioDePago() {
+		return medioDePago;
+	}
+
+	public void setMedioDePago(MedioDePago medioDePago) {
+		this.medioDePago = medioDePago;
+	}
+
+	public boolean isHabilitado() {
+		return habilitado;
+	}
+
+	public void setHabilitado(boolean habilitado) {
+		this.habilitado = habilitado;
+	}
+
+	public HistorialPagos getUltimoPago() {
+		return ultimoPago;
+	}
+
+	public void setUltimoPago(HistorialPagos ultimoPago) {
+		this.ultimoPago = ultimoPago;
+	}
+
 }

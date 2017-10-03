@@ -1,4 +1,4 @@
-package com.tsijee01.persistence.service.bean;
+package com.tsijee01.service.bean;
 
 import java.util.Optional;
 
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.tsijee01.persistence.model.AdminTenant;
 import com.tsijee01.persistence.repository.AdminTenantRepository;
-import com.tsijee01.persistence.service.AdminTenantService;
+import com.tsijee01.service.AdminTenantService;
 import com.tsijee01.util.Password;
 
 @Service

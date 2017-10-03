@@ -1,4 +1,4 @@
-package com.tsijee01.persistence.service;
+package com.tsijee01.service;
 
 
 import com.tsijee01.persistence.model.AdminTenant;

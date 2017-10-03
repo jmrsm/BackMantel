@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tsijee01.persistence.service.SuperAdminService;
+import com.tsijee01.service.SuperAdminService;
 
 import ma.glasnost.orika.MapperFacade;
 

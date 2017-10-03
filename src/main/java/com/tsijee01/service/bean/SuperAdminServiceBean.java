@@ -1,4 +1,4 @@
-package com.tsijee01.persistence.service.bean;
+package com.tsijee01.service.bean;
 
 import java.util.Optional;
 
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.tsijee01.persistence.model.SuperAdmin;
 import com.tsijee01.persistence.repository.SuperAdminRepository;
-import com.tsijee01.persistence.service.SuperAdminService;
+import com.tsijee01.service.SuperAdminService;
 import com.tsijee01.util.Password;
 
 @Service
