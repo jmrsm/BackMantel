@@ -28,5 +28,17 @@ public class AdminTenantController {
 		return new ResponseEntity<String>(admintenantservice.existeUser(email),HttpStatus.OK);
 
 	}
+	@RequestMapping(path = "/loginAdmin/", method = RequestMethod.GET)
+	public ResponseEntity<?> loginAdministradorTenant(HttpServletRequest request,
+			@RequestParam(name = "email", required = true) String email,
+			@RequestParam(name = "password", required = true) String password) {
+
+		//if (admintenantservice.login(email, password)) {
+			return new ResponseEntity<Object>(HttpStatus.OK);
+		/*} else {
+			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+		}*/
+
+	}
 
 }
