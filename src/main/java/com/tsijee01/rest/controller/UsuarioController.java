@@ -10,43 +10,35 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tsijee01.service.SuperAdminService;
+import com.tsijee01.service.UsuarioService;
 
 import ma.glasnost.orika.MapperFacade;
 
 @RestController
-public class SuperAdminController {
-
+public class UsuarioController {
 	@Autowired
-	private SuperAdminService administradorService;
+	private UsuarioService userService;
 	
 	@Autowired
 	private MapperFacade mepper;
+	
+	@RequestMapping(path = "/existUser/", method = RequestMethod.GET)
+	public ResponseEntity<?> existeUser(HttpServletRequest request,
+			@RequestParam(name = "email", required = true) String email) {
+		
+		return new ResponseEntity<String>(userService.existeUser(email),HttpStatus.OK);
 
-	@RequestMapping(path = "/loginAdministradorTenant/", method = RequestMethod.GET)
+	}
+	@RequestMapping(path = "/loginUser/", method = RequestMethod.GET)
 	public ResponseEntity<?> loginAdministradorTenant(HttpServletRequest request,
 			@RequestParam(name = "email", required = true) String email,
 			@RequestParam(name = "password", required = true) String password) {
 
-		if (administradorService.login(email, password)) {
+		if (userService.login(email, password)) {
 			return new ResponseEntity<Object>(HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
 		}
-
-	}
-
-	@RequestMapping(path = "/test", method = RequestMethod.GET)
-	public ResponseEntity<String> test(HttpServletRequest request) {
-
-		return new ResponseEntity<String>("esto es un test ", HttpStatus.OK);
-
-	}
-	@RequestMapping(path = "/existSuperAdmin/", method = RequestMethod.GET)
-	public ResponseEntity<?> existeUser(HttpServletRequest request,
-			@RequestParam(name = "email", required = true) String email) {
-		
-		return new ResponseEntity<String>(administradorService.existeUser(email),HttpStatus.OK);
 
 	}
 }

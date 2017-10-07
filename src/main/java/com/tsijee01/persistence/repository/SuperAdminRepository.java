@@ -10,7 +10,7 @@ import com.tsijee01.persistence.model.SuperAdmin;
 public interface SuperAdminRepository extends BaseRepository <SuperAdmin, Long>{
 
 	Optional<SuperAdmin> findOneByEmail(String email);
-
+	boolean existsByEmail(String email);
 	
 
 }

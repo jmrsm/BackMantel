@@ -43,6 +43,16 @@ public class AdminTenantServiceBean implements AdminTenantService {
 		return false;
 		
 	}
+	@Override
+	public String existeUser(String email) {
+		// TODO Auto-generated method stub
+		if(adminRepository.existsByEmail(email)){
+			return "Existe";
+		}else{
+			return "No existe";
+		}
+		
+	}
 	
 	
 
