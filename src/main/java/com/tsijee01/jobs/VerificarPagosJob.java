@@ -24,8 +24,8 @@ public class VerificarPagosJob {
 
 	// si fija si están al día con sus pagos y sino los deshabilita para que no
 	// puedan seguir viendo contenido
-	@Scheduled(cron = "${verificarPagos.cron}")
 	// @PostConstruct la forma más fácil de probarlo
+	@Scheduled(cron = "${verificarPagos.cron}")
 	public void verificarPagos() {
 
 		List<Usuario> usuariosHabilitados = usuarioService.findHabilitadosConUltimoPago();

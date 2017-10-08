@@ -76,6 +76,4 @@ public class AdminTenant {
 	public void setApellido(String apellido) {
 		this.apellido = apellido;
 	}
-	
-	
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.tsijee01.persistence.model.AdminTenant;
 import com.tsijee01.persistence.repository.AdminTenantRepository;
+import com.tsijee01.rest.dto.AdminTenantDTO;
 import com.tsijee01.service.AdminTenantService;
 import com.tsijee01.util.Password;
 
@@ -42,6 +43,12 @@ public class AdminTenantServiceBean implements AdminTenantService {
 		}
 		return false;
 		
+	}
+
+	@Override
+	public boolean alta(AdminTenantDTO adminTenant, Long proveedorContenidoId) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 	

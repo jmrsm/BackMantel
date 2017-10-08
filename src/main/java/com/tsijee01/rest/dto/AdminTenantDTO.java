@@ -1,7 +1,20 @@
 package com.tsijee01.rest.dto;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+import com.tsijee01.persistence.model.ProveedorContenido;
+
 public class AdminTenantDTO {
 
+	private ProveedorContenido proveedorContenido;
+	
 	private long id;
 
 	private String email;
