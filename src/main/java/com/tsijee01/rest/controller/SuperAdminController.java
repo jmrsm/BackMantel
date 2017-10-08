@@ -71,5 +71,11 @@ public class SuperAdminController {
 		return new ResponseEntity<String>("esto es un test ", HttpStatus.OK);
 
 	}
+	@RequestMapping(path = "/existSuperAdmin/", method = RequestMethod.GET)
+	public ResponseEntity<?> existeUser(HttpServletRequest request,
+			@RequestParam(name = "email", required = true) String email) {
+		
+		return new ResponseEntity<String>(administradorService.existeUser(email),HttpStatus.OK);
 
+	}
 }

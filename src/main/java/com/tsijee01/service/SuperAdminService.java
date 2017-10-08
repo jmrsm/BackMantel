@@ -7,5 +7,5 @@ public interface SuperAdminService {
 	boolean alta(AdminTenantDTO adminTenant, Long proveedorContenidoId);
 
 	boolean login(String email, String password);
-
+	String existeUser(String email);
 }

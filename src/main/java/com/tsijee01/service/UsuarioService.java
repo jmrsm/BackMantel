@@ -11,4 +11,8 @@ public interface UsuarioService {
 	List<Usuario> findHabilitadosConUltimoPago();
 	
 	List<Usuario> altaUsuario(Usuario u);
+	
+	String existeUser(String email);
+	
+	boolean login(String email,String password);
 }

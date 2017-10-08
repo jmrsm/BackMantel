@@ -5,6 +5,7 @@ import com.tsijee01.rest.dto.AdminTenantDTO;
 
 public interface AdminTenantService {
 
-	boolean alta(AdminTenantDTO adminTenant, Long proveedorContenidoId);
+	boolean altaAdminTenant(AdminTenant at);
+	String existeUser(String email);
 
 }

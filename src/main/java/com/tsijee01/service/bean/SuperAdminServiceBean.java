@@ -34,6 +34,17 @@ public class SuperAdminServiceBean implements SuperAdminService {
 		}
 		return false;
 	}
+	@Override
+	public String existeUser(String email) {
+		// TODO Auto-generated method stub
+		if(superAdminRepository.existsByEmail(email)){
+			return "Existe";
+		}else{
+			return "No existe";
+		}
+			
+		
+	}
 
 	@Override
 	public boolean alta(AdminTenantDTO adminTenant, Long proveedorContenidoId) {

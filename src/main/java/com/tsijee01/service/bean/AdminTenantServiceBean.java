@@ -44,11 +44,15 @@ public class AdminTenantServiceBean implements AdminTenantService {
 		return false;
 		
 	}
-
 	@Override
-	public boolean alta(AdminTenantDTO adminTenant, Long proveedorContenidoId) {
+	public String existeUser(String email) {
 		// TODO Auto-generated method stub
-		return false;
+		if(adminRepository.existsByEmail(email)){
+			return "Existe";
+		}else{
+			return "No existe";
+		}
+		
 	}
 	
 	

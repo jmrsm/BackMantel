@@ -10,5 +10,6 @@ public interface AdminTenantRepository extends BaseRepository <AdminTenant, Long
 
 	Optional<AdminTenant> findByEmail(String email);
 	
+	boolean existsByEmail(String email) ;
 
 }
