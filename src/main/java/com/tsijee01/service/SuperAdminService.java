@@ -1,5 +1,6 @@
 package com.tsijee01.service;
 
+import com.tsijee01.persistence.model.SuperAdmin;
 import com.tsijee01.rest.dto.AdminTenantDTO;
 
 public interface SuperAdminService {
@@ -8,4 +9,6 @@ public interface SuperAdminService {
 
 	boolean login(String email, String password);
 	String existeUser(String email);
+
+	boolean altaSuperAdmin(SuperAdmin superAdmin, String password);
 }

@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tsijee01.persistence.model.SuperAdmin;
 import com.tsijee01.rest.dto.AdminTenantDTO;
+import com.tsijee01.rest.dto.SuperAdminDTO;
 import com.tsijee01.service.SuperAdminService;
 
 import ma.glasnost.orika.MapperFacade;
@@ -28,7 +30,19 @@ public class SuperAdminController {
 	@Autowired
 	private MapperFacade mapper;
 
+	// Esto no puede ser publica hay que borrarla antes de entregar
+	@RequestMapping(path = "api/superAdmin/altaSuperAdmin", method = RequestMethod.POST)
+	public ResponseEntity<?> altaSuperAdministrador(HttpServletRequest request,
+			@RequestBody SuperAdminDTO superAdminDTO ,
+			@RequestParam(name = "password", required = true) String password) {
 
+		if (superAdminService.altaSuperAdmin(mapper.map(superAdminDTO,SuperAdmin.class),password)){
+			return new ResponseEntity<Object>(HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Object>(HttpStatus.CONFLICT);
+		}
+	}
+	
 	@RequestMapping(path = "api/superAdmin/altaAdmin", method = RequestMethod.POST)
 	public ResponseEntity<?> altaAdministradorTenant(HttpServletRequest request,
 			@RequestBody AdminTenantDTO adminTenant ,

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.tsijee01.persistence.model.SuperAdmin;
 import com.tsijee01.persistence.repository.SuperAdminRepository;
 import com.tsijee01.rest.dto.AdminTenantDTO;
+import com.tsijee01.rest.dto.SuperAdminDTO;
 import com.tsijee01.service.SuperAdminService;
 import com.tsijee01.util.Password;
 
@@ -51,7 +52,19 @@ public class SuperAdminServiceBean implements SuperAdminService {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
 	
+	
+	@Override
+	public boolean altaSuperAdmin(SuperAdmin superAdmin, String password) {
+		
+		superAdmin.setPassowd(passwordUtil.hasherPassword(password));
+		if (!superAdminRepository.findOneByEmail(superAdmin.getEmail()).isPresent()){
+			superAdminRepository.save(superAdmin);
+			return true;
+		}else {
+			return false;
+		}
+		
+	}
 
 }
