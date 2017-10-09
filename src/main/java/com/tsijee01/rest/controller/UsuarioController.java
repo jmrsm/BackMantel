@@ -41,4 +41,18 @@ public class UsuarioController {
 		}
 
 	}
+	@RequestMapping(path = "/altaUsuario/", method = RequestMethod.POST)
+	public ResponseEntity<?> createUser(HttpServletRequest request,
+			@RequestParam(name = "email", required = true) String email,
+			@RequestParam(name = "password", required = true) String password,
+			@RequestParam(name = "nombre", required = true) String nombre,
+			@RequestParam(name = "apellido", required = true) String apellido) {
+
+		if (userService.crearUser(email, password,nombre,apellido)) {
+			return new ResponseEntity<Object>(HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+		}
+
+	}
 }

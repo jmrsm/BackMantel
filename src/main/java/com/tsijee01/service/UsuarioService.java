@@ -15,4 +15,6 @@ public interface UsuarioService {
 	String existeUser(String email);
 	
 	boolean login(String email,String password);
+	
+	boolean crearUser(String email,String password,String nombre,String apellido);
 }

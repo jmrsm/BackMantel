@@ -50,6 +50,7 @@ public class UsuarioServiceBean implements UsuarioService{
 	public boolean login(String email, String password) {
 
 		Optional<Usuario> sa = usuarioRepository.findOneByEmail(email);
+		
 		if (sa.isPresent()) {
 			if (passwordUtil.checkearPassword(password, sa.get().getPassowd())){
 				// TODO loguear el usuario al sistema 
@@ -58,5 +59,24 @@ public class UsuarioServiceBean implements UsuarioService{
 			
 		}
 		return false;
+	}
+	@Override
+	public boolean crearUser(String email, String password, String nombre, String apellido) {
+		// TODO Auto-generated method stub
+		Optional<Usuario> sa = usuarioRepository.findOneByEmail(email);
+		if(sa.isPresent()){
+			//Si el usuario ya existe
+			return false;
+		}else{
+			Usuario user= new Usuario();
+			user.setApellido(apellido);
+			user.setEmail(email);
+			user.setHabilitado(true);
+			user.setNombre(nombre);
+			user.setPassowd(passwordUtil.hasherPassword(password));
+			usuarioRepository.save(user);
+			return true;
+		}
+		
 	}
 }
