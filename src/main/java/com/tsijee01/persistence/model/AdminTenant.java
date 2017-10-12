@@ -76,4 +76,13 @@ public class AdminTenant {
 	public void setApellido(String apellido) {
 		this.apellido = apellido;
 	}
+
+	public ProveedorContenido getProveedorContenido() {
+		return proveedorContenido;
+	}
+
+	public void setProveedorContenido(ProveedorContenido proveedorContenido) {
+		this.proveedorContenido = proveedorContenido;
+	}
+	
 }
