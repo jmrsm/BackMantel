@@ -8,8 +8,8 @@ import com.tsijee01.persistence.model.AdminTenant;
 @Repository
 public interface AdminTenantRepository extends BaseRepository <AdminTenant, Long>{
 
-	Optional<AdminTenant> findByEmail(String email);
-	
 	boolean existsByEmail(String email) ;
+
+	Optional<AdminTenant> findOneByEmail(String email);
 
 }

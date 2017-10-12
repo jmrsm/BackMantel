@@ -15,4 +15,6 @@ public interface UsuarioRepository extends BaseRepository <Usuario, Long>{
 	List<Usuario> findByHabilitadoTrue();
 	boolean existsByEmail(String email);
 	Optional<Usuario> findOneByEmail(String email);
+	Optional<Usuario> findByEmail(String email); 
+	
 }

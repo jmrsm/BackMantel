@@ -48,7 +48,7 @@ public class UsuarioController {
 	//@GetMapping("/altaUsuario")
 	//@PostMapping("/altaUsuario")
 	@RequestMapping(path = "/altaUsuario", method = RequestMethod.POST)
-	@CrossOrigin(origins = "http://localhost:4200/*")
+//	@CrossOrigin(origins = "http://localhost:4200/*")
 	public ResponseEntity<?> createUser(HttpServletRequest request,
 			@RequestParam(name = "email", required = true) String email,
 			@RequestParam(name = "password", required = true) String password,

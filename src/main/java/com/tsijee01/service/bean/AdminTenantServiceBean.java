@@ -22,7 +22,7 @@ public class AdminTenantServiceBean implements AdminTenantService {
 
 	public boolean altaAdminTenant(AdminTenant at) {
 
-		Optional <AdminTenant> old = adminRepository.findByEmail(at.getEmail());
+		Optional <AdminTenant> old = adminRepository.findOneByEmail(at.getEmail());
 		if (old.isPresent()){
 			return false;
 		} else {
@@ -34,7 +34,7 @@ public class AdminTenantServiceBean implements AdminTenantService {
 	
 	public boolean loginAdminTenant(String email, String password) {
 
-		Optional <AdminTenant> dbAdminTenant = adminRepository.findByEmail(email);
+		Optional <AdminTenant> dbAdminTenant = adminRepository.findOneByEmail(email);
 		if (dbAdminTenant.isPresent()) {
 			if (passwordUtil.checkearPassword(password, dbAdminTenant.get().getPassowd())){
 				// TODO loguear el usuario al sistema 

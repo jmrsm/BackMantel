@@ -10,7 +10,7 @@ public enum TipoPagoEnum {
 		this.tipoPago = tipoPago;
 	}
 
-	public String url() {
+	public String tipoPago() {
 		return tipoPago;
 	}
 
