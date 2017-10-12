@@ -62,7 +62,7 @@ public class UsuarioServiceBean implements UsuarioService{
 	}
 	@Override
 	public boolean crearUser(String email, String password, String nombre, String apellido) {
-		// TODO Auto-generated method stub
+
 		Optional<Usuario> sa = usuarioRepository.findOneByEmail(email);
 		if(sa.isPresent()){
 			//Si el usuario ya existe

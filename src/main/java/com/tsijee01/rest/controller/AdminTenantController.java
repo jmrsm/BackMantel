@@ -23,23 +23,10 @@ public class AdminTenantController {
 	@Autowired
 	private MapperFacade mepper;
 	
-//	@RequestMapping(path = "/existAdmin/", method = RequestMethod.GET)
-//	public ResponseEntity<?> existeUser(HttpServletRequest request,
-//			@RequestParam(name = "email", required = true) String email) {
-//		return new ResponseEntity<String>(admintenantservice.existeUser(email),HttpStatus.OK);
-//	}
-//	
-//	@RequestMapping(path = "/loginAdmin/", method = RequestMethod.GET)
-//	public ResponseEntity<?> loginAdministradorTenant(HttpServletRequest request,
-//			@RequestParam(name = "email", required = true) String email,
-//			@RequestParam(name = "password", required = true) String password) {
-//
-//		if (admintenantservice.login(email, password)) {
-//			return new ResponseEntity<Object>(HttpStatus.OK);
-//		} else {
-//			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
-//		}
-//
-//	}
+	@RequestMapping(path = "api/adminTenant/altaContenido", method = RequestMethod.GET)
+	public ResponseEntity<?> existeUser(HttpServletRequest request,
+			@RequestParam(name = "email", required = true) String email) {
+		return new ResponseEntity<String>(admintenantservice.existeUser(email),HttpStatus.OK);
+	}
 
 }
