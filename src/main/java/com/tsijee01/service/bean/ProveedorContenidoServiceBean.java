@@ -16,7 +16,7 @@ public class ProveedorContenidoServiceBean implements ProveedorContenidoService 
 	@Override
 	public boolean altaProveedorContenido(String nombre) {
 		
-		if (proveedorContenidoRepository.findByName(nombre).isPresent()){
+		if (proveedorContenidoRepository.findByNombre(nombre).isPresent()){
 			return false;
 		}else {
 			ProveedorContenido pc = new ProveedorContenido();

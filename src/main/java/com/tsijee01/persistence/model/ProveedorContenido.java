@@ -43,12 +43,4 @@ public class ProveedorContenido {
 		this.nombre = nombre;
 	}
 
-//	public List<PaqueteContenido> getPaqueteContenido() {
-//		return paqueteContenido;
-//	}
-//
-//	public void setPaqueteContenido(List<PaqueteContenido> paqueteContenido) {
-//		this.paqueteContenido = paqueteContenido;
-//	}
-	
 }
