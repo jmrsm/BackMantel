@@ -30,4 +30,38 @@ public class Actor {
 			joinColumns=@JoinColumn(name="contenido_id", referencedColumnName="id"),
 			inverseJoinColumns=@JoinColumn(name="actor_id", referencedColumnName="id"))
 	private List <Contenido> contenidos;
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getApellido() {
+		return apellido;
+	}
+
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
+	}
+
+	public List<Contenido> getContenidos() {
+		return contenidos;
+	}
+
+	public void setContenidos(List<Contenido> contenidos) {
+		this.contenidos = contenidos;
+	}
+	
+	
 }

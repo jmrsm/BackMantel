@@ -43,4 +43,13 @@ public class ProveedorContenido {
 		this.nombre = nombre;
 	}
 
+	public List<AdminTenant> getAdmins() {
+		return admins;
+	}
+
+	public void setAdmins(List<AdminTenant> admins) {
+		this.admins = admins;
+	}
+	
+
 }

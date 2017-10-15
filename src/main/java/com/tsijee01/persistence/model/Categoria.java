@@ -28,6 +28,14 @@ public class Categoria {
 			inverseJoinColumns=@JoinColumn(name="contenido_id", referencedColumnName="id"))
 	private List<Contenido> contenidoCategoria;
 
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
 	public String getNombreCategoria() {
 		return nombreCategoria;
 	}

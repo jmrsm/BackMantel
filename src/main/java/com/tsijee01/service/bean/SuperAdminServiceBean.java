@@ -37,6 +37,8 @@ public class SuperAdminServiceBean implements SuperAdminService {
 			if (pc.isPresent()) {
 				adminTenant.setProveedorContenido(pc.get());
 				adminTenantRepository.save(adminTenant);
+				pc.get().getAdmins().add(adminTenant);
+				proveedorContenidoRepository.save(pc.get());
 				return true;
 			} else {
 				return false;

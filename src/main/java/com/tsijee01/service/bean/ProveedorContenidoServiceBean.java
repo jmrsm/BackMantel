@@ -1,5 +1,7 @@
 package com.tsijee01.service.bean;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +26,16 @@ public class ProveedorContenidoServiceBean implements ProveedorContenidoService 
 			proveedorContenidoRepository.save(pc);
 			return true;
 		}
-		
+	}
+
+	@Override
+	public List<ProveedorContenido> findAll() {
+		return proveedorContenidoRepository.findAll();
+	}
+
+	@Override
+	public boolean actualizarProveedorContenido(ProveedorContenido proveedorContenido) {
+		return true;
 	}
 
 }
