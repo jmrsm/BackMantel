@@ -1,9 +1,16 @@
 package com.tsijee01.config;
 
+import java.util.Date;
+
 import org.springframework.stereotype.Component;
 
 import com.tsijee01.persistence.model.AdminTenant;
+import com.tsijee01.persistence.model.Contenido;
+import com.tsijee01.persistence.model.Evento;
+import com.tsijee01.persistence.model.Pelicula;
+import com.tsijee01.persistence.model.ProveedorContenido;
 import com.tsijee01.rest.dto.AdminTenantDTO;
+import com.tsijee01.rest.dto.ContenidoFullDTO;
 
 import ma.glasnost.orika.CustomMapper;
 import ma.glasnost.orika.MapperFactory;
@@ -26,6 +33,8 @@ public class MapperConfig extends ConfigurableMapper {
 	protected void configure(final MapperFactory factory) {
 		this.factory = factory;
 		this.configureAdmintenantMapper();
+		this.configureContenidoMapper();
+		this.configurePeliculaMapper();
 
 	}
 
@@ -49,4 +58,53 @@ public class MapperConfig extends ConfigurableMapper {
 				}).byDefault().register();
 	}
 
+	private void configureContenidoMapper() {
+
+		this.factory.classMap(ContenidoFullDTO.class, Contenido.class)
+				.customize(new CustomMapper<ContenidoFullDTO, Contenido>() {
+					@Override
+					public void mapAtoB(ContenidoFullDTO a, Contenido b, MappingContext context) {
+						b.setDuracion(a.getDuracion()) ;
+						b.setId(a.getId());
+						b.setFechaPublicado(new Date()); 
+						b.setTitulo(a.getTitulo());
+						b.setDescipcion(a.getDescipcion());
+//						b.categorias = cont.getCategorias();
+//						b.directores = cont.getDirectores();
+//						b.actores = cont.getActores();
+						// TODO ver como vamos a manejar el ranking
+						b.setRanking(0);
+						// TODO ver como subimos la foto
+						b.setFotoPortada("");
+						// TODO ver como subimos el contenido
+						b.setPath("");
+//						b.comentarios = cont.getComentarios();
+//						b.similares = cont.getSimilares();
+						ProveedorContenido pc = new ProveedorContenido();
+						pc.setId(a.getProveedorContenido().getId());
+						b.setProveedorContenido(pc);
+						
+
+					}
+
+					@Override
+					public void mapBtoA(Contenido b, ContenidoFullDTO a, MappingContext context) {
+						// a.setApellido(b.getApellido());
+					}
+				}).byDefault().register();
+	}
+	private void configurePeliculaMapper() {
+
+		this.factory.classMap(ContenidoFullDTO.class, Pelicula.class)
+				.customize(new CustomMapper<ContenidoFullDTO, Pelicula>() {
+					@Override
+					public void mapAtoB(ContenidoFullDTO a, Pelicula b, MappingContext context) {
+						super.mapAtoB(a, b, context);
+					}
+
+					@Override
+					public void mapBtoA(Pelicula b, ContenidoFullDTO a, MappingContext context) {
+					}
+				}).byDefault().register();
+	}
 }

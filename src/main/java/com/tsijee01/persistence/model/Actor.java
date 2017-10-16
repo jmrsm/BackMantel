@@ -27,8 +27,8 @@ public class Actor {
 	
 	@ManyToMany
 	@JoinTable(name = "actor_contenido",
-			joinColumns=@JoinColumn(name="contenido_id", referencedColumnName="id"),
-			inverseJoinColumns=@JoinColumn(name="actor_id", referencedColumnName="id"))
+			joinColumns=@JoinColumn(name="actor_id", referencedColumnName="id"),
+			inverseJoinColumns=@JoinColumn(name="contenido_id", referencedColumnName="id"))
 	private List <Contenido> contenidos;
 
 	public long getId() {

@@ -17,6 +17,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -41,8 +42,8 @@ public abstract class Contenido {
 	
 	@ManyToMany
 	@JoinTable(name = "categoria_contenido",
-			joinColumns=@JoinColumn(name="categoria_id", referencedColumnName="id"),
-			inverseJoinColumns=@JoinColumn(name="contenido_id", referencedColumnName="id"))
+			joinColumns=@JoinColumn(name="contenido_id", referencedColumnName="id"),
+			inverseJoinColumns=@JoinColumn(name="categoria_id", referencedColumnName="id"))
 	private List<Categoria> categorias;
 	
 	@ManyToMany
@@ -66,6 +67,9 @@ public abstract class Contenido {
 	@Column (nullable = false)
 	private String path;
 	
+	@Column(length = 100, nullable = false)
+	private int duracion;
+	
 	@OneToMany(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
 	@JoinColumn(name = "id")
 	@Fetch (FetchMode.SELECT)
@@ -82,6 +86,26 @@ public abstract class Contenido {
 	@ManyToOne(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
 	@JoinColumn(name = "proveedorId")
 	ProveedorContenido proveedorContenido;
+
+	public Contenido() {
+		
+	}
+	public Contenido(Contenido cont) {
+		this.duracion = cont.getDuracion();
+		this.id = cont.getId();
+		this.fechaPublicado = cont.getFechaPublicado();
+		this.titulo = cont.getTitulo();
+		this.descipcion = cont.getDescipcion();
+		this.categorias = cont.getCategorias();
+		this.directores = cont.getDirectores();
+		this.actores = cont.getActores();
+		this.ranking = cont.getRanking();
+		this.fotoPortada = cont.getFotoPortada();
+		this.path = cont.getPath();
+		this.comentarios = cont.getComentarios();
+		this.similares = cont.getSimilares();
+		this.proveedorContenido = cont.getProveedorContenido();
+	}
 
 	public Long getId() {
 		return id;
@@ -189,6 +213,14 @@ public abstract class Contenido {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public int getDuracion() {
+		return duracion;
+	}
+
+	public void setDuracion(int duracion) {
+		this.duracion = duracion;
 	}
 
 }

@@ -2,13 +2,13 @@ package com.tsijee01.rest.dto;
 
 import java.util.List;
 
-public class ProveedorContenidoDTO {
+public class ProveedorContenidoBasicDTO {
 
 	private Long id;
 	
 	private String nombre;
+
 	
-	private List<AdminTenantDTO> admins;
 
 	public Long getId() {
 		return id;
@@ -26,14 +26,5 @@ public class ProveedorContenidoDTO {
 		this.nombre = nombre;
 	}
 
-	public List<AdminTenantDTO> getAdmins() {
-		return admins;
-	}
-
-	public void setAdmins(List<AdminTenantDTO> admins) {
-		this.admins = admins;
-	}
-	
-	
 	
 }
