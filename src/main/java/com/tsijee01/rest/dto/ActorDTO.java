@@ -1,7 +1,5 @@
 package com.tsijee01.rest.dto;
 
-import java.util.List;
-
 public class ActorDTO {
 
 	private long id;
