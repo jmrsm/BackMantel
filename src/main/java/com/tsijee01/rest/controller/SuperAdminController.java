@@ -18,7 +18,6 @@ import com.tsijee01.persistence.model.SuperAdmin;
 import com.tsijee01.rest.dto.AdminTenantDTO;
 import com.tsijee01.rest.dto.ProveedorContenidoDTO;
 import com.tsijee01.rest.dto.SuperAdminDTO;
-import com.tsijee01.service.CategoriaContenidoService;
 import com.tsijee01.service.ProveedorContenidoService;
 import com.tsijee01.service.SuperAdminService;
 
@@ -36,10 +35,6 @@ public class SuperAdminController {
 	@Autowired
 	private ProveedorContenidoService proveedorContenidoService;
 
-	@Autowired
-	private CategoriaContenidoService categoriaContenidoService;
-	
-	
 	@Autowired
 	private MapperFacade mapper;
 
@@ -114,10 +109,5 @@ public class SuperAdminController {
 			return new ResponseEntity<Object>(HttpStatus.CONFLICT);
 		}
 	}
-
-
-	
-
-	
 
 }

@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 @Entity
 public class EventoEspectaculo extends Evento {
 
-	
 	@Column(nullable = false)
 	private Date fechaInicio;
 	
@@ -16,5 +15,17 @@ public class EventoEspectaculo extends Evento {
 		super((Evento)eventoEspectaculo);
 	}
 	
+	public EventoEspectaculo(){
+		
+	}
 
+	public Date getFechaInicio() {
+		return fechaInicio;
+	}
+
+	public void setFechaInicio(Date fechaInicio) {
+		this.fechaInicio = fechaInicio;
+	}
+
+	
 }

@@ -5,11 +5,13 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.tsijee01.rest.dto.ContenidoFullDTO;
 import com.tsijee01.service.ContenidoService;
@@ -36,4 +38,18 @@ public class ContenidoController {
 		}
 	}
 
+	@PostMapping("api/admin/contenidoMultimadia")
+	public ResponseEntity<Object> agregarImagenAEvento(
+			HttpServletRequest request, @RequestParam("file") MultipartFile file,
+			@RequestParam("contenidoId") Long contenidoId) {
+		
+		try{
+			contenidoService.altaContenidoMultimedia(contenidoId, file);
+			return new ResponseEntity<Object>(HttpStatus.OK);
+		}catch(Exception ex){
+			return new ResponseEntity<Object>(HttpStatus.CONFLICT);
+		}
+		
+	
+	}
 }

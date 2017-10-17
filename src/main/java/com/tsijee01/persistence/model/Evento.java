@@ -5,5 +5,8 @@ public abstract class Evento extends Contenido {
 	public Evento(Evento evento) {
 		super((Contenido) evento);
 	}
+	
+	public Evento(){
+	}
 
 }

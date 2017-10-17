@@ -27,8 +27,8 @@ public class Director {
 	
 	@ManyToMany
 	@JoinTable(name = "director_contenido",
-			joinColumns=@JoinColumn(name="contenido_id", referencedColumnName="id"),
-			inverseJoinColumns=@JoinColumn(name="director_id", referencedColumnName="id"))
+			joinColumns=@JoinColumn(name="director_id", referencedColumnName="id"),
+			inverseJoinColumns=@JoinColumn(name="contenido_id", referencedColumnName="id"))
 	private List <Contenido> contenido;
 
 	public long getId() {

@@ -6,9 +6,10 @@ import org.springframework.stereotype.Component;
 
 import com.tsijee01.persistence.model.AdminTenant;
 import com.tsijee01.persistence.model.Contenido;
-import com.tsijee01.persistence.model.Evento;
+import com.tsijee01.persistence.model.EventoDeportivo;
+import com.tsijee01.persistence.model.EventoEspectaculo;
 import com.tsijee01.persistence.model.Pelicula;
-import com.tsijee01.persistence.model.ProveedorContenido;
+import com.tsijee01.persistence.model.Serie;
 import com.tsijee01.rest.dto.AdminTenantDTO;
 import com.tsijee01.rest.dto.ContenidoFullDTO;
 
@@ -35,6 +36,9 @@ public class MapperConfig extends ConfigurableMapper {
 		this.configureAdmintenantMapper();
 		this.configureContenidoMapper();
 		this.configurePeliculaMapper();
+		this.configureEventoDeportivoMapper();
+		this.configureSerieMapper();
+		this.configureEventoEspectaculoMapper();
 
 	}
 
@@ -69,27 +73,16 @@ public class MapperConfig extends ConfigurableMapper {
 						b.setFechaPublicado(new Date()); 
 						b.setTitulo(a.getTitulo());
 						b.setDescipcion(a.getDescipcion());
-//						b.categorias = cont.getCategorias();
-//						b.directores = cont.getDirectores();
-//						b.actores = cont.getActores();
 						// TODO ver como vamos a manejar el ranking
 						b.setRanking(0);
 						// TODO ver como subimos la foto
 						b.setFotoPortada("");
 						// TODO ver como subimos el contenido
 						b.setPath("");
-//						b.comentarios = cont.getComentarios();
-//						b.similares = cont.getSimilares();
-						ProveedorContenido pc = new ProveedorContenido();
-						pc.setId(a.getProveedorContenido().getId());
-						b.setProveedorContenido(pc);
-						
-
 					}
 
 					@Override
 					public void mapBtoA(Contenido b, ContenidoFullDTO a, MappingContext context) {
-						// a.setApellido(b.getApellido());
 					}
 				}).byDefault().register();
 	}
@@ -104,6 +97,52 @@ public class MapperConfig extends ConfigurableMapper {
 
 					@Override
 					public void mapBtoA(Pelicula b, ContenidoFullDTO a, MappingContext context) {
+					}
+				}).byDefault().register();
+	}
+	
+	private void configureSerieMapper() {
+		this.factory.classMap(ContenidoFullDTO.class, Serie.class)
+				.customize(new CustomMapper<ContenidoFullDTO, Serie>() {
+					@Override
+					public void mapAtoB(ContenidoFullDTO a, Serie b, MappingContext context) {
+						super.mapAtoB(a, b, context);
+						b.setCapitulo(a.getSerieCapitulo());
+						b.setTemporada(a.getSerieTemporada());
+					}
+
+					@Override
+					public void mapBtoA(Serie b, ContenidoFullDTO a, MappingContext context) {
+					}
+				}).byDefault().register();
+	}
+	
+	private void configureEventoDeportivoMapper() {
+		this.factory.classMap(ContenidoFullDTO.class, EventoDeportivo.class)
+				.customize(new CustomMapper<ContenidoFullDTO, EventoDeportivo>() {
+					@Override
+					public void mapAtoB(ContenidoFullDTO a, EventoDeportivo b, MappingContext context) {
+						super.mapAtoB(a, b, context);
+						b.setNombreDeporte(a.getEventoDeportivoNombreDeporte());
+						b.setNombreEquipoLocal(a.getEventoDeportivoNombreEquipoLocal());
+						b.setNombreEquipoVisitante(a.getEventoDeportivoNombreEquipoVisitante());
+					}
+					@Override
+					public void mapBtoA(EventoDeportivo b, ContenidoFullDTO a, MappingContext context) {
+					}
+				}).byDefault().register();
+	}
+	
+	private void configureEventoEspectaculoMapper() {
+		this.factory.classMap(ContenidoFullDTO.class, EventoEspectaculo.class)
+				.customize(new CustomMapper<ContenidoFullDTO, EventoEspectaculo>() {
+					@Override
+					public void mapAtoB(ContenidoFullDTO a, EventoEspectaculo b, MappingContext context) {
+						super.mapAtoB(a, b, context);
+						b.setFechaInicio(a.getEventoEspectaculoFechaInicio());
+					}
+					@Override
+					public void mapBtoA(EventoEspectaculo b, ContenidoFullDTO a, MappingContext context) {
 					}
 				}).byDefault().register();
 	}

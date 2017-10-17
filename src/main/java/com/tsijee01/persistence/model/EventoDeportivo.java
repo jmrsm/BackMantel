@@ -19,6 +19,11 @@ public class EventoDeportivo extends Evento {
 		super((Evento) eventoDeportivo);
 	}
 
+	public EventoDeportivo(){
+		super();
+	}
+
+	
 	public String getNombreEquipoVisitante() {
 		return nombreEquipoVisitante;
 	}

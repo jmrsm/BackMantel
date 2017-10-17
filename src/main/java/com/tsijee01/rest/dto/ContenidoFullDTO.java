@@ -1,5 +1,6 @@
 package com.tsijee01.rest.dto;
 
+import java.util.Date;
 import java.util.List;
 
 public class ContenidoFullDTO {
@@ -7,20 +8,42 @@ public class ContenidoFullDTO {
 	private long id;
 
 	private String titulo;
-	
-	private String descipcion;
-	
-	private Integer duracion;
-	
-	private List<CategoriaDTO> categorias;
-	
-	private List <DirectorDTO> directores;
 
-	private List <ActorDTO> actores;
-	
+	private String descipcion;
+
+	private Integer duracion;
+
+	private List<CategoriaDTO> categorias;
+
+	private List<DirectorDTO> directores;
+
+	private List<ActorDTO> actores;
+
 	private TipoContenidoEnum tipoContenido;
-	
+
 	private ProveedorContenidoBasicDTO proveedorContenido;
+
+	// TODO resolver bien como hacemos con cada sub tipo, se pueden hacer DTOS
+	// que solo incluya lo referente a la sub clase
+
+	// si es evento espectaculo
+	
+	private Date eventoEspectaculoFechaInicio;
+	
+	// si es serie
+
+	private int serieTemporada;
+
+	private int serieCapitulo;
+
+	// si es evento deportivo
+
+	private String eventoDeportivoNombreEquipoVisitante;
+
+	private String eventoDeportivoNombreEquipoLocal;
+
+	private String eventoDeportivoNombreDeporte;
+
 	
 	public long getId() {
 		return id;
@@ -92,6 +115,54 @@ public class ContenidoFullDTO {
 
 	public void setProveedorContenido(ProveedorContenidoBasicDTO proveedorContenido) {
 		this.proveedorContenido = proveedorContenido;
+	}
+
+	public int getSerieTemporada() {
+		return serieTemporada;
+	}
+
+	public void setSerieTemporada(int serieTemporada) {
+		this.serieTemporada = serieTemporada;
+	}
+
+	public int getSerieCapitulo() {
+		return serieCapitulo;
+	}
+
+	public void setSerieCapitulo(int serieCapitulo) {
+		this.serieCapitulo = serieCapitulo;
+	}
+
+	public String getEventoDeportivoNombreEquipoVisitante() {
+		return eventoDeportivoNombreEquipoVisitante;
+	}
+
+	public void setEventoDeportivoNombreEquipoVisitante(String eventoDeportivoNombreEquipoVisitante) {
+		this.eventoDeportivoNombreEquipoVisitante = eventoDeportivoNombreEquipoVisitante;
+	}
+
+	public String getEventoDeportivoNombreEquipoLocal() {
+		return eventoDeportivoNombreEquipoLocal;
+	}
+
+	public void setEventoDeportivoNombreEquipoLocal(String eventoDeportivoNombreEquipoLocal) {
+		this.eventoDeportivoNombreEquipoLocal = eventoDeportivoNombreEquipoLocal;
+	}
+
+	public String getEventoDeportivoNombreDeporte() {
+		return eventoDeportivoNombreDeporte;
+	}
+
+	public void setEventoDeportivoNombreDeporte(String eventoDeportivoNombreDeporte) {
+		this.eventoDeportivoNombreDeporte = eventoDeportivoNombreDeporte;
+	}
+
+	public Date getEventoEspectaculoFechaInicio() {
+		return eventoEspectaculoFechaInicio;
+	}
+
+	public void setEventoEspectaculoFechaInicio(Date eventoEspectaculoFechaInicio) {
+		this.eventoEspectaculoFechaInicio = eventoEspectaculoFechaInicio;
 	}
 	
 }
