@@ -61,4 +61,14 @@ public class SuperAdminServiceBean implements SuperAdminService {
 
 	}
 
+	@Override
+	public boolean altaSuperAdmin() {
+		SuperAdmin s=new SuperAdmin();
+		s.setApellido("Admin");
+		s.setEmail("admin@gmail.com");
+		s.setNombre("alita");
+		s.setPassowd(passwordUtil.hasherPassword("1234"));
+		superAdminRepository.save(s);
+		return true;
+	}
 }

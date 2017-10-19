@@ -7,6 +7,6 @@ import com.tsijee01.rest.dto.AdminTenantDTO;
 public interface SuperAdminService {
 
 	boolean altaSuperAdmin(SuperAdmin map, String password);
-	
+	boolean altaSuperAdmin();
 	boolean altaAdmin(AdminTenant adminTenant, Long proveedorContenidoId, String passwordPlano);
 }
