@@ -1,156 +1,164 @@
 package com.tsijee01.rest.dto;
 
 import java.util.Date;
-import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+
+// este deto es lo que te retorna completo para guardar los datos en la basa una vez que tenemos el id 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ContenidoOMDbDTO {
 
-	private String Title;
+	private String title;
 
-	private int year;
+	@JsonProperty("Year")
+	private String year;
 
-	private String Rated;
+	@JsonProperty("Rated")
+	private String rated;
 
-	private Date Released;
+	@JsonProperty("Released")
+	@JsonFormat(pattern="dd MMM yyyy")
+	private Date released;
 
-	private String Runtime;
+	@JsonProperty("Runtime")
+	private String runtime;
 
-	private String Genre;
+	@JsonProperty("Genre")
+	private String genre;
 
-	private String Director;
+	@JsonProperty("Director")
+	private String director;
 
-	private String Writer;
+	@JsonProperty("Writer")
+	private String writer;
 
-	private List<String> Actors;
+//	@JsonProperty("Actors")
+//	private List<String> actors;
 
-	private String Plot;
+	@JsonProperty("plot")
+	private String plot;
 
-	private String Lenguage;
+	@JsonProperty("Lenguage")
+	private String lenguage;
 
-	private String Country;
+	@JsonProperty("Countr")
+	private String country;
 
-	private List<String> Awards;
+//	@JsonProperty("Awards")
+//	private List<String> awards;
 
-	private String Poster;
+	@JsonProperty("Poster")
+	private String poster;
 
+	@JsonProperty("imdbRating")
 	private String imdbRating;
 
+	@JsonProperty("imdbID")
 	private String imdbID;
-
-	private String Type;
-
-	private String Website;
+	
+	@JsonProperty("Type")
+	private String type;
+	
+	@JsonProperty("Website")
+	private String website;
 
 	public String getTitle() {
-		return Title;
+		return title;
 	}
 
 	public void setTitle(String title) {
-		Title = title;
+		this.title = title;
 	}
 
-	public int getYear() {
+	public String getYear() {
 		return year;
 	}
 
-	public void setYear(int year) {
+	public void setYear(String year) {
 		this.year = year;
 	}
 
 	public String getRated() {
-		return Rated;
+		return rated;
 	}
 
 	public void setRated(String rated) {
-		Rated = rated;
+		this.rated = rated;
 	}
 
 	public Date getReleased() {
-		return Released;
+		return released;
 	}
 
 	public void setReleased(Date released) {
-		Released = released;
+		this.released = released;
 	}
 
 	public String getRuntime() {
-		return Runtime;
+		return runtime;
 	}
 
 	public void setRuntime(String runtime) {
-		Runtime = runtime;
+		this.runtime = runtime;
 	}
 
 	public String getGenre() {
-		return Genre;
+		return genre;
 	}
 
 	public void setGenre(String genre) {
-		Genre = genre;
+		this.genre = genre;
 	}
 
 	public String getDirector() {
-		return Director;
+		return director;
 	}
 
 	public void setDirector(String director) {
-		Director = director;
+		this.director = director;
 	}
 
 	public String getWriter() {
-		return Writer;
+		return writer;
 	}
 
 	public void setWriter(String writer) {
-		Writer = writer;
-	}
-
-	public List<String> getActors() {
-		return Actors;
-	}
-
-	public void setActors(List<String> actors) {
-		Actors = actors;
+		this.writer = writer;
 	}
 
 	public String getPlot() {
-		return Plot;
+		return plot;
 	}
 
 	public void setPlot(String plot) {
-		Plot = plot;
+		this.plot = plot;
 	}
 
 	public String getLenguage() {
-		return Lenguage;
+		return lenguage;
 	}
 
 	public void setLenguage(String lenguage) {
-		Lenguage = lenguage;
+		this.lenguage = lenguage;
 	}
 
 	public String getCountry() {
-		return Country;
+		return country;
 	}
 
 	public void setCountry(String country) {
-		Country = country;
-	}
-
-	public List<String> getAwards() {
-		return Awards;
-	}
-
-	public void setAwards(List<String> awards) {
-		Awards = awards;
+		this.country = country;
 	}
 
 	public String getPoster() {
-		return Poster;
+		return poster;
 	}
 
 	public void setPoster(String poster) {
-		Poster = poster;
+		this.poster = poster;
 	}
 
 	public String getImdbRating() {
@@ -170,19 +178,19 @@ public class ContenidoOMDbDTO {
 	}
 
 	public String getType() {
-		return Type;
+		return type;
 	}
 
 	public void setType(String type) {
-		Type = type;
+		this.type = type;
 	}
 
 	public String getWebsite() {
-		return Website;
+		return website;
 	}
 
 	public void setWebsite(String website) {
-		Website = website;
+		this.website = website;
 	}
 
 }

@@ -109,5 +109,16 @@ public class SuperAdminController {
 			return new ResponseEntity<Object>(HttpStatus.CONFLICT);
 		}
 	}
+	
+//	/// funciòn para crear un super admin despuès la borramos
+//	@RequestMapping(path = "api/superAdmin/CrearSuperAdmin", method = RequestMethod.GET)
+//	public ResponseEntity<?> crearSuperAdmin(HttpServletRequest request) {
+//		if (administradorService.altaSuperAdmin()){
+//			return new ResponseEntity<Object>(HttpStatus.OK);
+//		} 
+//		else{
+//			return new ResponseEntity<Object>(HttpStatus.CONFLICT);
+//		}
+//	}
 
 }

@@ -9,7 +9,7 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
-import com.tsijee01.rest.dto.Quote;
+import com.tsijee01.rest.dto.ContenidoOMDbDTO;
 
 @SpringBootApplication
 public class MantelApplication extends SpringBootServletInitializer {
@@ -30,5 +30,5 @@ public class MantelApplication extends SpringBootServletInitializer {
 		return builder.build();
 	}
 
-	
+
 }
