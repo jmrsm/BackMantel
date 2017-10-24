@@ -95,20 +95,30 @@ public class SuperAdminController {
 //		}
 //	}
 
-	// crear nuevo admin 
+	// crear nuevo admin  @RequestBody AdminTenantDTO adminTenant, saco el dto
 	@RequestMapping(path = "api/superAdmin/admin", method = RequestMethod.POST)
 	public ResponseEntity<?> altaAdministradorTenant(HttpServletRequest request,
-			@RequestBody AdminTenantDTO adminTenant, 
+			@RequestParam(name = "apellido", required = true) String apellido,
+			@RequestParam(name = "email", required = true) String email,
+			@RequestParam(name = "nombre", required = true) String nombre,
+			@RequestParam(name = "id", required = true) Long id,
 			@RequestParam(name = "password", required = true) String password,
 			@RequestParam(name = "proveedorContenidoId", required = true) Long proveedorContenidoId) {
-
-		if (administradorService.altaAdmin(mapper.map(adminTenant, AdminTenant.class), proveedorContenidoId,
+		AdminTenantDTO a = new AdminTenantDTO();
+		
+		a.setApellido(apellido);
+		a.setEmail(email);
+		a.setId(id);
+		a.setNombre(nombre);
+		System.out.println(proveedorContenidoId);
+		if (administradorService.altaAdmin(mapper.map(a, AdminTenant.class), proveedorContenidoId,
 				password)) {
 			return new ResponseEntity<Object>(HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Object>(HttpStatus.CONFLICT);
 		}
 	}
+
 	
 //	/// funciòn para crear un super admin despuès la borramos
 //	@RequestMapping(path = "api/superAdmin/CrearSuperAdmin", method = RequestMethod.GET)
