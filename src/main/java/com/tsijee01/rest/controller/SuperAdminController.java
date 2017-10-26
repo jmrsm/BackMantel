@@ -71,6 +71,8 @@ public class SuperAdminController {
 			return new ResponseEntity<Object>(HttpStatus.CONFLICT);
 		}
 	}
+	
+}
 
 	
 		
@@ -94,21 +96,3 @@ public class SuperAdminController {
 //			return new ResponseEntity<Object>(HttpStatus.CONFLICT);
 //		}
 //	}
-
-	// crear nuevo admin 
-	@RequestMapping(path = "api/superAdmin/admin", method = RequestMethod.POST)
-	public ResponseEntity<?> altaAdministradorTenant(HttpServletRequest request,
-			@RequestBody AdminTenantDTO adminTenant, 
-			@RequestParam(name = "password", required = true) String password,
-			@RequestParam(name = "proveedorContenidoId", required = true) Long proveedorContenidoId) {
-
-		if (administradorService.altaAdmin(mapper.map(adminTenant, AdminTenant.class), proveedorContenidoId,
-				password)) {
-			return new ResponseEntity<Object>(HttpStatus.OK);
-		} else {
-			return new ResponseEntity<Object>(HttpStatus.CONFLICT);
-		}
-	}
-
-
-}
