@@ -18,7 +18,7 @@ public class DirectorServiceBean  implements DirectorService{
 	
 	@Override
 	public boolean altaDirector(Director director) {
-		Optional<Director> old = directorRepository.findByNombreAndApellido(director.getNombre(),director.getApellido());
+		Optional<Director> old = directorRepository.findByNombreCompleto(director.getNombreCompleto());
 		if (old.isPresent()){
 			return false;
 		}else{
@@ -29,7 +29,7 @@ public class DirectorServiceBean  implements DirectorService{
 
 	@Override
 	public List<Director> findAll() {
-		return directorRepository.findAllByOrderByApellidoAscNombreAsc();
+		return directorRepository.findAll();
 	}
 
 	@Override

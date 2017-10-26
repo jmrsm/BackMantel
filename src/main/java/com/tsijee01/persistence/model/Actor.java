@@ -20,16 +20,19 @@ public class Actor {
 	private long id;
 
 	@Column(length = 50, nullable = false)
-	private String nombre;
-	
-	@Column(length = 512, nullable = false)
-	private String apellido;
-	
+	private String nombreCompleto;
+
+	public Actor(String nombreCompleto) {
+		this.nombreCompleto = nombreCompleto;
+	}
+
+	public Actor() {
+
+	}
+
 	@ManyToMany
-	@JoinTable(name = "actor_contenido",
-			joinColumns=@JoinColumn(name="actor_id", referencedColumnName="id"),
-			inverseJoinColumns=@JoinColumn(name="contenido_id", referencedColumnName="id"))
-	private List <Contenido> contenidos;
+	@JoinTable(name = "actor_contenido", joinColumns = @JoinColumn(name = "actor_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "contenido_id", referencedColumnName = "id"))
+	private List<Contenido> contenidos;
 
 	public long getId() {
 		return id;
@@ -39,22 +42,6 @@ public class Actor {
 		this.id = id;
 	}
 
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
-	public String getApellido() {
-		return apellido;
-	}
-
-	public void setApellido(String apellido) {
-		this.apellido = apellido;
-	}
-
 	public List<Contenido> getContenidos() {
 		return contenidos;
 	}
@@ -62,6 +49,13 @@ public class Actor {
 	public void setContenidos(List<Contenido> contenidos) {
 		this.contenidos = contenidos;
 	}
-	
-	
+
+	public String getNombreCompleto() {
+		return nombreCompleto;
+	}
+
+	public void setNombreCompleto(String nombreCompleto) {
+		this.nombreCompleto = nombreCompleto;
+	}
+
 }

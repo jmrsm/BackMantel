@@ -19,7 +19,7 @@ public class ActorServiceBean  implements ActorService{
 	
 	@Override
 	public boolean altaActor(Actor actor) {
-		Optional<Actor> old = actorRepository.findByNombreAndApellido(actor.getNombre(),actor.getApellido());
+		Optional<Actor> old = actorRepository.findByNombreCompleto(actor.getNombreCompleto());
 		if (old.isPresent()){
 			return false;
 		}else{
@@ -30,7 +30,7 @@ public class ActorServiceBean  implements ActorService{
 
 	@Override
 	public List<Actor> findAll() {
-		return actorRepository.findAllByOrderByApellidoAscNombreAsc();
+		return actorRepository.findAll();
 	}
 
 	@Override

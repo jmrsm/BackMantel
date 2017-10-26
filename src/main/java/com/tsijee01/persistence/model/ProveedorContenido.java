@@ -23,7 +23,7 @@ public class ProveedorContenido {
 	private String nombre;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
-	@JoinColumn(name = "id")
+	@JoinColumn(name = "porveedor_id")
 	private List<AdminTenant> admins;
 	
 

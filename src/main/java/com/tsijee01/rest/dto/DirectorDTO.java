@@ -1,12 +1,23 @@
 package com.tsijee01.rest.dto;
 
+import javax.persistence.Column;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DirectorDTO {
-	
+
+	public DirectorDTO() {
+
+	}
+
+	public DirectorDTO(String nombreyApellido) {
+		this.nombreCompleto = nombreyApellido;
+	}
+
 	private long id;
-	
-	private String nombre;
-	
-	private String apellido;
+
+	private String nombreCompleto;
 
 	public long getId() {
 		return id;
@@ -16,22 +27,12 @@ public class DirectorDTO {
 		this.id = id;
 	}
 
-	public String getNombre() {
-		return nombre;
+	public String getNombreCompleto() {
+		return nombreCompleto;
 	}
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public void setNombreCompleto(String nombreCompleto) {
+		this.nombreCompleto = nombreCompleto;
 	}
-
-	public String getApellido() {
-		return apellido;
-	}
-
-	public void setApellido(String apellido) {
-		this.apellido = apellido;
-	}
-	
-	
 
 }

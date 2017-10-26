@@ -8,10 +8,8 @@ import org.springframework.stereotype.Repository;
 import com.tsijee01.persistence.model.Actor;
 
 @Repository
-public interface ActorRepository extends BaseRepository <Actor, Long>{
+public interface ActorRepository extends BaseRepository<Actor, Long> {
 
-	Optional<Actor> findByNombreAndApellido(String nombre, String apellido);
+	Optional<Actor> findByNombreCompleto(String nombreCompleto);
 
-	List<Actor> findAllByOrderByApellidoAscNombreAsc();
-	
 }

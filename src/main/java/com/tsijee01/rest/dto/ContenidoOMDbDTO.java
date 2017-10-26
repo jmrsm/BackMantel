@@ -1,140 +1,162 @@
 package com.tsijee01.rest.dto;
 
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 
 // este deto es lo que te retorna completo para guardar los datos en la basa una vez que tenemos el id 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ContenidoOMDbDTO {
 
-	private String title;
+	private long id;
+
+	private List<ComentarioDTO> comentarios;
+
+	private List<ContenidoOMDbDTO> similares;
+
+	private ProveedorContenidoDTO proveedorContenido;
+
+	@JsonProperty("Title")
+	private String titulo;
 
 	@JsonProperty("Year")
-	private String year;
+	private Integer anio;
 
-	@JsonProperty("Rated")
-	private String rated;
+	// @JsonProperty("Rated")
+	// private String rated;
 
 	@JsonProperty("Released")
-	@JsonFormat(pattern="dd MMM yyyy")
-	private Date released;
+	// @JsonFormat(pattern="dd MMM yyyy")
+	private Date fechaPublicado;
 
 	@JsonProperty("Runtime")
-	private String runtime;
+	private int duracion;
 
 	@JsonProperty("Genre")
-	private String genre;
+	private List<CategoriaDTO> categorias;
 
 	@JsonProperty("Director")
-	private String director;
+	private List<DirectorDTO> director;
 
-	@JsonProperty("Writer")
-	private String writer;
+	// @JsonProperty("Writer")
+	// private String writer;
 
-//	@JsonProperty("Actors")
-//	private List<String> actors;
+	@JsonProperty("Actors")
+	private List<ActorDTO> actores;
 
-	@JsonProperty("plot")
-	private String plot;
+	@JsonProperty("Plot")
+	private String descipcion;
 
 	@JsonProperty("Lenguage")
 	private String lenguage;
 
-	@JsonProperty("Countr")
+	@JsonProperty("Country")
 	private String country;
 
-//	@JsonProperty("Awards")
-//	private List<String> awards;
+	// @JsonProperty("Awards")
+	// private List<String> awards;
 
 	@JsonProperty("Poster")
-	private String poster;
+	private String fotoPortada;
 
 	@JsonProperty("imdbRating")
-	private String imdbRating;
+	private BigDecimal ranking;
+
+	@JsonProperty("imdbVotes")
+	private int cantVotos;
 
 	@JsonProperty("imdbID")
 	private String imdbID;
-	
+
 	@JsonProperty("Type")
 	private String type;
-	
+
 	@JsonProperty("Website")
 	private String website;
 
-	public String getTitle() {
-		return title;
+	public long getId() {
+		return id;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setId(long id) {
+		this.id = id;
 	}
 
-	public String getYear() {
-		return year;
+	public Integer getAnio() {
+		return anio;
 	}
 
-	public void setYear(String year) {
-		this.year = year;
+	public void setAnio(Integer anio) {
+		this.anio = anio;
 	}
 
-	public String getRated() {
-		return rated;
-	}
-
-	public void setRated(String rated) {
-		this.rated = rated;
-	}
-
-	public Date getReleased() {
-		return released;
-	}
-
-	public void setReleased(Date released) {
-		this.released = released;
-	}
-
-	public String getRuntime() {
-		return runtime;
-	}
-
-	public void setRuntime(String runtime) {
-		this.runtime = runtime;
-	}
-
-	public String getGenre() {
-		return genre;
-	}
-
-	public void setGenre(String genre) {
-		this.genre = genre;
-	}
-
-	public String getDirector() {
-		return director;
-	}
-
-	public void setDirector(String director) {
+	public void setDirector(List<DirectorDTO> director) {
 		this.director = director;
 	}
 
-	public String getWriter() {
-		return writer;
+	public void setActores(List<ActorDTO> actores) {
+		this.actores = actores;
 	}
 
-	public void setWriter(String writer) {
-		this.writer = writer;
+	public Date getFechaPublicado() {
+		return fechaPublicado;
 	}
 
-	public String getPlot() {
-		return plot;
+	public void setFechaPublicado(Date fechaPublicado) {
+		this.fechaPublicado = fechaPublicado;
 	}
 
-	public void setPlot(String plot) {
-		this.plot = plot;
+	public void setFechaPublicado(String released) throws ParseException {
+		this.fechaPublicado = new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH).parse(released);
+	}
+
+	public int getDuracion() {
+		return duracion;
+	}
+
+	public void setDuracion(String duracion) {
+		this.duracion = Integer.valueOf(duracion.split(" ")[0]);
+	}
+
+	public List<CategoriaDTO> getCategorias() {
+		return categorias;
+	}
+
+	public void setCategorias(String categorias) {
+		this.categorias = Arrays.asList(categorias.split(",")).stream().map(CategoriaDTO::new)
+				.collect(Collectors.toList());
+	}
+
+	public void setCategorias(List<CategoriaDTO> categorias) {
+		this.categorias = categorias;
+	}
+
+	public String getTitulo() {
+		return titulo;
+	}
+
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
+	}
+
+	public String getDescipcion() {
+		return descipcion;
+	}
+
+	public void setDescipcion(String descipcion) {
+		this.descipcion = descipcion;
+	}
+
+	public List<ActorDTO> getActores() {
+		return actores;
 	}
 
 	public String getLenguage() {
@@ -153,20 +175,25 @@ public class ContenidoOMDbDTO {
 		this.country = country;
 	}
 
-	public String getPoster() {
-		return poster;
+	public BigDecimal getRanking() {
+		return ranking;
 	}
 
-	public void setPoster(String poster) {
-		this.poster = poster;
+	public void setRanking(BigDecimal ranking) {
+		this.ranking = ranking;
 	}
 
-	public String getImdbRating() {
-		return imdbRating;
+	public void setRanking(String ranking) {
+		this.ranking = new BigDecimal(ranking);
+
 	}
 
-	public void setImdbRating(String imdbRating) {
-		this.imdbRating = imdbRating;
+	public String getFotoPortada() {
+		return fotoPortada;
+	}
+
+	public void setFotoPortada(String fotoPortada) {
+		this.fotoPortada = fotoPortada;
 	}
 
 	public String getImdbID() {
@@ -191,6 +218,52 @@ public class ContenidoOMDbDTO {
 
 	public void setWebsite(String website) {
 		this.website = website;
+	}
+
+	public List<DirectorDTO> getDirector() {
+		return director;
+	}
+
+	public void setDirector(String director) {
+		this.director = Arrays.asList(director.split(",")).stream().map(DirectorDTO::new).collect(Collectors.toList());
+	}
+
+	public void setActores(String actor) {
+		this.actores = Arrays.asList(actor.split(",")).stream().map(ActorDTO::new).collect(Collectors.toList());
+
+	}
+
+	public int getCantVotos() {
+		return cantVotos;
+	}
+
+	public void setCantVotos(String cantVotos) {
+		System.out.println((cantVotos.replace(",", "")));
+		this.cantVotos = Integer.valueOf(cantVotos.replace(",", ""));
+	}
+
+	public List<ComentarioDTO> getComentarios() {
+		return comentarios;
+	}
+
+	public void setComentarios(List<ComentarioDTO> comentarios) {
+		this.comentarios = comentarios;
+	}
+
+	public List<ContenidoOMDbDTO> getSimilares() {
+		return similares;
+	}
+
+	public void setSimilares(List<ContenidoOMDbDTO> similares) {
+		this.similares = similares;
+	}
+
+	public ProveedorContenidoDTO getProveedorContenido() {
+		return proveedorContenido;
+	}
+
+	public void setProveedorContenido(ProveedorContenidoDTO proveedorContenido) {
+		this.proveedorContenido = proveedorContenido;
 	}
 
 }

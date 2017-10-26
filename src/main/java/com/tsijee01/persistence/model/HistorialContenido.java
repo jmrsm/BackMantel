@@ -13,27 +13,24 @@ import javax.persistence.ManyToOne;
 @Entity
 public class HistorialContenido {
 
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private long id;
-	
+
 	@Column
 	private boolean visto;
-	
-	@ManyToOne(fetch = FetchType.LAZY, cascade={CascadeType.REMOVE})
-	@JoinColumn(name = "id_responde_comentario")
+
+	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE })
+	@JoinColumn(name = "id_contenido")
 	private Contenido contenido;
-		
+
 	@Column(nullable = true)
 	private int puntuacion;
-	
+
 	@Column(nullable = true)
 	private boolean favorito;
-	
-	
-	
+
 	public boolean isVisto() {
 		return visto;
 	}
@@ -66,5 +63,4 @@ public class HistorialContenido {
 		this.favorito = favorito;
 	}
 
-	
 }

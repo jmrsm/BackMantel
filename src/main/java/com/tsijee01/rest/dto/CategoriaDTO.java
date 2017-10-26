@@ -6,6 +6,13 @@ public class CategoriaDTO {
 	
 	private String nombreCategoria;
 
+	public CategoriaDTO(){
+		
+	}
+	
+	public CategoriaDTO(String nombreCategoria){
+		this.nombreCategoria = nombreCategoria;
+	}
 	public long getId() {
 		return id;
 	}

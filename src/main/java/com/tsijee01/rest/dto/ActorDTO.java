@@ -2,34 +2,22 @@ package com.tsijee01.rest.dto;
 
 public class ActorDTO {
 
-	private long id;
-	
-	private String nombre;
-	
-	private String apellido;
-	
-	public long getId() {
-		return id;
+	private String nombreCompleto;
+
+	public ActorDTO(String nombreCompleto) {
+		this.nombreCompleto = nombreCompleto;
 	}
 
-	public void setId(long id) {
-		this.id = id;
+	public ActorDTO() {
+
 	}
 
-	public String getNombre() {
-		return nombre;
+	public String getNombreCompleto() {
+		return nombreCompleto;
 	}
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
-	public String getApellido() {
-		return apellido;
-	}
-
-	public void setApellido(String apellido) {
-		this.apellido = apellido;
+	public void setNombreCompleto(String nombreCompleto) {
+		this.nombreCompleto = nombreCompleto;
 	}
 	
 }

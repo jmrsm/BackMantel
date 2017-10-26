@@ -112,6 +112,8 @@ public class ContenidoServiceBean implements ContenidoService {
 		}
 		return true;
 	}
+	
+	
 
 	// lo que sean objectos se los trae de la base y agrega al objeto que
 	// estamos creando los atributos simples son mapeados en el mapper
@@ -159,5 +161,23 @@ public class ContenidoServiceBean implements ContenidoService {
 		});
 
 		return cont;
+	}
+
+	@Override
+	public boolean altaSerie(Serie contenido, int temporada, int capitulo) {
+		
+		Serie serie = new Serie(contenido);
+		serie.setCapitulo(capitulo);
+		serie.setTemporada(temporada);
+		return true;
+		
+	}
+	
+	@Override
+	public boolean altaPelicula(Pelicula contenido) {
+
+		Pelicula peli = new Pelicula(contenido);
+		peliculaRepositoy.save(peli);
+		return true;
 	}
 }

@@ -20,16 +20,11 @@ public class Director {
 	private long id;
 
 	@Column(length = 50, nullable = false)
-	private String nombre;
-	
-	@Column(length = 512, nullable = false)
-	private String apellido;
-	
+	private String nombreCompleto;
+
 	@ManyToMany
-	@JoinTable(name = "director_contenido",
-			joinColumns=@JoinColumn(name="director_id", referencedColumnName="id"),
-			inverseJoinColumns=@JoinColumn(name="contenido_id", referencedColumnName="id"))
-	private List <Contenido> contenido;
+	@JoinTable(name = "director_contenido", joinColumns = @JoinColumn(name = "director_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "contenido_id", referencedColumnName = "id"))
+	private List<Contenido> contenido;
 
 	public long getId() {
 		return id;
@@ -39,20 +34,12 @@ public class Director {
 		this.id = id;
 	}
 
-	public String getNombre() {
-		return nombre;
+	public String getNombreCompleto() {
+		return nombreCompleto;
 	}
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
-	public String getApellido() {
-		return apellido;
-	}
-
-	public void setApellido(String apellido) {
-		this.apellido = apellido;
+	public void setNombreCompleto(String nombreCompleto) {
+		this.nombreCompleto = nombreCompleto;
 	}
 
 	public List<Contenido> getContenido() {
@@ -62,5 +49,5 @@ public class Director {
 	public void setContenido(List<Contenido> contenido) {
 		this.contenido = contenido;
 	}
-	
+
 }

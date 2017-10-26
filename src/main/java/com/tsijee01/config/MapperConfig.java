@@ -1,5 +1,6 @@
 package com.tsijee01.config;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.springframework.stereotype.Component;
@@ -12,6 +13,7 @@ import com.tsijee01.persistence.model.Pelicula;
 import com.tsijee01.persistence.model.Serie;
 import com.tsijee01.rest.dto.AdminTenantDTO;
 import com.tsijee01.rest.dto.ContenidoFullDTO;
+import com.tsijee01.rest.dto.ContenidoOMDbDTO;
 
 import ma.glasnost.orika.CustomMapper;
 import ma.glasnost.orika.MapperFactory;
@@ -74,7 +76,7 @@ public class MapperConfig extends ConfigurableMapper {
 						b.setTitulo(a.getTitulo());
 						b.setDescipcion(a.getDescipcion());
 						// TODO ver como vamos a manejar el ranking
-						b.setRanking(0);
+						b.setRanking(new BigDecimal(0));
 						// TODO ver como subimos la foto
 						b.setFotoPortada("");
 						// TODO ver como subimos el contenido
@@ -143,6 +145,35 @@ public class MapperConfig extends ConfigurableMapper {
 					}
 					@Override
 					public void mapBtoA(EventoEspectaculo b, ContenidoFullDTO a, MappingContext context) {
+					}
+				}).byDefault().register();
+	}
+	
+	private void configureContenidoOmdbMapper() {
+		this.factory.classMap(ContenidoOMDbDTO.class, Contenido.class)
+				.customize(new CustomMapper<ContenidoOMDbDTO, Contenido>() {
+					@Override
+					public void mapAtoB(ContenidoOMDbDTO a, Contenido b, MappingContext context) {
+						super.mapAtoB(a, b, context);
+						
+//						b.setActores(actores);
+//						b.setCategorias(categorias);
+//						b.setComentarios(comentarios);
+//						b.setDescipcion(a.getPlot());
+//						b.setDirectores(directores);
+//						b.setDuracion(duracion);
+//						b.setFechaPublicado(fechaPublicado);
+//						b.setFotoPortada(fotoPortada);
+//						b.setId(id);
+//						b.setPath(path);
+//						b.setProveedorContenido(proveedorContenido);
+//						b.setRanking(ranking);
+//						b.setSimilares(similares);
+//						b.setTitulo(titulo);
+//						
+					}
+					@Override
+					public void mapBtoA(Contenido b, ContenidoOMDbDTO a, MappingContext context) {
 					}
 				}).byDefault().register();
 	}
