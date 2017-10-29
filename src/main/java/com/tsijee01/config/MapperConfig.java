@@ -12,8 +12,7 @@ import com.tsijee01.persistence.model.EventoEspectaculo;
 import com.tsijee01.persistence.model.Pelicula;
 import com.tsijee01.persistence.model.Serie;
 import com.tsijee01.rest.dto.AdminTenantDTO;
-import com.tsijee01.rest.dto.ContenidoFullDTO;
-import com.tsijee01.rest.dto.ContenidoOMDbDTO;
+import com.tsijee01.rest.dto.ContenidoDTO;
 
 import ma.glasnost.orika.CustomMapper;
 import ma.glasnost.orika.MapperFactory;
@@ -66,94 +65,95 @@ public class MapperConfig extends ConfigurableMapper {
 
 	private void configureContenidoMapper() {
 
-		this.factory.classMap(ContenidoFullDTO.class, Contenido.class)
-				.customize(new CustomMapper<ContenidoFullDTO, Contenido>() {
+		this.factory.classMap(ContenidoDTO.class, Contenido.class)
+				.customize(new CustomMapper<ContenidoDTO, Contenido>() {
 					@Override
-					public void mapAtoB(ContenidoFullDTO a, Contenido b, MappingContext context) {
-						b.setDuracion(a.getDuracion()) ;
-						b.setId(a.getId());
-						b.setFechaPublicado(new Date()); 
-						b.setTitulo(a.getTitulo());
-						b.setDescipcion(a.getDescipcion());
-						// TODO ver como vamos a manejar el ranking
-						b.setRanking(new BigDecimal(0));
-						// TODO ver como subimos la foto
-						b.setFotoPortada("");
-						// TODO ver como subimos el contenido
-						b.setPath("");
+					public void mapAtoB(ContenidoDTO a, Contenido b, MappingContext context) {
+//						b.setDuracion(a.getDuracion()) ;
+//						b.setId(a.getId());
+//						b.setFechaPublicado(new Date()); 
+//						b.setTitulo(a.getTitulo());
+//						b.setDescipcion(a.getDescipcion());
+//						// TODO ver como vamos a manejar el ranking
+//						b.setRanking(new BigDecimal(0));
+//						// TODO ver como subimos la foto
+//						b.setFotoPortada("");
+//						// TODO ver como subimos el contenido
+//						b.setPath("");
 					}
 
 					@Override
-					public void mapBtoA(Contenido b, ContenidoFullDTO a, MappingContext context) {
+					public void mapBtoA(Contenido b, ContenidoDTO a, MappingContext context) {
 					}
 				}).byDefault().register();
 	}
 	private void configurePeliculaMapper() {
 
-		this.factory.classMap(ContenidoFullDTO.class, Pelicula.class)
-				.customize(new CustomMapper<ContenidoFullDTO, Pelicula>() {
+		this.factory.classMap(ContenidoDTO.class, Pelicula.class)
+				.customize(new CustomMapper<ContenidoDTO, Pelicula>() {
 					@Override
-					public void mapAtoB(ContenidoFullDTO a, Pelicula b, MappingContext context) {
+					public void mapAtoB(ContenidoDTO a, Pelicula b, MappingContext context) {
 						super.mapAtoB(a, b, context);
 					}
 
 					@Override
-					public void mapBtoA(Pelicula b, ContenidoFullDTO a, MappingContext context) {
+					public void mapBtoA(Pelicula b, ContenidoDTO a, MappingContext context) {
 					}
 				}).byDefault().register();
 	}
 	
 	private void configureSerieMapper() {
-		this.factory.classMap(ContenidoFullDTO.class, Serie.class)
-				.customize(new CustomMapper<ContenidoFullDTO, Serie>() {
+		this.factory.classMap(ContenidoDTO.class, Serie.class)
+				.customize(new CustomMapper<ContenidoDTO, Serie>() {
 					@Override
-					public void mapAtoB(ContenidoFullDTO a, Serie b, MappingContext context) {
+					public void mapAtoB(ContenidoDTO a, Serie b, MappingContext context) {
 						super.mapAtoB(a, b, context);
-						b.setCapitulo(a.getSerieCapitulo());
-						b.setTemporada(a.getSerieTemporada());
+//						b.setCapitulo(a.getSerieCapitulo());
+//						b.setTemporada(a.getSerieTemporada());
 					}
 
 					@Override
-					public void mapBtoA(Serie b, ContenidoFullDTO a, MappingContext context) {
+					public void mapBtoA(Serie b, ContenidoDTO a, MappingContext context) {
 					}
 				}).byDefault().register();
 	}
 	
 	private void configureEventoDeportivoMapper() {
-		this.factory.classMap(ContenidoFullDTO.class, EventoDeportivo.class)
-				.customize(new CustomMapper<ContenidoFullDTO, EventoDeportivo>() {
+		this.factory.classMap(ContenidoDTO.class, EventoDeportivo.class)
+				.customize(new CustomMapper<ContenidoDTO, EventoDeportivo>() {
 					@Override
-					public void mapAtoB(ContenidoFullDTO a, EventoDeportivo b, MappingContext context) {
+					public void mapAtoB(ContenidoDTO a, EventoDeportivo b, MappingContext context) {
 						super.mapAtoB(a, b, context);
 						b.setNombreDeporte(a.getEventoDeportivoNombreDeporte());
 						b.setNombreEquipoLocal(a.getEventoDeportivoNombreEquipoLocal());
 						b.setNombreEquipoVisitante(a.getEventoDeportivoNombreEquipoVisitante());
 					}
 					@Override
-					public void mapBtoA(EventoDeportivo b, ContenidoFullDTO a, MappingContext context) {
+					public void mapBtoA(EventoDeportivo b, ContenidoDTO a, MappingContext context) {
 					}
 				}).byDefault().register();
 	}
 	
 	private void configureEventoEspectaculoMapper() {
-		this.factory.classMap(ContenidoFullDTO.class, EventoEspectaculo.class)
-				.customize(new CustomMapper<ContenidoFullDTO, EventoEspectaculo>() {
+		this.factory.classMap(ContenidoDTO.class, EventoEspectaculo.class)
+				.customize(new CustomMapper<ContenidoDTO, EventoEspectaculo>() {
 					@Override
-					public void mapAtoB(ContenidoFullDTO a, EventoEspectaculo b, MappingContext context) {
+					public void mapAtoB(ContenidoDTO a, EventoEspectaculo b, MappingContext context) {
 						super.mapAtoB(a, b, context);
-						b.setFechaInicio(a.getEventoEspectaculoFechaInicio());
+						
 					}
 					@Override
-					public void mapBtoA(EventoEspectaculo b, ContenidoFullDTO a, MappingContext context) {
+					public void mapBtoA(EventoEspectaculo b, ContenidoDTO a, MappingContext context) {
+						super.mapBtoA(b, a, context);
 					}
 				}).byDefault().register();
 	}
 	
 	private void configureContenidoOmdbMapper() {
-		this.factory.classMap(ContenidoOMDbDTO.class, Contenido.class)
-				.customize(new CustomMapper<ContenidoOMDbDTO, Contenido>() {
+		this.factory.classMap(ContenidoDTO.class, Contenido.class)
+				.customize(new CustomMapper<ContenidoDTO, Contenido>() {
 					@Override
-					public void mapAtoB(ContenidoOMDbDTO a, Contenido b, MappingContext context) {
+					public void mapAtoB(ContenidoDTO a, Contenido b, MappingContext context) {
 						super.mapAtoB(a, b, context);
 						
 //						b.setActores(actores);
@@ -173,7 +173,7 @@ public class MapperConfig extends ConfigurableMapper {
 //						
 					}
 					@Override
-					public void mapBtoA(Contenido b, ContenidoOMDbDTO a, MappingContext context) {
+					public void mapBtoA(Contenido b, ContenidoDTO a, MappingContext context) {
 					}
 				}).byDefault().register();
 	}

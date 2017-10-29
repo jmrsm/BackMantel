@@ -25,6 +25,10 @@ public class HistorialContenido {
 	@JoinColumn(name = "id_contenido")
 	private Contenido contenido;
 
+	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE })
+	@JoinColumn(name = "id_Usuario")
+	private Usuario usuario;
+	
 	@Column(nullable = true)
 	private int puntuacion;
 
@@ -62,5 +66,22 @@ public class HistorialContenido {
 	public void setFavorito(boolean favorito) {
 		this.favorito = favorito;
 	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+	
 
 }

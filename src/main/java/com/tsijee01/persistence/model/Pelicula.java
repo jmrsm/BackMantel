@@ -6,11 +6,11 @@ import javax.persistence.Entity;
 public class Pelicula extends Contenido {
 
 	public Pelicula(Pelicula peli) {
-		super((Contenido)peli);
+		super((Contenido) peli);
 	}
 
 	public Pelicula() {
-		
+
 	}
 
 }

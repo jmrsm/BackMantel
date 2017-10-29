@@ -11,6 +11,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,18 +22,23 @@ import com.tsijee01.persistence.model.Contenido;
 import com.tsijee01.persistence.model.Director;
 import com.tsijee01.persistence.model.EventoDeportivo;
 import com.tsijee01.persistence.model.EventoEspectaculo;
+import com.tsijee01.persistence.model.HistorialContenido;
 import com.tsijee01.persistence.model.Pelicula;
 import com.tsijee01.persistence.model.ProveedorContenido;
 import com.tsijee01.persistence.model.Serie;
+import com.tsijee01.persistence.model.TemporadaSerie;
+import com.tsijee01.persistence.model.Usuario;
 import com.tsijee01.persistence.repository.ActorRepository;
 import com.tsijee01.persistence.repository.CategoriaContenidoRepository;
 import com.tsijee01.persistence.repository.DirectorRepository;
 import com.tsijee01.persistence.repository.EventoDeportivoRepository;
 import com.tsijee01.persistence.repository.EventoEspectaculoRepository;
+import com.tsijee01.persistence.repository.HistorialContenidoRepository;
 import com.tsijee01.persistence.repository.PeliculRepository;
 import com.tsijee01.persistence.repository.ProveedorContenidoRepository;
 import com.tsijee01.persistence.repository.SerieRepository;
-import com.tsijee01.rest.dto.ContenidoFullDTO;
+import com.tsijee01.persistence.repository.UsuarioRepository;
+import com.tsijee01.rest.dto.ContenidoDTO;
 import com.tsijee01.rest.dto.TipoContenidoEnum;
 import com.tsijee01.service.ContenidoService;
 
@@ -66,15 +73,21 @@ public class ContenidoServiceBean implements ContenidoService {
 
 	@Autowired
 	SerieRepository serieRepository;
+	
+	@Autowired
+	HistorialContenidoRepository historialContenidoRepository;
 
+	@Autowired 
+	UsuarioRepository usuarioRepository;
+	
 	@Autowired
 	MapperFacade mapper;
 
 	@Value("${contenidoPath}")
 	private String contenidoPath;
-	
+
 	public void altaContenidoMultimedia(Long contenidoId, MultipartFile contenido) throws IOException {
-		
+
 		// TODO crear una estructura de carpetas con el proveedor de contenido y
 		// el tipo de contenido si es serie carpeta para las temporadas
 		String pathContenido = contenidoPath + "\\" + String.valueOf(contenidoId) + "\\";
@@ -89,7 +102,7 @@ public class ContenidoServiceBean implements ContenidoService {
 	}
 
 	@Override
-	public boolean altaContenido(ContenidoFullDTO contenido) {
+	public boolean altaContenido(ContenidoDTO contenido) {
 
 		TipoContenidoEnum tcEnum = contenido.getTipoContenido();
 
@@ -112,8 +125,6 @@ public class ContenidoServiceBean implements ContenidoService {
 		}
 		return true;
 	}
-	
-	
 
 	// lo que sean objectos se los trae de la base y agrega al objeto que
 	// estamos creando los atributos simples son mapeados en el mapper
@@ -164,20 +175,86 @@ public class ContenidoServiceBean implements ContenidoService {
 	}
 
 	@Override
-	public boolean altaSerie(Serie contenido, int temporada, int capitulo) {
-		
-		Serie serie = new Serie(contenido);
-		serie.setCapitulo(capitulo);
-		serie.setTemporada(temporada);
-		return true;
-		
-	}
-	
-	@Override
-	public boolean altaPelicula(Pelicula contenido) {
+	public boolean altaSerie(Serie serie, Long proveedorContenidoId) {
 
-		Pelicula peli = new Pelicula(contenido);
+		this.guardarContenido(serie, proveedorContenidoId);
+		serie.setTemporadas(new ArrayList<TemporadaSerie>());
+		serieRepository.save(serie);
+		return true;
+
+	}
+
+	@Override
+	public boolean altaPelicula(Pelicula peli, Long proveedorContenidoId) {
+
+		this.guardarContenido(peli, proveedorContenidoId);
 		peliculaRepositoy.save(peli);
 		return true;
 	}
+
+	private void guardarContenido(Contenido cont, Long proveedorContenidoId) {
+
+		cont.setPath("");
+		cont.getActores().forEach(ac -> {
+			Optional<Actor> oa = actorRepository.findByNombreCompleto(ac.getNombreCompleto());
+			ac.setId(oa.isPresent() ? oa.get().getId() : actorRepository.save(ac).getId());
+
+		});
+		cont.getCategorias().forEach(ca -> {
+			Optional<Categoria> oc = categoriaRepository.findByNombreCategoria(ca.getNombreCategoria());
+			ca.setId(oc.isPresent() ? oc.get().getId() : categoriaRepository.save(ca).getId());
+		});
+		cont.getDirectores().forEach(dir -> {
+			Optional<Director> od = directorRepository.findByNombreCompleto(dir.getNombreCompleto());
+			dir.setId(od.isPresent() ? od.get().getId() : directorRepository.save(dir).getId());
+		});
+		cont.setProveedorContenido(proveedorContenidoRepository.findOne(proveedorContenidoId).get());
+	}
+
+	@Override
+	public Page<Pelicula> buscarPelicula(Pageable pag, String query) {
+		return peliculaRepositoy.findByTituloContaining(pag, query);
+
+	}
+
+	@Override
+	public List<Categoria> listarCategorias() {
+		return categoriaRepository.findAll();
+	}
+
+	@Override
+	public Page<Pelicula> buscarPeliculaPorGenero(Pageable pag, Long generoId) {
+		Optional<Categoria> c = categoriaRepository.findOne(generoId);
+		Page<Pelicula> listaPorGenero = peliculaRepositoy.findByCategorias(pag, c.get());
+		return listaPorGenero;
+	}
+
+	@Override
+	public Page<Pelicula> buscarPeliculaPorActor(Pageable pag, Long actorId) {
+		Optional<Actor> actor = actorRepository.findOne(actorId);
+		Page<Pelicula> listaPorActor = peliculaRepositoy.findByActores(pag, actor.get());
+		return listaPorActor;
+	}
+
+	@Override
+	public Page<Pelicula> buscarPeliculaPorDirector(Pageable pag, Long directorId) {
+		Optional<Director> dire = directorRepository.findOne(directorId);
+		Page<Pelicula> listaPorDirector = peliculaRepositoy.findByDirectores(pag, dire.get());
+		return listaPorDirector;
+	}
+
+	@Override
+	public List<Categoria> obtenerTiposContenido() {
+
+		return categoriaRepository.findAll();
+	}
+	
+	public List<Pelicula> recomendarAUsuario(Long usuarioId){
+		Optional <Usuario> usuario = usuarioRepository.findOne(usuarioId);
+		List<HistorialContenido> contenido = historialContenidoRepository.findbyUsuario(usuario.get());
+		
+		
+		return null;
+	}
+
 }

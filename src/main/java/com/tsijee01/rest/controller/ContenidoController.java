@@ -1,9 +1,14 @@
 package com.tsijee01.rest.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,13 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.tsijee01.persistence.model.Contenido;
 import com.tsijee01.persistence.model.Pelicula;
 import com.tsijee01.persistence.model.Serie;
-import com.tsijee01.rest.dto.ContenidoFullDTO;
-import com.tsijee01.rest.dto.ContenidoOMDbDTO;
+import com.tsijee01.rest.dto.CategoriaDTO;
+import com.tsijee01.rest.dto.ContenidoDTO;
 import com.tsijee01.rest.dto.SearchContenidoOmbdapi;
 import com.tsijee01.service.ContenidoService;
+import com.tsijee01.util.PageUtils;
 
 import ma.glasnost.orika.MapperFacade;
 
@@ -42,8 +47,7 @@ public class ContenidoController {
 
 	// crear nuevo contenido
 	@RequestMapping(path = "api/admin/contenido", method = RequestMethod.POST)
-	public ResponseEntity<?> altaCategoriaContenido(HttpServletRequest request,
-			@RequestBody ContenidoFullDTO contenido) {
+	public ResponseEntity<?> altaCategoriaContenido(HttpServletRequest request, @RequestBody ContenidoDTO contenido) {
 		if (contenidoService.altaContenido(contenido)) {
 			return new ResponseEntity<Object>(HttpStatus.OK);
 		} else {
@@ -63,47 +67,73 @@ public class ContenidoController {
 
 	}
 
-	// buscar contenido
+	// buscar contenido en Omdb para los admin
 	@RequestMapping(path = "api/admin/contenidoOmdb", method = RequestMethod.GET)
-	public ResponseEntity<SearchContenidoOmbdapi> buscarContenido(HttpServletRequest request,
+	public ResponseEntity<SearchContenidoOmbdapi> buscarContenidoOmdb(HttpServletRequest request,
 			@RequestParam(name = "nombre", required = true) String nombre,
 			@RequestParam(name = "year", required = false) String year) {
 
 		nombre = nombre.replace(" ", "+");
 		if (year == null || year.isEmpty()) {
-
 			return new ResponseEntity<SearchContenidoOmbdapi>(this.getContenidoByName(nombre), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<SearchContenidoOmbdapi>(this.getContenidoByNameAndYear(nombre, year),
 					HttpStatus.OK);
 		}
+	}
+
+	// buscar contenido en Omdb para los admin
+	@RequestMapping(path = "api/admin/tiposContenido", method = RequestMethod.GET)
+	public ResponseEntity<List<CategoriaDTO>> listarTiposContenido(HttpServletRequest request) {
+
+		return new ResponseEntity<List<CategoriaDTO>>(
+				mapper.mapAsList(contenidoService.obtenerTiposContenido(), CategoriaDTO.class), HttpStatus.OK);
+	}
+
+	@RequestMapping(path = "api/usuario/categoria", method = RequestMethod.GET)
+	public ResponseEntity<List<CategoriaDTO>> buscarContenido(HttpServletRequest request) {
+
+		List<CategoriaDTO> categorias = mapper.mapAsList(contenidoService.listarCategorias(), CategoriaDTO.class);
+		return new ResponseEntity<List<CategoriaDTO>>(categorias, HttpStatus.OK);
+
+	}
+
+	// buscar contenido usuario final
+	@RequestMapping(path = "api/usuario/pelicula", method = RequestMethod.GET)
+	public ResponseEntity<Page<Pelicula>> buscarContenido(HttpServletRequest request,
+			@RequestParam(name = "_start", required = true) int start,
+			@RequestParam(name = "_end", required = true) int end,
+			@RequestParam(name = "sort", required = false) String sortField,
+			@RequestParam(name = "order", required = false) String sortOrder,
+			@RequestParam(name = "_q", required = false) String query) {
+
+		Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
+		Page<Pelicula> pelis = contenidoService.buscarPelicula(pag, query);
+		return new ResponseEntity<Page<Pelicula>>(pelis, HttpStatus.OK);
 
 	}
 
 	// asociar contenido de omdb a un proveedor de contenido e insertarlo en la
 	// base de datos
-	@RequestMapping(path = "api/admin/guardarContenidoOmdb", method = RequestMethod.POST)
-	public ResponseEntity<?> buscarContenido(HttpServletRequest request,
-			@RequestParam(name = "proveedorContenidoId", required = true) Long ProveedorContenidoId,
+	@RequestMapping(path = "api/admin/contenidoOmdb", method = RequestMethod.POST)
+	public ResponseEntity<?> altaContenido(HttpServletRequest request,
+			@RequestParam(name = "proveedorContenidoId", required = true) Long proveedorContenidoId,
 			@RequestParam(name = "omdbId", required = true) String omdbId,
-			@RequestParam(name = "temporada", required = false) int temporada,
-			@RequestParam(name = "capitulo", required = false) int capitulo) {
+			@RequestParam(name = "esSerie", required = true) Boolean esSerie) {
 
-		ContenidoOMDbDTO cont = this.getContenidoOmdbById(omdbId);
-		if (temporada != 0 && capitulo != 0) {
-			contenidoService.altaSerie(mapper.map(cont, Serie.class), temporada, capitulo);
+		ContenidoDTO cont = this.getContenidoOmdbById(omdbId);
+		if (esSerie) {
+			contenidoService.altaSerie(mapper.map(cont, Serie.class), proveedorContenidoId);
 		} else {
-			contenidoService.altaPelicula(mapper.map(cont, Pelicula.class));
+			contenidoService.altaPelicula(mapper.map(cont, Pelicula.class), proveedorContenidoId);
 		}
-
 		return new ResponseEntity<Object>(HttpStatus.OK);
-
 	}
 
-	private ContenidoOMDbDTO getContenidoOmdbById(String omdbId) {
+	private ContenidoDTO getContenidoOmdbById(String omdbId) {
 
-		ContenidoOMDbDTO contenido = restTemplate
-				.getForObject("http://www.omdbapi.com/?i=" + omdbId + "&apikey=" + omdbapikey, ContenidoOMDbDTO.class);
+		ContenidoDTO contenido = restTemplate
+				.getForObject("http://www.omdbapi.com/?i=" + omdbId + "&apikey=" + omdbapikey, ContenidoDTO.class);
 		return contenido;
 
 	}
@@ -125,4 +155,51 @@ public class ContenidoController {
 
 	}
 
+	@RequestMapping(path = "api/usuario/listarPorGenero", method = RequestMethod.GET)
+	public ResponseEntity<Page<ContenidoDTO>> listarPorGenero(HttpServletRequest request,
+			@RequestParam(name = "_start", required = true) int start,
+			@RequestParam(name = "_end", required = true) int end,
+			@RequestParam(name = "sort", required = false) String sortField,
+			@RequestParam(name = "order", required = false) String sortOrder,
+			@RequestParam(name = "_q", required = false) String query,
+			@RequestParam(name = "generoId", required = true) Long generoId) {
+
+		Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
+		Page<Pelicula> pelis = contenidoService.buscarPeliculaPorGenero(pag, generoId);
+		Page<ContenidoDTO> dtoPage = pelis.map(new Converter<Pelicula, ContenidoDTO>() {
+			@Override
+			public ContenidoDTO convert(Pelicula peli) {
+				return mapper.map(peli, ContenidoDTO.class);
+			}
+		});
+		return new ResponseEntity<Page<ContenidoDTO>>(dtoPage, HttpStatus.OK);
+	}
+
+	@RequestMapping(path = "api/usuario/listarPorActor", method = RequestMethod.GET)
+	public ResponseEntity<Page<Pelicula>> listarPorActor(HttpServletRequest request,
+			@RequestParam(name = "_start", required = true) int start,
+			@RequestParam(name = "_end", required = true) int end,
+			@RequestParam(name = "sort", required = false) String sortField,
+			@RequestParam(name = "order", required = false) String sortOrder,
+			@RequestParam(name = "_q", required = false) String query,
+			@RequestParam(name = "actorId", required = true) Long actorId) {
+
+		Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
+		Page<Pelicula> pelis = contenidoService.buscarPeliculaPorActor(pag, actorId);
+		return new ResponseEntity<Page<Pelicula>>(pelis, HttpStatus.OK);
+	}
+
+	@RequestMapping(path = "api/usuario/listarPorDirector", method = RequestMethod.GET)
+	public ResponseEntity<Page<Pelicula>> listarPorDirector(HttpServletRequest request,
+			@RequestParam(name = "_start", required = true) int start,
+			@RequestParam(name = "_end", required = true) int end,
+			@RequestParam(name = "sort", required = false) String sortField,
+			@RequestParam(name = "order", required = false) String sortOrder,
+			@RequestParam(name = "_q", required = false) String query,
+			@RequestParam(name = "directorId", required = true) Long directorId) {
+
+		Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
+		Page<Pelicula> pelis = contenidoService.buscarPeliculaPorDirector(pag, directorId);
+		return new ResponseEntity<Page<Pelicula>>(pelis, HttpStatus.OK);
+	}
 }

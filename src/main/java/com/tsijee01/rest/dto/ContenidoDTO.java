@@ -9,20 +9,39 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+import javax.persistence.Column;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 // este deto es lo que te retorna completo para guardar los datos en la basa una vez que tenemos el id 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ContenidoOMDbDTO {
+public class ContenidoDTO {
 
 	private long id;
 
 	private List<ComentarioDTO> comentarios;
 
-	private List<ContenidoOMDbDTO> similares;
+	private List<ContenidoDTO> similares;
 
 	private ProveedorContenidoDTO proveedorContenido;
+
+	private TipoContenidoEnum tipoContenido;
+
+	// si es evento
+	private Boolean esPago;
+	
+	private int precio;
+	
+	private Date fechaInicio;
+	
+	
+	// si es evento deportivo
+	private String eventoDeportivoNombreEquipoVisitante;
+
+	private String eventoDeportivoNombreEquipoLocal;
+
+	private String eventoDeportivoNombreDeporte;
 
 	@JsonProperty("Title")
 	private String titulo;
@@ -44,7 +63,7 @@ public class ContenidoOMDbDTO {
 	private List<CategoriaDTO> categorias;
 
 	@JsonProperty("Director")
-	private List<DirectorDTO> director;
+	private List<DirectorDTO> directores;
 
 	// @JsonProperty("Writer")
 	// private String writer;
@@ -90,6 +109,55 @@ public class ContenidoOMDbDTO {
 		this.id = id;
 	}
 
+
+	public int getPrecio() {
+		return precio;
+	}
+
+	public void setPrecio(int precio) {
+		this.precio = precio;
+	}
+
+	public Boolean getEsPago() {
+		return esPago;
+	}
+
+	public void setEsPago(Boolean esPago) {
+		this.esPago = esPago;
+	}
+
+	public Date getFechaInicio() {
+		return fechaInicio;
+	}
+
+	public void setFechaInicio(Date fechaInicio) {
+		this.fechaInicio = fechaInicio;
+	}
+
+	public String getEventoDeportivoNombreEquipoVisitante() {
+		return eventoDeportivoNombreEquipoVisitante;
+	}
+
+	public void setEventoDeportivoNombreEquipoVisitante(String eventoDeportivoNombreEquipoVisitante) {
+		this.eventoDeportivoNombreEquipoVisitante = eventoDeportivoNombreEquipoVisitante;
+	}
+
+	public String getEventoDeportivoNombreEquipoLocal() {
+		return eventoDeportivoNombreEquipoLocal;
+	}
+
+	public void setEventoDeportivoNombreEquipoLocal(String eventoDeportivoNombreEquipoLocal) {
+		this.eventoDeportivoNombreEquipoLocal = eventoDeportivoNombreEquipoLocal;
+	}
+
+	public String getEventoDeportivoNombreDeporte() {
+		return eventoDeportivoNombreDeporte;
+	}
+
+	public void setEventoDeportivoNombreDeporte(String eventoDeportivoNombreDeporte) {
+		this.eventoDeportivoNombreDeporte = eventoDeportivoNombreDeporte;
+	}
+
 	public Integer getAnio() {
 		return anio;
 	}
@@ -98,8 +166,12 @@ public class ContenidoOMDbDTO {
 		this.anio = anio;
 	}
 
-	public void setDirector(List<DirectorDTO> director) {
-		this.director = director;
+	public void setAnio(String anio) {
+		this.anio = Integer.valueOf(anio.substring(0, 3));
+	}
+
+	public void setDirectores(List<DirectorDTO> director) {
+		this.directores = director;
 	}
 
 	public void setActores(List<ActorDTO> actores) {
@@ -220,12 +292,13 @@ public class ContenidoOMDbDTO {
 		this.website = website;
 	}
 
-	public List<DirectorDTO> getDirector() {
-		return director;
+	public List<DirectorDTO> getDirectores() {
+		return directores;
 	}
 
-	public void setDirector(String director) {
-		this.director = Arrays.asList(director.split(",")).stream().map(DirectorDTO::new).collect(Collectors.toList());
+	public void setDirectores(String director) {
+		this.directores = Arrays.asList(director.split(",")).stream().map(DirectorDTO::new)
+				.collect(Collectors.toList());
 	}
 
 	public void setActores(String actor) {
@@ -238,7 +311,6 @@ public class ContenidoOMDbDTO {
 	}
 
 	public void setCantVotos(String cantVotos) {
-		System.out.println((cantVotos.replace(",", "")));
 		this.cantVotos = Integer.valueOf(cantVotos.replace(",", ""));
 	}
 
@@ -250,11 +322,11 @@ public class ContenidoOMDbDTO {
 		this.comentarios = comentarios;
 	}
 
-	public List<ContenidoOMDbDTO> getSimilares() {
+	public List<ContenidoDTO> getSimilares() {
 		return similares;
 	}
 
-	public void setSimilares(List<ContenidoOMDbDTO> similares) {
+	public void setSimilares(List<ContenidoDTO> similares) {
 		this.similares = similares;
 	}
 
@@ -264,6 +336,22 @@ public class ContenidoOMDbDTO {
 
 	public void setProveedorContenido(ProveedorContenidoDTO proveedorContenido) {
 		this.proveedorContenido = proveedorContenido;
+	}
+
+	public TipoContenidoEnum getTipoContenido() {
+		return tipoContenido;
+	}
+
+	public void setTipoContenido(TipoContenidoEnum tipoContenido) {
+		this.tipoContenido = tipoContenido;
+	}
+
+	public void setDuracion(int duracion) {
+		this.duracion = duracion;
+	}
+
+	public void setCantVotos(int cantVotos) {
+		this.cantVotos = cantVotos;
 	}
 
 }
