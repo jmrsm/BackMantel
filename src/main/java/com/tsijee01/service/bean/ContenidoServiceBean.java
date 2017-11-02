@@ -175,21 +175,21 @@ public class ContenidoServiceBean implements ContenidoService {
 	}
 
 	@Override
-	public boolean altaSerie(Serie serie, Long proveedorContenidoId) {
+	public Long altaSerie(Serie serie, Long proveedorContenidoId) {
 
 		this.guardarContenido(serie, proveedorContenidoId);
 		serie.setTemporadas(new ArrayList<TemporadaSerie>());
-		serieRepository.save(serie);
-		return true;
+		return serieRepository.save(serie).getId();
+		
 
 	}
 
 	@Override
-	public boolean altaPelicula(Pelicula peli, Long proveedorContenidoId) {
+	public Long altaPelicula(Pelicula peli, Long proveedorContenidoId) {
 
 		this.guardarContenido(peli, proveedorContenidoId);
-		peliculaRepositoy.save(peli);
-		return true;
+		return peliculaRepositoy.save(peli).getId();
+		
 	}
 
 	private void guardarContenido(Contenido cont, Long proveedorContenidoId) {

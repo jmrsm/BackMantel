@@ -18,9 +18,9 @@ public interface ContenidoService {
 
 	boolean altaContenido(ContenidoDTO contenido);
 
-	boolean altaPelicula(Pelicula contenido, Long proveedorContenidoId);
+	Long  altaPelicula(Pelicula contenido, Long proveedorContenidoId);
 
-	boolean altaSerie(Serie contenido, Long proveedorContenidoId);
+	Long altaSerie(Serie contenido, Long proveedorContenidoId);
 
 	Page<Pelicula> buscarPelicula(Pageable pag, String query);
 

@@ -55,18 +55,6 @@ public class ContenidoController {
 		}
 	}
 
-	@PostMapping("api/admin/contenidoMultimadia")
-	public ResponseEntity<Object> agregarImagenAEvento(HttpServletRequest request,
-			@RequestParam("file") MultipartFile file, @RequestParam("contenidoId") Long contenidoId) {
-		try {
-			contenidoService.altaContenidoMultimedia(contenidoId, file);
-			return new ResponseEntity<Object>(HttpStatus.OK);
-		} catch (Exception ex) {
-			return new ResponseEntity<Object>(HttpStatus.CONFLICT);
-		}
-
-	}
-
 	// buscar contenido en Omdb para los admin
 	@RequestMapping(path = "api/admin/contenidoOmdb", method = RequestMethod.GET)
 	public ResponseEntity<SearchContenidoOmbdapi> buscarContenidoOmdb(HttpServletRequest request,
@@ -113,21 +101,23 @@ public class ContenidoController {
 
 	}
 
+	// TODO agregar al return id de contenido 
 	// asociar contenido de omdb a un proveedor de contenido e insertarlo en la
 	// base de datos
 	@RequestMapping(path = "api/admin/contenidoOmdb", method = RequestMethod.POST)
-	public ResponseEntity<?> altaContenido(HttpServletRequest request,
+	public ResponseEntity<Long> altaContenido(HttpServletRequest request,
 			@RequestParam(name = "proveedorContenidoId", required = true) Long proveedorContenidoId,
 			@RequestParam(name = "omdbId", required = true) String omdbId,
 			@RequestParam(name = "esSerie", required = true) Boolean esSerie) {
 
 		ContenidoDTO cont = this.getContenidoOmdbById(omdbId);
+		Long id = null;
 		if (esSerie) {
-			contenidoService.altaSerie(mapper.map(cont, Serie.class), proveedorContenidoId);
+			id = contenidoService.altaSerie(mapper.map(cont, Serie.class), proveedorContenidoId);
 		} else {
-			contenidoService.altaPelicula(mapper.map(cont, Pelicula.class), proveedorContenidoId);
+			id = contenidoService.altaPelicula(mapper.map(cont, Pelicula.class), proveedorContenidoId);
 		}
-		return new ResponseEntity<Object>(HttpStatus.OK);
+		return new ResponseEntity<Long>(id,HttpStatus.OK);
 	}
 
 	private ContenidoDTO getContenidoOmdbById(String omdbId) {
@@ -176,7 +166,7 @@ public class ContenidoController {
 	}
 
 	@RequestMapping(path = "api/usuario/listarPorActor", method = RequestMethod.GET)
-	public ResponseEntity<Page<Pelicula>> listarPorActor(HttpServletRequest request,
+	public ResponseEntity<Page<ContenidoDTO>> listarPorActor(HttpServletRequest request,
 			@RequestParam(name = "_start", required = true) int start,
 			@RequestParam(name = "_end", required = true) int end,
 			@RequestParam(name = "sort", required = false) String sortField,
@@ -186,11 +176,17 @@ public class ContenidoController {
 
 		Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
 		Page<Pelicula> pelis = contenidoService.buscarPeliculaPorActor(pag, actorId);
-		return new ResponseEntity<Page<Pelicula>>(pelis, HttpStatus.OK);
+		Page<ContenidoDTO> dtoPage = pelis.map(new Converter<Pelicula, ContenidoDTO>() {
+			@Override
+			public ContenidoDTO convert(Pelicula peli) {
+				return mapper.map(peli, ContenidoDTO.class);
+			}
+		});
+		return new ResponseEntity<Page<ContenidoDTO>>(dtoPage, HttpStatus.OK);
 	}
 
 	@RequestMapping(path = "api/usuario/listarPorDirector", method = RequestMethod.GET)
-	public ResponseEntity<Page<Pelicula>> listarPorDirector(HttpServletRequest request,
+	public ResponseEntity<Page<ContenidoDTO>> listarPorDirector(HttpServletRequest request,
 			@RequestParam(name = "_start", required = true) int start,
 			@RequestParam(name = "_end", required = true) int end,
 			@RequestParam(name = "sort", required = false) String sortField,
@@ -200,6 +196,12 @@ public class ContenidoController {
 
 		Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
 		Page<Pelicula> pelis = contenidoService.buscarPeliculaPorDirector(pag, directorId);
-		return new ResponseEntity<Page<Pelicula>>(pelis, HttpStatus.OK);
+		Page<ContenidoDTO> dtoPage = pelis.map(new Converter<Pelicula, ContenidoDTO>() {
+			@Override
+			public ContenidoDTO convert(Pelicula peli) {
+				return mapper.map(peli, ContenidoDTO.class);
+			}
+		});
+		return new ResponseEntity<Page<ContenidoDTO>>(dtoPage, HttpStatus.OK);
 	}
 }
