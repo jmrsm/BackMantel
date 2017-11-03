@@ -251,9 +251,7 @@ public class ContenidoServiceBean implements ContenidoService {
 	
 	public List<Pelicula> recomendarAUsuario(Long usuarioId){
 		Optional <Usuario> usuario = usuarioRepository.findOne(usuarioId);
-		List<HistorialContenido> contenido = historialContenidoRepository.findbyUsuario(usuario.get());
-		
-		
+		List<HistorialContenido> contenido = historialContenidoRepository.findByUsuario(usuario.get());
 		return null;
 	}
 

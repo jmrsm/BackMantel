@@ -10,5 +10,5 @@ import com.tsijee01.persistence.model.Usuario;
 @Repository
 public interface HistorialContenidoRepository extends BaseRepository<HistorialContenido , Long >{
 
-	List<HistorialContenido>  findbyUsuario(Usuario usuario);
+	List<HistorialContenido>  findByUsuario(Usuario usuario);
 }
