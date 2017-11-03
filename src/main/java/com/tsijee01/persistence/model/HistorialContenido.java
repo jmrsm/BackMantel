@@ -32,6 +32,11 @@ public class HistorialContenido {
 	@Column(nullable = true)
 	private int puntuacion;
 
+	// en caso de que lo haya visto 
+	@Column(nullable = true)
+	private Long tiempoDeReproduccion;
+
+	
 	@Column(nullable = true)
 	private boolean favorito;
 
@@ -82,6 +87,13 @@ public class HistorialContenido {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
-	
+
+	public Long getTiempoDeReproduccion() {
+		return tiempoDeReproduccion;
+	}
+
+	public void setTiempoDeReproduccion(Long tiempoDeReproduccion) {
+		this.tiempoDeReproduccion = tiempoDeReproduccion;
+	}
 
 }

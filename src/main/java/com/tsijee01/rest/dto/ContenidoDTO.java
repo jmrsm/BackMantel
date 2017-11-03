@@ -28,6 +28,8 @@ public class ContenidoDTO {
 
 	private TipoContenidoEnum tipoContenido;
 
+	private Boolean esDestacado;
+	
 	// si es evento
 	private Boolean esPago;
 	
@@ -354,4 +356,13 @@ public class ContenidoDTO {
 		this.cantVotos = cantVotos;
 	}
 
+	public Boolean getEsDestacado() {
+		return esDestacado;
+	}
+
+	public void setEsDestacado(Boolean esDestacado) {
+		this.esDestacado = esDestacado;
+	}
+
+	
 }

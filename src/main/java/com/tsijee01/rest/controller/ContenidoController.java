@@ -70,6 +70,16 @@ public class ContenidoController {
 		}
 	}
 
+	@RequestMapping(path = "api/admin/destacado", method = RequestMethod.POST)
+	public ResponseEntity<?> marcarDestacado(HttpServletRequest request,
+			@RequestParam(name = "contenidoId", required = true) Long contenidoId,
+			@RequestParam(name = "esDestacado", required = true) Boolean esDestacado) {
+
+		contenidoService.marcarDestacado(contenidoId, esDestacado);
+		return new ResponseEntity<Object>(HttpStatus.OK);
+
+	}
+
 	// buscar contenido en Omdb para los admin
 	@RequestMapping(path = "api/admin/tiposContenido", method = RequestMethod.GET)
 	public ResponseEntity<List<CategoriaDTO>> listarTiposContenido(HttpServletRequest request) {
@@ -101,23 +111,23 @@ public class ContenidoController {
 
 	}
 
-	// TODO agregar al return id de contenido 
-	// asociar contenido de omdb a un proveedor de contenido e insertarlo en la
-	// base de datos
 	@RequestMapping(path = "api/admin/contenidoOmdb", method = RequestMethod.POST)
 	public ResponseEntity<Long> altaContenido(HttpServletRequest request,
 			@RequestParam(name = "proveedorContenidoId", required = true) Long proveedorContenidoId,
 			@RequestParam(name = "omdbId", required = true) String omdbId,
-			@RequestParam(name = "esSerie", required = true) Boolean esSerie) {
+			@RequestParam(name = "path", required = true) String path,
+			@RequestParam(name = "esSerie", required = true) Boolean esSerie,
+			@RequestParam(name = "esDestacado", required = true) Boolean esDestacado) {
 
 		ContenidoDTO cont = this.getContenidoOmdbById(omdbId);
 		Long id = null;
 		if (esSerie) {
-			id = contenidoService.altaSerie(mapper.map(cont, Serie.class), proveedorContenidoId);
+			id = contenidoService.altaSerie(mapper.map(cont, Serie.class), proveedorContenidoId, esDestacado);
 		} else {
-			id = contenidoService.altaPelicula(mapper.map(cont, Pelicula.class), proveedorContenidoId);
+			id = contenidoService.altaPelicula(mapper.map(cont, Pelicula.class), proveedorContenidoId, path,
+					esDestacado);
 		}
-		return new ResponseEntity<Long>(id,HttpStatus.OK);
+		return new ResponseEntity<Long>(id, HttpStatus.OK);
 	}
 
 	private ContenidoDTO getContenidoOmdbById(String omdbId) {
@@ -204,4 +214,7 @@ public class ContenidoController {
 		});
 		return new ResponseEntity<Page<ContenidoDTO>>(dtoPage, HttpStatus.OK);
 	}
+
+	// TODO crear una api que reciva el contenido que está viendo un usuario
+	// junto al tiempo de reproducción
 }

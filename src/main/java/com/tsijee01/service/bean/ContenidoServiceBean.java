@@ -30,6 +30,7 @@ import com.tsijee01.persistence.model.TemporadaSerie;
 import com.tsijee01.persistence.model.Usuario;
 import com.tsijee01.persistence.repository.ActorRepository;
 import com.tsijee01.persistence.repository.CategoriaContenidoRepository;
+import com.tsijee01.persistence.repository.ContenidoRepository;
 import com.tsijee01.persistence.repository.DirectorRepository;
 import com.tsijee01.persistence.repository.EventoDeportivoRepository;
 import com.tsijee01.persistence.repository.EventoEspectaculoRepository;
@@ -47,6 +48,9 @@ import ma.glasnost.orika.MapperFacade;
 @Service
 public class ContenidoServiceBean implements ContenidoService {
 
+	@Autowired
+	ContenidoRepository contenidoRepository;
+	
 	@Autowired
 	PeliculRepository peliculaRepositoy;
 
@@ -109,10 +113,25 @@ public class ContenidoServiceBean implements ContenidoService {
 		if (tcEnum.equals(TipoContenidoEnum.EVENTO_DEPORTIVO)) {
 			EventoDeportivo eventoDeportivo = mapper.map(contenido, EventoDeportivo.class);
 			eventoDeportivo = (EventoDeportivo) this.crearContenido(eventoDeportivo);
+			if (contenido.getEsPago()){
+				eventoDeportivo.setEsPago(true);
+				eventoDeportivo.setPrecio(contenido.getPrecio());
+				eventoDeportivo.setFechaInicio(contenido.getFechaInicio());
+			}
+			eventoDeportivo.setNombreEquipoLocal(contenido.getEventoDeportivoNombreEquipoLocal());
+			eventoDeportivo.setNombreEquipoVisitante(contenido.getEventoDeportivoNombreEquipoVisitante());
+			eventoDeportivo.setNombreDeporte(contenido.getEventoDeportivoNombreDeporte());
 			eventoDeportivoRepository.save(eventoDeportivo);
 		} else if (tcEnum.equals(TipoContenidoEnum.EVENTO_ESPECTACULO)) {
 			EventoEspectaculo espectaculo = mapper.map(contenido, EventoEspectaculo.class);
+			
 			espectaculo = (EventoEspectaculo) this.crearContenido(espectaculo);
+			if (contenido.getEsPago()){
+				espectaculo.setEsPago(true);
+				espectaculo.setPrecio(contenido.getPrecio());
+				espectaculo.setFechaInicio(contenido.getFechaInicio());
+			}
+			
 			eventoEspectaculoRepositoy.save(espectaculo);
 		} else if (tcEnum.equals(TipoContenidoEnum.PELICULA)) {
 			Pelicula peli = mapper.map(contenido, Pelicula.class);
@@ -175,9 +194,9 @@ public class ContenidoServiceBean implements ContenidoService {
 	}
 
 	@Override
-	public Long altaSerie(Serie serie, Long proveedorContenidoId) {
+	public Long altaSerie(Serie serie, Long proveedorContenidoId, Boolean esDestacado) {
 
-		this.guardarContenido(serie, proveedorContenidoId);
+		this.guardarContenido(serie, proveedorContenidoId, esDestacado);
 		serie.setTemporadas(new ArrayList<TemporadaSerie>());
 		return serieRepository.save(serie).getId();
 		
@@ -185,14 +204,15 @@ public class ContenidoServiceBean implements ContenidoService {
 	}
 
 	@Override
-	public Long altaPelicula(Pelicula peli, Long proveedorContenidoId) {
+	public Long altaPelicula(Pelicula peli, Long proveedorContenidoId, String path, Boolean esDestacado) {
 
-		this.guardarContenido(peli, proveedorContenidoId);
+		this.guardarContenido(peli, proveedorContenidoId, esDestacado);
+		peli.setPath(path);
 		return peliculaRepositoy.save(peli).getId();
 		
 	}
 
-	private void guardarContenido(Contenido cont, Long proveedorContenidoId) {
+	private void guardarContenido(Contenido cont, Long proveedorContenidoId, Boolean esDestacado) {
 
 		cont.setPath("");
 		cont.getActores().forEach(ac -> {
@@ -209,6 +229,9 @@ public class ContenidoServiceBean implements ContenidoService {
 			dir.setId(od.isPresent() ? od.get().getId() : directorRepository.save(dir).getId());
 		});
 		cont.setProveedorContenido(proveedorContenidoRepository.findOne(proveedorContenidoId).get());
+		cont.setEsDestacado(esDestacado);
+		
+		
 	}
 
 	@Override
@@ -253,6 +276,14 @@ public class ContenidoServiceBean implements ContenidoService {
 		Optional <Usuario> usuario = usuarioRepository.findOne(usuarioId);
 		List<HistorialContenido> contenido = historialContenidoRepository.findByUsuario(usuario.get());
 		return null;
+	}
+
+	@Override
+	public void marcarDestacado(Long contenidoId, Boolean esDestacado) {
+		Optional<Contenido> cont = contenidoRepository.findOne(contenidoId);
+		cont.get().setEsDestacado(esDestacado);
+		contenidoRepository.save(cont.get());
+		
 	}
 
 }

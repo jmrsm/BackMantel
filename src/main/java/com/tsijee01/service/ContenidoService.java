@@ -18,9 +18,9 @@ public interface ContenidoService {
 
 	boolean altaContenido(ContenidoDTO contenido);
 
-	Long  altaPelicula(Pelicula contenido, Long proveedorContenidoId);
+	Long  altaPelicula(Pelicula contenido, Long proveedorContenidoId, String path, Boolean esDestacado);
 
-	Long altaSerie(Serie contenido, Long proveedorContenidoId);
+	Long altaSerie(Serie contenido, Long proveedorContenidoId, Boolean esDestacado);
 
 	Page<Pelicula> buscarPelicula(Pageable pag, String query);
 
@@ -33,5 +33,7 @@ public interface ContenidoService {
 	Page<Pelicula> buscarPeliculaPorDirector(Pageable pag, Long directorId);
 
 	List<Categoria> obtenerTiposContenido();
+
+	void marcarDestacado(Long contenidoId, Boolean esDestacado);
 
 }

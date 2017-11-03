@@ -66,6 +66,9 @@ public abstract class Contenido {
 
 	@Column(length = 100, nullable = false)
 	private int duracion;
+	
+	@Column(length = 100, nullable = false)
+	private Boolean esDestacado;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
 	@JoinColumn(name = "id")
@@ -221,4 +224,13 @@ public abstract class Contenido {
 		this.duracion = duracion;
 	}
 
+	public Boolean getEsDestacado() {
+		return esDestacado;
+	}
+
+	public void setEsDestacado(Boolean esDestacado) {
+		this.esDestacado = esDestacado;
+	}
+
+	
 }
