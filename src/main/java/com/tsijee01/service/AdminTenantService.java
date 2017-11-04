@@ -8,5 +8,5 @@ public interface AdminTenantService {
 	
 	String existeUser(String email);
 
-
+	String idUser(String email);
 }
