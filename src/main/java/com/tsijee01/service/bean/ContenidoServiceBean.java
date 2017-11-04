@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tsijee01.persistence.model.Actor;
+import com.tsijee01.persistence.model.AdminTenant;
 import com.tsijee01.persistence.model.Categoria;
 import com.tsijee01.persistence.model.Contenido;
 import com.tsijee01.persistence.model.Director;
@@ -29,6 +30,7 @@ import com.tsijee01.persistence.model.Serie;
 import com.tsijee01.persistence.model.TemporadaSerie;
 import com.tsijee01.persistence.model.Usuario;
 import com.tsijee01.persistence.repository.ActorRepository;
+import com.tsijee01.persistence.repository.AdminTenantRepository;
 import com.tsijee01.persistence.repository.CategoriaContenidoRepository;
 import com.tsijee01.persistence.repository.ContenidoRepository;
 import com.tsijee01.persistence.repository.DirectorRepository;
@@ -83,6 +85,9 @@ public class ContenidoServiceBean implements ContenidoService {
 
 	@Autowired 
 	UsuarioRepository usuarioRepository;
+	
+	@Autowired 
+	AdminTenantRepository adminTenantRepository;
 	
 	@Autowired
 	MapperFacade mapper;
@@ -284,6 +289,12 @@ public class ContenidoServiceBean implements ContenidoService {
 		cont.get().setEsDestacado(esDestacado);
 		contenidoRepository.save(cont.get());
 		
+	}
+	@Override
+	public List<Contenido> obtenermicontenido(String email) {
+		Optional<AdminTenant> admin = adminTenantRepository.findOneByEmail(email);
+		List<Contenido> contenido = contenidoRepository.findByProveedorContenido(admin.get().getId());
+		return contenido;
 	}
 
 }

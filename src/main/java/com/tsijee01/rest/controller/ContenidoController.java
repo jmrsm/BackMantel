@@ -118,8 +118,8 @@ public class ContenidoController {
 			@RequestParam(name = "path", required = true) String path,
 			@RequestParam(name = "esSerie", required = true) Boolean esSerie,
 			@RequestParam(name = "esDestacado", required = true) Boolean esDestacado) {
-
 		ContenidoDTO cont = this.getContenidoOmdbById(omdbId);
+
 		Long id = null;
 		if (esSerie) {
 			id = contenidoService.altaSerie(mapper.map(cont, Serie.class), proveedorContenidoId, esDestacado);
@@ -213,6 +213,15 @@ public class ContenidoController {
 			}
 		});
 		return new ResponseEntity<Page<ContenidoDTO>>(dtoPage, HttpStatus.OK);
+	}
+	
+	@RequestMapping(path = "api/admin/listarmicontenido", method = RequestMethod.GET)
+	public ResponseEntity<List<ContenidoDTO>> listarmicontenido(HttpServletRequest request,
+			@RequestParam(name = "email", required = false) String email) {
+
+		List<ContenidoDTO> contenidos = mapper.mapAsList(contenidoService.listarCategorias(), ContenidoDTO.class);
+		return new ResponseEntity<List<ContenidoDTO>>(contenidos, HttpStatus.OK);
+
 	}
 
 	// TODO crear una api que reciva el contenido que está viendo un usuario

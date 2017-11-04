@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tsijee01.persistence.model.Categoria;
+import com.tsijee01.persistence.model.Contenido;
 import com.tsijee01.persistence.model.Pelicula;
 import com.tsijee01.persistence.model.Serie;
 import com.tsijee01.rest.dto.ContenidoDTO;
@@ -33,7 +34,9 @@ public interface ContenidoService {
 	Page<Pelicula> buscarPeliculaPorDirector(Pageable pag, Long directorId);
 
 	List<Categoria> obtenerTiposContenido();
-
+	
+	List<Contenido> obtenermicontenido(String email);
+	
 	void marcarDestacado(Long contenidoId, Boolean esDestacado);
 
 }
