@@ -41,4 +41,6 @@ public interface ContenidoService {
 
 	void guardarReproduccion(Long idUsuario, Long idContenido, Long tiempo);
 
+	void marcarFavorito(Long contenidoId, Boolean esFavorito, Long usuarioId);
+
 }

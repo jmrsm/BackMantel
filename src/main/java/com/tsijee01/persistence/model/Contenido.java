@@ -31,7 +31,7 @@ public abstract class Contenido {
 	@Column(name = "id")
 	private long id;
 
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private Date fechaPublicado;
 
 	@Column(length = 100, nullable = false)

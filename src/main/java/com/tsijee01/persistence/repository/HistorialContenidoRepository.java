@@ -15,4 +15,9 @@ public interface HistorialContenidoRepository extends BaseRepository<HistorialCo
 	List<HistorialContenido>  findByUsuario(Usuario usuario);
 
 	Optional<HistorialContenido> findByContenidoAndUsuario(Contenido contenido, Usuario usuario);
+
+	static List<HistorialContenido> findByFavoritoTrueAndUsuario(Optional<Usuario> u) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

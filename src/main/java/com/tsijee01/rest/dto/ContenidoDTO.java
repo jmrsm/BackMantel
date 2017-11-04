@@ -54,7 +54,7 @@ public class ContenidoDTO {
 	// @JsonProperty("Rated")
 	// private String rated;
 
-	@JsonProperty("Released")
+
 	// @JsonFormat(pattern="dd MMM yyyy")
 	private Date fechaPublicado;
 
@@ -187,9 +187,11 @@ public class ContenidoDTO {
 	public void setFechaPublicado(Date fechaPublicado) {
 		this.fechaPublicado = fechaPublicado;
 	}
-
+	@JsonProperty("Released")
 	public void setFechaPublicado(String released) throws ParseException {
+		if (!released.equals("N/A")) {
 		this.fechaPublicado = new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH).parse(released);
+		}
 	}
 
 	/*public int getDuracion() {

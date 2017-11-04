@@ -1,5 +1,7 @@
 package com.tsijee01.rest.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tsijee01.persistence.model.Contenido;
+import com.tsijee01.rest.dto.ContenidoDTO;
 import com.tsijee01.service.UsuarioService;
 
 import ma.glasnost.orika.MapperFacade;
@@ -41,12 +45,12 @@ public class UsuarioController {
 
 	}
 	
-	@RequestMapping(path = "api/usuario/listarContenido", method = RequestMethod.POST)
-	public ResponseEntity<?> listarContenido(HttpServletRequest request,
+	@RequestMapping(path = "api/usuario/listarFavoritos", method = RequestMethod.GET)
+	public ResponseEntity<?> listarFavoritos(HttpServletRequest request,
 			@RequestParam(name = "id", required = true) Long id) {
 
-		
-			return new ResponseEntity<Object>(HttpStatus.OK);
+		List<Contenido> listarFavoritos = userService.listarFavoritos(id);
+			return new ResponseEntity<List<Contenido>>(listarFavoritos, HttpStatus.OK);
 
 	}
 }

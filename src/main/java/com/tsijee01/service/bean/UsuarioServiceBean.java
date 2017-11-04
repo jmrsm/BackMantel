@@ -6,7 +6,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tsijee01.persistence.model.Contenido;
+import com.tsijee01.persistence.model.HistorialContenido;
 import com.tsijee01.persistence.model.Usuario;
+import com.tsijee01.persistence.repository.ContenidoRepository;
+import com.tsijee01.persistence.repository.HistorialContenidoRepository;
 import com.tsijee01.persistence.repository.UsuarioRepository;
 import com.tsijee01.service.UsuarioService;
 import com.tsijee01.util.Password;
@@ -78,5 +82,18 @@ public class UsuarioServiceBean implements UsuarioService{
 			return true;
 		}
 		
+	}
+
+	@Override
+	public List<Contenido> listarFavoritos(Long id) {
+		Optional <Usuario> u = usuarioRepository.findOne(id);
+		List<HistorialContenido> listaHC = HistorialContenidoRepository.findByFavoritoTrueAndUsuario(u);
+		List<Contenido> listaF = null;
+		
+		
+		for (int i = 0; i < listaHC.size(); i++) {
+			listaF.set(i, listaHC.get(i).getContenido());
+		}
+		return listaF;
 	}
 }

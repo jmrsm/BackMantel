@@ -236,4 +236,15 @@ public class ContenidoController {
 		
 		return new ResponseEntity<Object>(HttpStatus.OK);
 	}
+	
+	@RequestMapping(path = "api/usuario/favorito", method = RequestMethod.POST)
+	public ResponseEntity<?> marcarFavorito(HttpServletRequest request,
+			@RequestParam(name = "contenidoId", required = true) Long contenidoId,
+			@RequestParam(name = "usuarioId", required = true) Long usuarioId,
+			@RequestParam(name = "esFavorito", required = true) Boolean esFavorito) {
+
+		contenidoService.marcarFavorito(contenidoId, esFavorito, usuarioId);
+		return new ResponseEntity<Object>(HttpStatus.OK);
+
+	}
 }
