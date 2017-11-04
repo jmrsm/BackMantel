@@ -98,7 +98,7 @@ public class ContenidoController {
 
 	// buscar contenido usuario final
 	@RequestMapping(path = "api/usuario/pelicula", method = RequestMethod.GET)
-	public ResponseEntity<Page<Pelicula>> buscarContenido(HttpServletRequest request,
+	public ResponseEntity<Page<ContenidoDTO>> buscarContenido(HttpServletRequest request,
 			@RequestParam(name = "_start", required = true) int start,
 			@RequestParam(name = "_end", required = true) int end,
 			@RequestParam(name = "sort", required = false) String sortField,
@@ -107,7 +107,13 @@ public class ContenidoController {
 
 		Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
 		Page<Pelicula> pelis = contenidoService.buscarPelicula(pag, query);
-		return new ResponseEntity<Page<Pelicula>>(pelis, HttpStatus.OK);
+		Page<ContenidoDTO> dtoPage = pelis.map(new Converter<Pelicula, ContenidoDTO>() {
+			@Override
+			public ContenidoDTO convert(Pelicula peli) {
+				return mapper.map(peli, ContenidoDTO.class);
+			}
+		});
+		return new ResponseEntity<Page<ContenidoDTO>>(dtoPage, HttpStatus.OK);
 
 	}
 
