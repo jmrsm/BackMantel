@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tsijee01.persistence.model.TipoUsuarioEnum;
+import com.tsijee01.rest.dto.LoginDTO;
 import com.tsijee01.service.LoginService.LoginService;
 
 @RestController
@@ -22,19 +23,22 @@ public class LoginController {
 	private LoginService loginService;
 
 	@RequestMapping(path = "api/public/login", method = RequestMethod.GET)
-	public ResponseEntity<String> loginAdministradorTenant(HttpServletRequest request,
+	public ResponseEntity<LoginDTO> loginAdministradorTenant(HttpServletRequest request,
 			@RequestParam(name = "email", required = true) String email,
 			@RequestParam(name = "password", required = true) String password) {
 
 		Optional<TipoUsuarioEnum> tUE = (loginService.login(email, password));
 		if (tUE.isPresent()) {
 			if (tUE.get().tipoUsuario().equals(TipoUsuarioEnum.Forbbiden.tipoUsuario())) {
-				return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
+				return new ResponseEntity<LoginDTO>(HttpStatus.FORBIDDEN);
 			} else {
-				return new ResponseEntity<String>(tUE.get().tipoUsuario(), HttpStatus.OK);
+				LoginDTO lDTO = new LoginDTO();
+				lDTO.setId(loginService.obtenerId(email));
+				lDTO.setTipoUsuario(tUE.get().tipoUsuario());
+				return new ResponseEntity<LoginDTO>(lDTO, HttpStatus.OK);
 			}
 		} else {
-			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<LoginDTO>(HttpStatus.NOT_FOUND);
 		}
 
 	}
