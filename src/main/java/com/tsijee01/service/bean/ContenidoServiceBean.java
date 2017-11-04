@@ -286,4 +286,28 @@ public class ContenidoServiceBean implements ContenidoService {
 		
 	}
 
+	@Override
+	public void guardarReproduccion(Long idUsuario, Long idContenido, Long tiempo) {
+		
+		Optional<Usuario> u = usuarioRepository.findOne(idUsuario);
+		Optional<Contenido> cont = contenidoRepository.findOne(idContenido);
+		Optional<HistorialContenido> h = historialContenidoRepository.findByContenidoAndUsuario(cont.get(), u.get());
+		
+		if (h.isPresent() && h.get().isVisto()) {
+			h.get().setTiempoDeReproduccion(tiempo);
+			historialContenidoRepository.save(h.get());
+		}
+		else 
+		{
+			HistorialContenido hn = new HistorialContenido();
+			hn.setContenido(cont.get());
+			hn.setUsuario(u.get());
+			hn.setTiempoDeReproduccion(tiempo);
+			hn.setFavorito(false);
+			hn.setVisto(true);
+			historialContenidoRepository.save(hn);
+		}
+
+	}
+
 }

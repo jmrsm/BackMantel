@@ -36,4 +36,6 @@ public interface ContenidoService {
 
 	void marcarDestacado(Long contenidoId, Boolean esDestacado);
 
+	void guardarReproduccion(Long idUsuario, Long idContenido, Long tiempo);
+
 }

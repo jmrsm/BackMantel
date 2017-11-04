@@ -1,9 +1,11 @@
 package com.tsijee01.persistence.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
+import com.tsijee01.persistence.model.Contenido;
 import com.tsijee01.persistence.model.HistorialContenido;
 import com.tsijee01.persistence.model.Usuario;
 
@@ -11,4 +13,6 @@ import com.tsijee01.persistence.model.Usuario;
 public interface HistorialContenidoRepository extends BaseRepository<HistorialContenido , Long >{
 
 	List<HistorialContenido>  findByUsuario(Usuario usuario);
+
+	Optional<HistorialContenido> findByContenidoAndUsuario(Contenido contenido, Usuario usuario);
 }

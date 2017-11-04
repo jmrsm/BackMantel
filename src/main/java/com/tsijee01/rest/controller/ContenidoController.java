@@ -215,6 +215,16 @@ public class ContenidoController {
 		return new ResponseEntity<Page<ContenidoDTO>>(dtoPage, HttpStatus.OK);
 	}
 
-	// TODO crear una api que reciva el contenido que está viendo un usuario
+	// TODO crear una api que reciba el contenido que está viendo un usuario
 	// junto al tiempo de reproducción
+	@RequestMapping(path = "api/usuario/guardarReproduccion", method = RequestMethod.PUT)
+	public ResponseEntity<?> guardarReproduccion(HttpServletRequest request,
+			@RequestParam(name = "idUsuario", required = true) Long idUsuario,
+			@RequestParam(name = "idContenido", required = true) Long idContenido,
+			@RequestParam(name = "Tiempo", required = true) Long tiempo) {
+		
+		contenidoService.guardarReproduccion(idUsuario, idContenido, tiempo); 
+		
+		return new ResponseEntity<Object>(HttpStatus.OK);
+	}
 }

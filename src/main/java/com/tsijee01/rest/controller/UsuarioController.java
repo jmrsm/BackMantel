@@ -40,4 +40,13 @@ public class UsuarioController {
 		}
 
 	}
+	
+	@RequestMapping(path = "api/usuario/listarContenido", method = RequestMethod.POST)
+	public ResponseEntity<?> listarContenido(HttpServletRequest request,
+			@RequestParam(name = "id", required = true) Long id) {
+
+		
+			return new ResponseEntity<Object>(HttpStatus.OK);
+
+	}
 }
