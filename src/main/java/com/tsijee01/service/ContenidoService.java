@@ -43,4 +43,6 @@ public interface ContenidoService {
 
 	void marcarFavorito(Long contenidoId, Boolean esFavorito, Long usuarioId);
 
+	List<ContenidoDTO> listarContenidoProveedor(String email);
+	
 }

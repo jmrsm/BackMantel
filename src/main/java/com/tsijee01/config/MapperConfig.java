@@ -13,6 +13,7 @@ import com.tsijee01.persistence.model.Pelicula;
 import com.tsijee01.persistence.model.Serie;
 import com.tsijee01.rest.dto.AdminTenantDTO;
 import com.tsijee01.rest.dto.ContenidoDTO;
+import com.tsijee01.rest.dto.TipoContenidoEnum;
 
 import ma.glasnost.orika.CustomMapper;
 import ma.glasnost.orika.MapperFactory;
@@ -98,6 +99,8 @@ public class MapperConfig extends ConfigurableMapper {
 
 					@Override
 					public void mapBtoA(Pelicula b, ContenidoDTO a, MappingContext context) {
+						super.mapBtoA(b, a, context);
+						a.setTipoContenido(TipoContenidoEnum.PELICULA);
 					}
 				}).byDefault().register();
 	}
@@ -114,6 +117,8 @@ public class MapperConfig extends ConfigurableMapper {
 
 					@Override
 					public void mapBtoA(Serie b, ContenidoDTO a, MappingContext context) {
+						super.mapBtoA(b, a, context);
+						a.setTipoContenido(TipoContenidoEnum.SERIE);
 					}
 				}).byDefault().register();
 	}
@@ -130,6 +135,8 @@ public class MapperConfig extends ConfigurableMapper {
 					}
 					@Override
 					public void mapBtoA(EventoDeportivo b, ContenidoDTO a, MappingContext context) {
+						super.mapBtoA(b, a, context);
+						a.setTipoContenido(TipoContenidoEnum.EVENTO_DEPORTIVO);
 					}
 				}).byDefault().register();
 	}
@@ -145,6 +152,7 @@ public class MapperConfig extends ConfigurableMapper {
 					@Override
 					public void mapBtoA(EventoEspectaculo b, ContenidoDTO a, MappingContext context) {
 						super.mapBtoA(b, a, context);
+						a.setTipoContenido(TipoContenidoEnum.EVENTO_ESPECTACULO);
 					}
 				}).byDefault().register();
 	}

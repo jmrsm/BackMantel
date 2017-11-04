@@ -322,12 +322,26 @@ public class ContenidoServiceBean implements ContenidoService {
 	}
 
 	@Override
+
 	public void marcarFavorito(Long contenidoId, Boolean esFavorito, Long usuarioId) {
 		Optional<Contenido> cont = contenidoRepository.findOne(contenidoId);
 		Optional<Usuario> u = usuarioRepository.findOne(usuarioId);
 		Optional<HistorialContenido> h = historialContenidoRepository.findByContenidoAndUsuario(cont.get(), u.get());
 		h.get().setFavorito(esFavorito);
 		historialContenidoRepository.save(h.get());
+	}
+
+	public List<ContenidoDTO> listarContenidoProveedor(String email) {
+		
+		List<ContenidoDTO> ret = new ArrayList<>();
+		AdminTenant at = adminTenantRepository.findOneByEmail(email).get();
+		ProveedorContenido pc = at.getProveedorContenido();
+		
+		ret.addAll(mapper.mapAsList(peliculaRepositoy.findByProveedorContenido(pc), ContenidoDTO.class));
+		ret.addAll(mapper.mapAsList(serieRepository.findByProveedorContenido(pc), ContenidoDTO.class));
+		ret.addAll(mapper.mapAsList(eventoDeportivoRepository.findByProveedorContenido(pc), ContenidoDTO.class));
+		ret.addAll(mapper.mapAsList(eventoEspectaculoRepositoy.findByProveedorContenido(pc), ContenidoDTO.class));
+		return ret;
 	}
 
 }

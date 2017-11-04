@@ -10,6 +10,7 @@ import com.tsijee01.persistence.model.Actor;
 import com.tsijee01.persistence.model.Categoria;
 import com.tsijee01.persistence.model.Director;
 import com.tsijee01.persistence.model.Pelicula;
+import com.tsijee01.persistence.model.ProveedorContenido;
 
 @Repository
 public interface PeliculRepository extends BaseRepository<Pelicula, Long>{
@@ -23,5 +24,7 @@ public interface PeliculRepository extends BaseRepository<Pelicula, Long>{
 	Page<Pelicula> findByDirectores(Pageable pag, Director director);
 
 	Page<Pelicula> findByActores(Pageable pag, Actor actor);
+
+	List<Pelicula>  findByProveedorContenido(ProveedorContenido pc);
 
 }

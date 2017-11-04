@@ -161,7 +161,6 @@ public class ContenidoController {
 			@RequestParam(name = "_end", required = true) int end,
 			@RequestParam(name = "sort", required = false) String sortField,
 			@RequestParam(name = "order", required = false) String sortOrder,
-			@RequestParam(name = "_q", required = false) String query,
 			@RequestParam(name = "generoId", required = true) Long generoId) {
 
 		Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
@@ -181,7 +180,6 @@ public class ContenidoController {
 			@RequestParam(name = "_end", required = true) int end,
 			@RequestParam(name = "sort", required = false) String sortField,
 			@RequestParam(name = "order", required = false) String sortOrder,
-			@RequestParam(name = "_q", required = false) String query,
 			@RequestParam(name = "actorId", required = true) Long actorId) {
 
 		Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
@@ -201,7 +199,6 @@ public class ContenidoController {
 			@RequestParam(name = "_end", required = true) int end,
 			@RequestParam(name = "sort", required = false) String sortField,
 			@RequestParam(name = "order", required = false) String sortOrder,
-			@RequestParam(name = "_q", required = false) String query,
 			@RequestParam(name = "directorId", required = true) Long directorId) {
 
 		Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
@@ -215,16 +212,10 @@ public class ContenidoController {
 		return new ResponseEntity<Page<ContenidoDTO>>(dtoPage, HttpStatus.OK);
 	}
 	
-	@RequestMapping(path = "api/admin/listarmicontenido", method = RequestMethod.GET)
-	public ResponseEntity<List<ContenidoDTO>> listarmicontenido(HttpServletRequest request,
-			@RequestParam(name = "email", required = false) String email) {
+	
 
-		List<ContenidoDTO> contenidos = mapper.mapAsList(contenidoService.listarCategorias(), ContenidoDTO.class);
-		return new ResponseEntity<List<ContenidoDTO>>(contenidos, HttpStatus.OK);
 
-	}
-
-	// TODO crear una api que reciba el contenido que está viendo un usuario
+	// crear una api que reciba el contenido que está viendo un usuario
 	// junto al tiempo de reproducción
 	@RequestMapping(path = "api/usuario/guardarReproduccion", method = RequestMethod.PUT)
 	public ResponseEntity<?> guardarReproduccion(HttpServletRequest request,

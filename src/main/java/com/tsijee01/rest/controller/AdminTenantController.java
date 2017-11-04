@@ -1,5 +1,7 @@
 package com.tsijee01.rest.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,16 +12,35 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tsijee01.rest.dto.ActorDTO;
+import com.tsijee01.rest.dto.ContenidoDTO;
 import com.tsijee01.service.AdminTenantService;
+import com.tsijee01.service.ContenidoService;
+
+import ma.glasnost.orika.MapperFacade;
 
 @RestController
 public class AdminTenantController {
+	
 	@Autowired
 	AdminTenantService adminService;
+	
+	@Autowired 
+	ContenidoService contenidoService;
+	
+	@Autowired 
+	MapperFacade mapper;
+	
 	//obtener id admin
 	@RequestMapping(path = "api/admin/getID", method = RequestMethod.GET)
 	public ResponseEntity<?> listarActores(HttpServletRequest request ,@RequestParam(name = "email", required = true) String email) {
 		return new ResponseEntity<Object>(adminService.idUser(email), HttpStatus.OK);
+	}
+	
+	@RequestMapping(path = "api/admin/listarmicontenido", method = RequestMethod.GET)
+	public ResponseEntity<List<ContenidoDTO>> listarmicontenido(HttpServletRequest request,
+			@RequestParam(name = "email", required = false) String email) {
+		List<ContenidoDTO> contenidos = contenidoService.listarContenidoProveedor(email);
+		return new ResponseEntity<List<ContenidoDTO>>(contenidos, HttpStatus.OK);
+
 	}
 }
