@@ -55,7 +55,7 @@ public class ContenidoDTO {
 	// @JsonFormat(pattern="dd MMM yyyy")
 	private Date fechaPublicado;
 
-	@JsonProperty("Runtime")
+//	@JsonProperty("Runtime")
 	private int duracion;
 
 	@JsonProperty("Genre")
@@ -187,6 +187,7 @@ public class ContenidoDTO {
 		return duracion;
 	}
 
+	@JsonProperty("Runtime")
 	public void setDuracion(String duracion) {
 		this.duracion = Integer.valueOf(duracion.split(" ")[0]);
 	}
@@ -303,6 +304,7 @@ public class ContenidoDTO {
 		return cantVotos;
 	}
 
+	@JsonProperty("imdbVotes")
 	public void setCantVotos(String cantVotos) {
 		this.cantVotos = Integer.valueOf(cantVotos.replace(",", ""));
 	}
