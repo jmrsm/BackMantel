@@ -117,6 +117,17 @@ public class ContenidoController {
 
 	}
 
+	// buscar contenido usuario final
+	@RequestMapping(path = "api/usuario/verContenido", method = RequestMethod.GET)
+	public ResponseEntity<Long> buscarContenido(HttpServletRequest request,
+			@RequestParam(name = "usuarioID", required = true) Long usuarioId,
+			@RequestParam(name = "contenidoId", required = true) Long contenidoId) {
+		
+		Long segundosVistos = contenidoService.verContenido(usuarioId, contenidoId);
+		return new ResponseEntity<Long>(segundosVistos, HttpStatus.OK);
+
+	}
+	
 	@RequestMapping(path = "api/admin/contenidoOmdb", method = RequestMethod.POST)
 	public ResponseEntity<Long> altaContenido(HttpServletRequest request,
 			@RequestParam(name = "proveedorContenidoId", required = true) Long proveedorContenidoId,
