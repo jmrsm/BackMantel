@@ -52,6 +52,24 @@ public class SuperAdminController {
 		}
 	}
 	
+	
+
+	@RequestMapping(path = "api/superAdmin/admin", method = RequestMethod.POST)
+	public ResponseEntity<?> altaAdminTenant(HttpServletRequest request,
+			@RequestBody AdminTenantDTO adminTenant,
+			@RequestParam(name = "proveedorId", required = true) Long proveedorId,
+			@RequestParam(name = "password", required = true) String password) {
+
+		if (administradorService.altaAdmin(mapper.map(adminTenant, AdminTenant.class), proveedorId, password)) {
+			return new ResponseEntity<Object>(HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Object>(HttpStatus.CONFLICT);
+		}
+	}
+	
+	
+	
+	
 	// obtener todos los proveedores de contenido junto con sus administradores
 		@RequestMapping(path = "api/superAdmin/proveedorContenido", method = RequestMethod.GET)
 		public ResponseEntity<List<ProveedorContenidoDTO>> obtenerAdministradorContenido(HttpServletRequest request) {
@@ -62,7 +80,7 @@ public class SuperAdminController {
 
 	// crear nuevo proveedor de contenido
 	@RequestMapping(path = "api/superAdmin/proveedorContenido", method = RequestMethod.POST)
-	public ResponseEntity<?> altaAdministradorContenido(HttpServletRequest request,
+	public ResponseEntity<?> altaProveedorContenido(HttpServletRequest request,
 			@RequestParam(name = "nombre", required = true) String nombreProveedorContenido) {
 
 		if (proveedorContenidoService.altaProveedorContenido(nombreProveedorContenido)) {

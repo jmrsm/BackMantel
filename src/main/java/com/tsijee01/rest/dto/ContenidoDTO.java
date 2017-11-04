@@ -51,24 +51,18 @@ public class ContenidoDTO {
 	@JsonProperty("Year")
 	private Integer anio;
 
-	// @JsonProperty("Rated")
-	// private String rated;
-
 	@JsonProperty("Released")
 	// @JsonFormat(pattern="dd MMM yyyy")
 	private Date fechaPublicado;
 
-	//@JsonProperty("Runtime")
-	//private int duracion;
+	@JsonProperty("Runtime")
+	private int duracion;
 
 	@JsonProperty("Genre")
 	private List<CategoriaDTO> categorias;
 
 	@JsonProperty("Director")
 	private List<DirectorDTO> directores;
-
-	// @JsonProperty("Writer")
-	// private String writer;
 
 	@JsonProperty("Actors")
 	private List<ActorDTO> actores;
@@ -82,17 +76,14 @@ public class ContenidoDTO {
 	@JsonProperty("Country")
 	private String country;
 
-	// @JsonProperty("Awards")
-	// private List<String> awards;
-
 	@JsonProperty("Poster")
 	private String fotoPortada;
 
 	@JsonProperty("imdbRating")
 	private BigDecimal ranking;
 
-	//@JsonProperty("imdbVotes")
-	//private int cantVotos;
+	@JsonProperty("imdbVotes")
+	private int cantVotos;
 
 	@JsonProperty("imdbID")
 	private String imdbID;
@@ -192,13 +183,13 @@ public class ContenidoDTO {
 		this.fechaPublicado = new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH).parse(released);
 	}
 
-	/*public int getDuracion() {
+	public int getDuracion() {
 		return duracion;
 	}
 
 	public void setDuracion(String duracion) {
 		this.duracion = Integer.valueOf(duracion.split(" ")[0]);
-	}*/
+	}
 
 	public List<CategoriaDTO> getCategorias() {
 		return categorias;
@@ -308,13 +299,13 @@ public class ContenidoDTO {
 
 	}
 
-	/*public int getCantVotos() {
+	public int getCantVotos() {
 		return cantVotos;
 	}
 
 	public void setCantVotos(String cantVotos) {
 		this.cantVotos = Integer.valueOf(cantVotos.replace(",", ""));
-	}*/
+	}
 
 	public List<ComentarioDTO> getComentarios() {
 		return comentarios;
@@ -348,13 +339,13 @@ public class ContenidoDTO {
 		this.tipoContenido = tipoContenido;
 	}
 
-	/*public void setDuracion(int duracion) {
+	public void setDuracion(int duracion) {
 		this.duracion = duracion;
-	}*/
+	}
 
-	/*public void setCantVotos(int cantVotos) {
+	public void setCantVotos(int cantVotos) {
 		this.cantVotos = cantVotos;
-	}*/
+	}
 
 	public Boolean getEsDestacado() {
 		return esDestacado;

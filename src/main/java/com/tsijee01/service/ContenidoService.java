@@ -41,4 +41,6 @@ public interface ContenidoService {
 
 	void guardarReproduccion(Long idUsuario, Long idContenido, Long tiempo);
 
+	List<ContenidoDTO> listarContenidoProveedor(String email);
+	
 }

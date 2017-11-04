@@ -321,4 +321,18 @@ public class ContenidoServiceBean implements ContenidoService {
 
 	}
 
+	@Override
+	public List<ContenidoDTO> listarContenidoProveedor(String email) {
+		
+		List<ContenidoDTO> ret = new ArrayList<>();
+		AdminTenant at = adminTenantRepository.findOneByEmail(email).get();
+		ProveedorContenido pc = at.getProveedorContenido();
+		
+		ret.addAll(mapper.mapAsList(peliculaRepositoy.findByProveedorContenido(pc), ContenidoDTO.class));
+		ret.addAll(mapper.mapAsList(serieRepository.findByProveedorContenido(pc), ContenidoDTO.class));
+		ret.addAll(mapper.mapAsList(eventoDeportivoRepository.findByProveedorContenido(pc), ContenidoDTO.class));
+		ret.addAll(mapper.mapAsList(eventoEspectaculoRepositoy.findByProveedorContenido(pc), ContenidoDTO.class));
+		return ret;
+	}
+
 }

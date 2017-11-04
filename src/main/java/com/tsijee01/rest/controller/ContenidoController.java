@@ -215,16 +215,10 @@ public class ContenidoController {
 		return new ResponseEntity<Page<ContenidoDTO>>(dtoPage, HttpStatus.OK);
 	}
 	
-	@RequestMapping(path = "api/admin/listarmicontenido", method = RequestMethod.GET)
-	public ResponseEntity<List<ContenidoDTO>> listarmicontenido(HttpServletRequest request,
-			@RequestParam(name = "email", required = false) String email) {
+	
 
-		List<ContenidoDTO> contenidos = mapper.mapAsList(contenidoService.listarCategorias(), ContenidoDTO.class);
-		return new ResponseEntity<List<ContenidoDTO>>(contenidos, HttpStatus.OK);
 
-	}
-
-	// TODO crear una api que reciba el contenido que está viendo un usuario
+	// crear una api que reciba el contenido que está viendo un usuario
 	// junto al tiempo de reproducción
 	@RequestMapping(path = "api/usuario/guardarReproduccion", method = RequestMethod.PUT)
 	public ResponseEntity<?> guardarReproduccion(HttpServletRequest request,
