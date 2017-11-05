@@ -11,14 +11,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.tsijee01.persistence.model.Pelicula;
 import com.tsijee01.persistence.model.Serie;
@@ -97,7 +95,7 @@ public class ContenidoController {
 	}
 
 	// buscar contenido usuario final
-	@RequestMapping(path = "api/usuario/pelicula", method = RequestMethod.GET)
+	@RequestMapping(path = "api/usuario/listarPeliculasPorTitulo", method = RequestMethod.GET)
 	public ResponseEntity<Page<ContenidoDTO>> buscarContenido(HttpServletRequest request,
 			@RequestParam(name = "_start", required = true) int start,
 			@RequestParam(name = "_end", required = true) int end,
@@ -234,13 +232,14 @@ public class ContenidoController {
 
 	// crear una api que reciba el contenido que está viendo un usuario
 	// junto al tiempo de reproducción
-	@RequestMapping(path = "api/usuario/guardarReproduccion", method = RequestMethod.PUT)
+	@RequestMapping(path = "api/usuario/guardarReproduccion", method = RequestMethod.GET)
 	public ResponseEntity<?> guardarReproduccion(HttpServletRequest request,
 			@RequestParam(name = "idUsuario", required = true) Long idUsuario,
 			@RequestParam(name = "idContenido", required = true) Long idContenido,
 			@RequestParam(name = "Tiempo", required = true) Long tiempo) {
 		
-		contenidoService.guardarReproduccion(idUsuario, idContenido, tiempo); 
+		if (tiempo != 0)
+			contenidoService.guardarReproduccion(idUsuario, idContenido, tiempo); 
 		
 		return new ResponseEntity<Object>(HttpStatus.OK);
 	}
@@ -254,5 +253,22 @@ public class ContenidoController {
 		contenidoService.marcarFavorito(contenidoId, esFavorito, usuarioId);
 		return new ResponseEntity<Object>(HttpStatus.OK);
 
+	}
+	
+	@RequestMapping(path = "api/usuario/listarTodasPeliculas", method = RequestMethod.GET)
+	public ResponseEntity<Page<ContenidoDTO>> buscarTodoContenido(HttpServletRequest request,
+			@RequestParam(name = "_start", required = true) int start,
+			@RequestParam(name = "_end", required = true) int end  ) {
+		
+		Pageable pag = PageUtils.getPageRequest(start, end, null, null);
+		Page<Pelicula> pelis = contenidoService.buscarTodasLasPeliculas(pag);
+		
+		Page<ContenidoDTO> dtoPage = pelis.map(new Converter<Pelicula, ContenidoDTO>() {
+			@Override
+			public ContenidoDTO convert(Pelicula peli) {
+				return mapper.map(peli, ContenidoDTO.class);
+			}
+		});
+		return new ResponseEntity<Page<ContenidoDTO>>(dtoPage, HttpStatus.OK);
 	}
 }

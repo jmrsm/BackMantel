@@ -367,5 +367,10 @@ public class ContenidoServiceBean implements ContenidoService {
 			return new Long(0);
 		}
 	}
+	
+	@Override
+	public Page<Pelicula> buscarTodasLasPeliculas(Pageable pag) {
+		return peliculaRepositoy.findAll(pag);
+	}
 
 }

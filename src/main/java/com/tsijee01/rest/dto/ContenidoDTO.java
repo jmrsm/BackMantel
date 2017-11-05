@@ -92,6 +92,8 @@ public class ContenidoDTO {
 
 	@JsonProperty("Website")
 	private String website;
+	
+	private String path;
 
 	public long getId() {
 		return id;
@@ -358,5 +360,11 @@ public class ContenidoDTO {
 		this.esDestacado = esDestacado;
 	}
 
-	
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
 }
