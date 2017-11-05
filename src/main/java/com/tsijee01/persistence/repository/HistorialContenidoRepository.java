@@ -3,6 +3,7 @@ package com.tsijee01.persistence.repository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.stereotype.Repository;
 
 import com.tsijee01.persistence.model.Contenido;
@@ -15,9 +16,7 @@ public interface HistorialContenidoRepository extends BaseRepository<HistorialCo
 	List<HistorialContenido>  findByUsuario(Usuario usuario);
 
 	Optional<HistorialContenido> findByContenidoAndUsuario(Contenido contenido, Usuario usuario);
-
-	static List<HistorialContenido> findByFavoritoTrueAndUsuario(Optional<Usuario> u) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
+	@EntityGraph("HistorialContenido.ConContenido")
+	List<HistorialContenido> findByFavoritoAndUsuario(Boolean f,Usuario u) ;
 }

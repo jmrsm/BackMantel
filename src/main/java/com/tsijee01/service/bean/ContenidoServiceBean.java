@@ -327,8 +327,19 @@ public class ContenidoServiceBean implements ContenidoService {
 		Optional<Contenido> cont = contenidoRepository.findOne(contenidoId);
 		Optional<Usuario> u = usuarioRepository.findOne(usuarioId);
 		Optional<HistorialContenido> h = historialContenidoRepository.findByContenidoAndUsuario(cont.get(), u.get());
-		h.get().setFavorito(esFavorito);
-		historialContenidoRepository.save(h.get());
+		if (!h.isPresent()) {
+			HistorialContenido hn = new HistorialContenido();
+			hn.setContenido(cont.get());
+			hn.setPuntuacion(0);
+			hn.setUsuario(u.get());
+			hn.setVisto(false);
+			hn.setFavorito(esFavorito);
+			historialContenidoRepository.save(hn);
+		}
+		else {
+			h.get().setFavorito(esFavorito);
+			historialContenidoRepository.save(h.get());
+		}
 	}
 
 	public List<ContenidoDTO> listarContenidoProveedor(String email) {

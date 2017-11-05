@@ -2,6 +2,7 @@ package com.tsijee01.service.bean;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,9 +21,13 @@ public class UsuarioServiceBean implements UsuarioService{
 
 	@Autowired
 	private UsuarioRepository usuarioRepository; 
+	
 	@Autowired
 	private Password passwordUtil;
 	
+	@Autowired
+	private HistorialContenidoRepository historialContenidoRepository; 
+		
 	@Override
 	public List<Usuario> findAll() {
 		// TODO Auto-generated method stub
@@ -87,13 +92,8 @@ public class UsuarioServiceBean implements UsuarioService{
 	@Override
 	public List<Contenido> listarFavoritos(Long id) {
 		Optional <Usuario> u = usuarioRepository.findOne(id);
-		List<HistorialContenido> listaHC = HistorialContenidoRepository.findByFavoritoTrueAndUsuario(u);
-		List<Contenido> listaF = null;
+		List<HistorialContenido> listaHC = historialContenidoRepository.findByFavoritoAndUsuario(true, u.get());
+		return listaHC.stream().map(x->x.getContenido()).collect(Collectors.toList());
 		
-		
-		for (int i = 0; i < listaHC.size(); i++) {
-			listaF.set(i, listaHC.get(i).getContenido());
-		}
-		return listaF;
 	}
 }

@@ -9,8 +9,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 
 @Entity
+
+@NamedEntityGraph(name = "HistorialContenido.ConContenido", attributeNodes = {
+	       @NamedAttributeNode(value = "contenido")
+	    })
+
 public class HistorialContenido {
 
 	@Id

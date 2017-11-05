@@ -28,7 +28,7 @@ public class UsuarioController {
 	private UsuarioService userService;
 
 	@Autowired
-	private MapperFacade mepper;
+	private MapperFacade mapper;
 
 	@RequestMapping(path = "api/public/altaUsuario", method = RequestMethod.POST)
 	public ResponseEntity<?> createUser(HttpServletRequest request,
@@ -46,11 +46,11 @@ public class UsuarioController {
 	}
 	
 	@RequestMapping(path = "api/usuario/listarFavoritos", method = RequestMethod.GET)
-	public ResponseEntity<?> listarFavoritos(HttpServletRequest request,
-			@RequestParam(name = "id", required = true) Long id) {
+	public ResponseEntity<List<ContenidoDTO>> listarFavoritos(HttpServletRequest request,
+			@RequestParam(name = "usuarioId", required = true) Long id) {
 
 		List<Contenido> listarFavoritos = userService.listarFavoritos(id);
-			return new ResponseEntity<List<Contenido>>(listarFavoritos, HttpStatus.OK);
+			return new ResponseEntity<List<ContenidoDTO>>(mapper.mapAsList(listarFavoritos, ContenidoDTO.class),HttpStatus.OK);
 
 	}
 }
