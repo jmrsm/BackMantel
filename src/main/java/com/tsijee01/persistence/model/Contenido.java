@@ -61,7 +61,7 @@ public abstract class Contenido {
 	@Column(nullable = false)
 	private String fotoPortada;
 
-	@Column(nullable = false)
+	@Column(length = 512,nullable = false)
 	private String path;
 
 	@Column(length = 100, nullable = false)

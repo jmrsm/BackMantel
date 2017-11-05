@@ -137,7 +137,8 @@ public class ContenidoController {
 			@RequestParam(name = "esSerie", required = true) Boolean esSerie,
 			@RequestParam(name = "esDestacado", required = true) Boolean esDestacado) {
 		ContenidoDTO cont = this.getContenidoOmdbById(omdbId);
-
+		path=path.replace("%26token", "&token");
+		path=path.replace("/o/videos/","/o/videos%2F");
 		Long id = null;
 		if (esSerie) {
 			id = contenidoService.altaSerie(mapper.map(cont, Serie.class), proveedorContenidoId, esDestacado);
