@@ -183,6 +183,8 @@ public class ContenidoDTO {
 	public void setFechaPublicado(String released) throws ParseException {
 		if (!released.equals("N/A")) {
 		this.fechaPublicado = new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH).parse(released);
+		}else {
+			this.fechaPublicado = new Date();
 		}
 	}
 
@@ -192,7 +194,10 @@ public class ContenidoDTO {
 
 	@JsonProperty("Runtime")
 	public void setDuracion(String duracion) {
-		this.duracion = Integer.valueOf(duracion.split(" ")[0]);
+		if (!duracion.equals("N/A")) {
+			this.duracion = Integer.valueOf(duracion.split(" ")[0]);
+		}
+		
 	}
 
 	public List<CategoriaDTO> getCategorias() {
@@ -253,7 +258,12 @@ public class ContenidoDTO {
 	}
 
 	public void setRanking(String ranking) {
-		this.ranking = new BigDecimal(ranking);
+		if (!ranking.equals("N/A")){
+			this.ranking = new BigDecimal(ranking);
+		}else {
+			this.ranking = new BigDecimal(5);
+		}
+		
 
 	}
 
@@ -270,6 +280,7 @@ public class ContenidoDTO {
 	}
 
 	public void setImdbID(String imdbID) {
+		
 		this.imdbID = imdbID;
 	}
 
@@ -309,7 +320,10 @@ public class ContenidoDTO {
 
 	@JsonProperty("imdbVotes")
 	public void setCantVotos(String cantVotos) {
-		this.cantVotos = Integer.valueOf(cantVotos.replace(",", ""));
+		if (!cantVotos.equals("N/A")){
+			this.cantVotos = Integer.valueOf(cantVotos.replace(",", ""));
+		}
+		
 	}
 
 	public List<ComentarioDTO> getComentarios() {

@@ -41,7 +41,7 @@ public class HistorialContenido {
 
 	// en caso de que lo haya visto 
 	@Column(nullable = true)
-	private Long tiempoDeReproduccion;
+	private long tiempoDeReproduccion;
 
 	
 	@Column(nullable = true)

@@ -80,7 +80,7 @@ public abstract class Contenido {
 	@JoinTable(name = "contenidos_similares", joinColumns = @JoinColumn(name = "contenido_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "similar_contenido_id", referencedColumnName = "id"))
 	private List<Contenido> similares;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
 	@JoinColumn(name = "proveedorId")
 	ProveedorContenido proveedorContenido;
 
