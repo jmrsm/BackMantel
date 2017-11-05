@@ -20,7 +20,7 @@ public class LoginServiceBean implements LoginService {
 
 	@Autowired
 	private AdminTenantRepository adminRepository;
-	
+
 	@Autowired
 	private SuperAdminRepository superAdminRepository;
 
@@ -29,41 +29,59 @@ public class LoginServiceBean implements LoginService {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
-	
+
 	@Override
 	public Optional<TipoUsuarioEnum> login(String email, String password) {
-		
-		
-		
+
 		Optional<AdminTenant> at = adminRepository.findOneByEmail(email);
-		if (at.isPresent()){
-			if (passwordUtil.checkearPassword(password,  at.get().getPassowd())){
+		if (at.isPresent()) {
+			if (passwordUtil.checkearPassword(password, at.get().getPassowd())) {
 				return Optional.of(TipoUsuarioEnum.TENANT_ADMIN);
-			}else{
+			} else {
 				return Optional.of(TipoUsuarioEnum.Forbbiden);
 			}
 		}
-		
+
 		Optional<SuperAdmin> sa = superAdminRepository.findOneByEmail(email);
-		if (sa.isPresent()){
-			if (passwordUtil.checkearPassword(password,  sa.get().getPassowd())){
+		if (sa.isPresent()) {
+			if (passwordUtil.checkearPassword(password, sa.get().getPassowd())) {
 				return Optional.of(TipoUsuarioEnum.SUPER_ADMIN);
-			}else{
+			} else {
 				return Optional.of(TipoUsuarioEnum.Forbbiden);
 			}
 		}
-		
+
 		Optional<Usuario> u = usuarioRepository.findOneByEmail(email);
-		if (u.isPresent()){
-			if (passwordUtil.checkearPassword(password,  u.get().getPassowd())){
+		if (u.isPresent()) {
+			if (passwordUtil.checkearPassword(password, u.get().getPassowd())) {
 				return Optional.of(TipoUsuarioEnum.Usuario);
-			}else{
+			} else {
 				return Optional.of(TipoUsuarioEnum.Forbbiden);
 			}
-		}	
+		}
 		return Optional.empty();
 	}
-	
-	
+
+	@Override
+	public Long obtenerId(String email) {
+
+		Long id = null;
+		Optional<AdminTenant> at = adminRepository.findOneByEmail(email);
+		if (at.isPresent()) {
+			id = at.get().getId();
+		}
+
+		Optional<SuperAdmin> sa = superAdminRepository.findOneByEmail(email);
+		if (sa.isPresent()) {
+			id = sa.get().getId();
+		}
+
+		Optional<Usuario> u = usuarioRepository.findOneByEmail(email);
+		if (u.isPresent()) {
+			id = u.get().getId();
+		}
+		return id;
+
+	}
 
 }

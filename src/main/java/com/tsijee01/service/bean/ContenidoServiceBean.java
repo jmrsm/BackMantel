@@ -355,4 +355,17 @@ public class ContenidoServiceBean implements ContenidoService {
 		return ret;
 	}
 
+	@Override
+	public Long verContenido(Long usuarioId, Long contenidoId) {
+		
+		Optional<Contenido> cont = contenidoRepository.findOne(contenidoId);
+		Optional<Usuario> u = usuarioRepository.findOne(usuarioId);
+		Optional<HistorialContenido> h = historialContenidoRepository.findByContenidoAndUsuario(cont.get(), u.get());
+		if (h.isPresent()){
+			return h.get().getTiempoDeReproduccion();
+		}else {
+			return new Long(0);
+		}
+	}
+
 }

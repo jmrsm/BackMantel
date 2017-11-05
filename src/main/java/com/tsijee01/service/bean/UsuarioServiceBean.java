@@ -1,16 +1,18 @@
 package com.tsijee01.service.bean;
 
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.tsijee01.persistence.model.Contenido;
 import com.tsijee01.persistence.model.HistorialContenido;
 import com.tsijee01.persistence.model.Usuario;
-import com.tsijee01.persistence.repository.ContenidoRepository;
 import com.tsijee01.persistence.repository.HistorialContenidoRepository;
 import com.tsijee01.persistence.repository.UsuarioRepository;
 import com.tsijee01.service.UsuarioService;
@@ -27,7 +29,24 @@ public class UsuarioServiceBean implements UsuarioService{
 	
 	@Autowired
 	private HistorialContenidoRepository historialContenidoRepository; 
+	
+
+	@Override
+	public Page<Usuario> listarUsuarios(Pageable pag) {
+		return usuarioRepository.findAll(pag);
+	}
+
+	@Override
+	public Page<Usuario> buscarPorMail(Pageable pag, String query) {
+		return usuarioRepository.findByEmailContaining(pag, query);
 		
+	}
+
+	@Override
+	public Usuario buscarPorId(Long usuarioId) {
+		return usuarioRepository.findOne(usuarioId).get();
+	}
+	
 	@Override
 	public List<Usuario> findAll() {
 		// TODO Auto-generated method stub
@@ -97,3 +116,4 @@ public class UsuarioServiceBean implements UsuarioService{
 		
 	}
 }
+
