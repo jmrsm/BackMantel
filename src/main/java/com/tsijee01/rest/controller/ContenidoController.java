@@ -1,5 +1,8 @@
 package com.tsijee01.rest.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -270,5 +273,14 @@ public class ContenidoController {
 			}
 		});
 		return new ResponseEntity<Page<ContenidoDTO>>(dtoPage, HttpStatus.OK);
+	}
+	
+	@RequestMapping(path = "api/usuario/relojSistema", method = RequestMethod.GET)
+	public ResponseEntity<String> relojSistema(HttpServletRequest request) {
+		String res = "";
+		Date fecha = new Date();
+		DateFormat formato = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		res = formato.format(fecha);
+		return new ResponseEntity<String>(res, HttpStatus.OK);
 	}
 }
