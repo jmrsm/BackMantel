@@ -119,7 +119,7 @@ public class ContenidoController {
 
 	// buscar contenido usuario final
 	@RequestMapping(path = "api/usuario/verContenido", method = RequestMethod.GET)
-	public ResponseEntity<Long> buscarContenido(HttpServletRequest request,
+	public ResponseEntity<Long> verContenido(HttpServletRequest request,
 			@RequestParam(name = "usuarioID", required = true) Long usuarioId,
 			@RequestParam(name = "contenidoId", required = true) Long contenidoId) {
 		
