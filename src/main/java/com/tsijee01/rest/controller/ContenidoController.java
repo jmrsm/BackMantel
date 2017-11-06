@@ -32,6 +32,7 @@ import com.tsijee01.util.PageUtils;
 
 import ma.glasnost.orika.MapperFacade;
 
+
 @RestController
 public class ContenidoController {
 
@@ -50,6 +51,11 @@ public class ContenidoController {
 	// crear nuevo contenido
 	@RequestMapping(path = "api/admin/contenido", method = RequestMethod.POST)
 	public ResponseEntity<?> altaCategoriaContenido(HttpServletRequest request, @RequestBody ContenidoDTO contenido) {
+		String mailAdmin = (String) request.getSession()
+				.getAttribute("TENANT_ADMIN");
+		if (mailAdmin==null){
+			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+		}
 		if (contenidoService.altaContenido(contenido)) {
 			return new ResponseEntity<Object>(HttpStatus.OK);
 		} else {
@@ -63,6 +69,11 @@ public class ContenidoController {
 			@RequestParam(name = "nombre", required = true) String nombre,
 			@RequestParam(name = "year", required = false) String year) {
 
+		String mailAdmin = (String) request.getSession()
+				.getAttribute("TENANT_ADMIN");
+		if (mailAdmin==null){
+			return new ResponseEntity<SearchContenidoOmbdapi>(HttpStatus.FORBIDDEN);
+		}
 		nombre = nombre.replace(" ", "+");
 		if (year == null || year.isEmpty()) {
 			return new ResponseEntity<SearchContenidoOmbdapi>(this.getContenidoByName(nombre), HttpStatus.OK);
@@ -76,7 +87,11 @@ public class ContenidoController {
 	public ResponseEntity<?> marcarDestacado(HttpServletRequest request,
 			@RequestParam(name = "contenidoId", required = true) Long contenidoId,
 			@RequestParam(name = "esDestacado", required = true) Boolean esDestacado) {
-
+		String mailAdmin = (String) request.getSession()
+				.getAttribute("TENANT_ADMIN");
+		if (mailAdmin==null){
+			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+		}
 		contenidoService.marcarDestacado(contenidoId, esDestacado);
 		return new ResponseEntity<Object>(HttpStatus.OK);
 
@@ -86,6 +101,11 @@ public class ContenidoController {
 	@RequestMapping(path = "api/admin/tiposContenido", method = RequestMethod.GET)
 	public ResponseEntity<List<CategoriaDTO>> listarTiposContenido(HttpServletRequest request) {
 
+		String mailAdmin = (String) request.getSession()
+				.getAttribute("TENANT_ADMIN");
+		if (mailAdmin==null){
+			return new ResponseEntity<List<CategoriaDTO>>(HttpStatus.FORBIDDEN);
+		}
 		return new ResponseEntity<List<CategoriaDTO>>(
 				mapper.mapAsList(contenidoService.obtenerTiposContenido(), CategoriaDTO.class), HttpStatus.OK);
 	}
@@ -93,6 +113,11 @@ public class ContenidoController {
 	@RequestMapping(path = "api/usuario/categoria", method = RequestMethod.GET)
 	public ResponseEntity<List<CategoriaDTO>> buscarContenido(HttpServletRequest request) {
 
+		String mailAdmin = (String) request.getSession()
+				.getAttribute("USUARIO");
+		if (mailAdmin==null){
+			return new ResponseEntity<List<CategoriaDTO>>(HttpStatus.FORBIDDEN);
+		}
 		List<CategoriaDTO> categorias = mapper.mapAsList(contenidoService.listarCategorias(), CategoriaDTO.class);
 		return new ResponseEntity<List<CategoriaDTO>>(categorias, HttpStatus.OK);
 
@@ -106,7 +131,11 @@ public class ContenidoController {
 			@RequestParam(name = "sort", required = false) String sortField,
 			@RequestParam(name = "order", required = false) String sortOrder,
 			@RequestParam(name = "_q", required = false) String query) {
-
+		String mailAdmin = (String) request.getSession()
+				.getAttribute("USUARIO");
+		if (mailAdmin==null){
+			return new ResponseEntity<Page<ContenidoDTO>>(HttpStatus.FORBIDDEN);
+		}
 		Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
 		Page<Pelicula> pelis = contenidoService.buscarPelicula(pag, query);
 		Page<ContenidoDTO> dtoPage = pelis.map(new Converter<Pelicula, ContenidoDTO>() {
@@ -124,7 +153,11 @@ public class ContenidoController {
 	public ResponseEntity<Long> verContenido(HttpServletRequest request,
 			@RequestParam(name = "usuarioID", required = true) Long usuarioId,
 			@RequestParam(name = "contenidoId", required = true) Long contenidoId) {
-		
+		String mailAdmin = (String) request.getSession()
+				.getAttribute("USUARIO");
+		if (mailAdmin==null){
+			return new ResponseEntity<Long>(HttpStatus.FORBIDDEN);
+		}
 		Long segundosVistos = contenidoService.verContenido(usuarioId, contenidoId);
 		return new ResponseEntity<Long>(segundosVistos, HttpStatus.OK);
 
@@ -137,6 +170,11 @@ public class ContenidoController {
 			@RequestParam(name = "path", required = true) String path,
 			@RequestParam(name = "esSerie", required = true) Boolean esSerie,
 			@RequestParam(name = "esDestacado", required = true) Boolean esDestacado) {
+		String mailAdmin = (String) request.getSession()
+				.getAttribute("TENANT_ADMIN");
+		if (mailAdmin==null){
+			return new ResponseEntity<Long>(HttpStatus.FORBIDDEN);
+		}
 		ContenidoDTO cont = this.getContenidoOmdbById(omdbId);
 		path=path.replace("%26token", "&token");
 		path=path.replace("/o/videos/","/o/videos%2F");
@@ -182,8 +220,11 @@ public class ContenidoController {
 			@RequestParam(name = "sort", required = false) String sortField,
 			@RequestParam(name = "order", required = false) String sortOrder,
 			@RequestParam(name = "generoId", required = true) Long generoId) {
-
-		Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
+		String mailAdmin = (String) request.getSession()
+				.getAttribute("USUARIO");
+		if (mailAdmin==null){
+			return new ResponseEntity<Page<ContenidoDTO>>(HttpStatus.FORBIDDEN);
+		}		Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
 		Page<Pelicula> pelis = contenidoService.buscarPeliculaPorGenero(pag, generoId);
 		Page<ContenidoDTO> dtoPage = pelis.map(new Converter<Pelicula, ContenidoDTO>() {
 			@Override
@@ -201,7 +242,11 @@ public class ContenidoController {
 			@RequestParam(name = "sort", required = false) String sortField,
 			@RequestParam(name = "order", required = false) String sortOrder,
 			@RequestParam(name = "actorId", required = true) Long actorId) {
-
+		String mailAdmin = (String) request.getSession()
+				.getAttribute("USUARIO");
+		if (mailAdmin==null){
+			return new ResponseEntity<Page<ContenidoDTO>>(HttpStatus.FORBIDDEN);
+		}
 		Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
 		Page<Pelicula> pelis = contenidoService.buscarPeliculaPorActor(pag, actorId);
 		Page<ContenidoDTO> dtoPage = pelis.map(new Converter<Pelicula, ContenidoDTO>() {
@@ -220,7 +265,11 @@ public class ContenidoController {
 			@RequestParam(name = "sort", required = false) String sortField,
 			@RequestParam(name = "order", required = false) String sortOrder,
 			@RequestParam(name = "directorId", required = true) Long directorId) {
-
+		String mailAdmin = (String) request.getSession()
+				.getAttribute("USUARIO");
+		if (mailAdmin==null){
+			return new ResponseEntity<Page<ContenidoDTO>>(HttpStatus.FORBIDDEN);
+		}
 		Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
 		Page<Pelicula> pelis = contenidoService.buscarPeliculaPorDirector(pag, directorId);
 		Page<ContenidoDTO> dtoPage = pelis.map(new Converter<Pelicula, ContenidoDTO>() {
@@ -239,8 +288,12 @@ public class ContenidoController {
 			@RequestParam(name = "idUsuario", required = true) Long idUsuario,
 			@RequestParam(name = "idContenido", required = true) Long idContenido,
 			@RequestParam(name = "Tiempo", required = true) Long tiempo) {
-		
-		if (tiempo != 0)
+		String mailAdmin = (String) request.getSession()
+				.getAttribute("USUARIO");
+		if (mailAdmin==null){
+			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+		}
+				if (tiempo != 0)
 			contenidoService.guardarReproduccion(idUsuario, idContenido, tiempo); 
 		
 		return new ResponseEntity<Object>(HttpStatus.OK);
@@ -252,6 +305,11 @@ public class ContenidoController {
 			@RequestParam(name = "usuarioId", required = true) Long usuarioId,
 			@RequestParam(name = "esFavorito", required = true) Boolean esFavorito) {
 
+		String mailAdmin = (String) request.getSession()
+				.getAttribute("USUARIO");
+		if (mailAdmin==null){
+			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+		}
 		contenidoService.marcarFavorito(contenidoId, esFavorito, usuarioId);
 		return new ResponseEntity<Object>(HttpStatus.OK);
 
@@ -288,7 +346,12 @@ public class ContenidoController {
 	public ResponseEntity<Page<ContenidoDTO>> buscarTodoContenido(HttpServletRequest request,
 			@RequestParam(name = "_start", required = true) int start,
 			@RequestParam(name = "_end", required = true) int end  ) {
-		
+
+		String mailAdmin = (String) request.getSession()
+				.getAttribute("USUARIO");
+		if (mailAdmin==null){
+			return new ResponseEntity<Page<ContenidoDTO>>(HttpStatus.FORBIDDEN);
+		}
 		Pageable pag = PageUtils.getPageRequest(start, end, null, null);
 		Page<Pelicula> pelis = contenidoService.buscarTodasLasPeliculas(pag);
 		
@@ -303,6 +366,13 @@ public class ContenidoController {
 	
 	@RequestMapping(path = "api/usuario/relojSistema", method = RequestMethod.GET)
 	public ResponseEntity<String> relojSistema(HttpServletRequest request) {
+
+		String mailAdmin = (String) request.getSession()
+				.getAttribute("USUARIO");
+		if (mailAdmin==null){
+			return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
+		}
+		
 		String res = "";
 		Date fecha = new Date();
 		DateFormat formato = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");

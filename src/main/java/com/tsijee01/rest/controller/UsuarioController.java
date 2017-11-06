@@ -33,7 +33,12 @@ public class UsuarioController {
 			@RequestParam(name = "password", required = true) String password,
 			@RequestParam(name = "nombre", required = true) String nombre,
 			@RequestParam(name = "apellido", required = true) String apellido) {
-
+		String mailAdmin = (String) request.getSession()
+				.getAttribute("");
+		if (mailAdmin==null){
+			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+		}
+		
 		if (userService.crearUser(email, password, nombre, apellido)) {
 			return new ResponseEntity<Object>(HttpStatus.OK);
 		} else {
@@ -45,7 +50,12 @@ public class UsuarioController {
 	@RequestMapping(path = "api/usuario/listarFavoritos", method = RequestMethod.GET)
 	public ResponseEntity<List<ContenidoDTO>> listarFavoritos(HttpServletRequest request,
 			@RequestParam(name = "usuarioId", required = true) Long id) {
-
+		String mailAdmin = (String) request.getSession()
+				.getAttribute("USUARIO");
+		if (mailAdmin==null){
+			return new ResponseEntity<List<ContenidoDTO>>(HttpStatus.FORBIDDEN);
+		}
+		
 		
 		
 		List<Contenido> listarFavoritos = userService.listarFavoritos(id);

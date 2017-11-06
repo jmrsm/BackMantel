@@ -2,6 +2,7 @@ package com.tsijee01.rest.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,12 @@ public class ActorController {
 	// ya venga con contenido
 	@RequestMapping(path = "api/admin/actor", method = RequestMethod.POST)
 	public ResponseEntity<?> altaActor(HttpServletRequest request, @RequestBody ActorDTO actor) {
+		
+		String mailAdmin = (String) request.getSession()
+				.getAttribute("TENANT_ADMIN");
+		if (mailAdmin==null){
+			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+		}
 
 		if (actorService.altaActor(mapper.map(actor, Actor.class))) {
 			return new ResponseEntity<Object>(HttpStatus.OK);
@@ -37,9 +44,16 @@ public class ActorController {
 		}
 	}
 	
+	
 	// obtener todos los actores en el sistema
 	@RequestMapping(path = "api/admin/actor", method = RequestMethod.GET)
 	public ResponseEntity<?> listarActores(HttpServletRequest request) {
+
+		String mailAdmin = (String) request.getSession()
+				.getAttribute("TENANT_ADMIN");
+		if (mailAdmin==null){
+			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+		}
 		return new ResponseEntity<Object>(mapper.mapAsList(actorService.findAll(), ActorDTO.class), HttpStatus.OK);
 	}
 

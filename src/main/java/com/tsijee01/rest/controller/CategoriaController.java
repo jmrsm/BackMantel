@@ -2,6 +2,7 @@ package com.tsijee01.rest.controller;
 
 import java.util.List;
 
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,12 @@ public class CategoriaController {
 	public ResponseEntity<?> altaCategoriaContenido(HttpServletRequest request,
 			@RequestParam(name = "nombre", required = true) String nombreCategoria) {
 
+		String mailAdmin = (String) request.getSession()
+				.getAttribute("SUPER_ADMIN");
+		if (mailAdmin==null){
+			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+		}
+
 		if (categoriaContenidoService.altaCategoriaContenido(nombreCategoria)) {
 			return new ResponseEntity<Object>(HttpStatus.OK);
 		} else {
@@ -48,7 +55,11 @@ public class CategoriaController {
 	// crear nueva categoria de contenido
 	@RequestMapping(path = "api/superAdmin/categoriaContenido", method = RequestMethod.GET)
 	public ResponseEntity<List<CategoriaDTO>> obtenerCategoriasContenido(HttpServletRequest request) {
-
+		String mailAdmin = (String) request.getSession()
+				.getAttribute("SUPER_ADMIN");
+		if (mailAdmin==null){
+			return new ResponseEntity<List<CategoriaDTO>>(HttpStatus.FORBIDDEN);
+		}
 		List<CategoriaDTO> cates = mapper.mapAsList(categoriaContenidoService.obtenerCategorias(), CategoriaDTO.class);
 		return new ResponseEntity<List<CategoriaDTO>>(cates, HttpStatus.OK);
 

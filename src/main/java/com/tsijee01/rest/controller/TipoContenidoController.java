@@ -25,6 +25,12 @@ public class TipoContenidoController {
 	
 	@RequestMapping(path = "api/superAdmin/tipoContenido", method = RequestMethod.GET)
 	public ResponseEntity<List<String>> obtenerCategoriasContenido(HttpServletRequest request) {
+
+		String mailAdmin = (String) request.getSession()
+				.getAttribute("SUPER_ADMIN");
+		if (mailAdmin==null){
+			return new ResponseEntity<List<String>>(HttpStatus.FORBIDDEN);
+		}
 		
 		List<String> tiposContenido = Arrays.asList(TipoContenidoEnum.values()).stream().map(tc -> tc.name()).collect(Collectors.toList());
 		return new ResponseEntity<List<String>>(tiposContenido, HttpStatus.OK);
