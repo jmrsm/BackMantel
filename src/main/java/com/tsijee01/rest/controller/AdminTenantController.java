@@ -1,6 +1,7 @@
 package com.tsijee01.rest.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -33,12 +34,29 @@ public class AdminTenantController {
 	//obtener id admin
 	@RequestMapping(path = "api/admin/getID", method = RequestMethod.GET)
 	public ResponseEntity<?> listarActores(HttpServletRequest request ,@RequestParam(name = "email", required = true) String email) {
+		
+		@SuppressWarnings("unchecked")
+		Optional <String> mailAdmin = (Optional<String>) request.getSession()
+				.getAttribute("TENANT_ADMIN");
+		if (!mailAdmin.isPresent()){
+			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+		}
+		
 		return new ResponseEntity<Object>(adminService.idUser(email), HttpStatus.OK);
 	}
 	
 	@RequestMapping(path = "api/admin/listarmicontenido", method = RequestMethod.GET)
 	public ResponseEntity<List<ContenidoDTO>> listarmicontenido(HttpServletRequest request,
 			@RequestParam(name = "email", required = false) String email) {
+		
+		@SuppressWarnings("unchecked")
+		Optional <String> mailAdmin = (Optional<String>) request.getSession()
+				.getAttribute("TENANT_ADMIN");
+		if (!mailAdmin.isPresent()){
+			return new ResponseEntity<List<ContenidoDTO>>(HttpStatus.FORBIDDEN);
+		}
+		
+		
 		List<ContenidoDTO> contenidos = contenidoService.listarContenidoProveedor(email);
 		return new ResponseEntity<List<ContenidoDTO>>(contenidos, HttpStatus.OK);
 

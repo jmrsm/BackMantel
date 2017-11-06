@@ -119,7 +119,7 @@ public class ContenidoController {
 
 	}
 
-	// buscar contenido usuario final
+	// si ya la vio devuelve el último segundo visto sino 0
 	@RequestMapping(path = "api/usuario/verContenido", method = RequestMethod.GET)
 	public ResponseEntity<Long> verContenido(HttpServletRequest request,
 			@RequestParam(name = "usuarioID", required = true) Long usuarioId,
@@ -232,9 +232,6 @@ public class ContenidoController {
 		return new ResponseEntity<Page<ContenidoDTO>>(dtoPage, HttpStatus.OK);
 	}
 	
-	
-
-
 	// crear una api que reciba el contenido que está viendo un usuario
 	// junto al tiempo de reproducción
 	@RequestMapping(path = "api/usuario/guardarReproduccion", method = RequestMethod.GET)
@@ -312,8 +309,5 @@ public class ContenidoController {
 		res = formato.format(fecha);
 		return new ResponseEntity<String>(res, HttpStatus.OK);
 	}
-	
-	
-	
 	
 }

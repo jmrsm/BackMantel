@@ -2,7 +2,7 @@ package com.tsijee01.persistence.model;
 
 public enum TipoUsuarioEnum {
 
-	SUPER_ADMIN("Super_admin"), TENANT_ADMIN("Tenant_admin"), Usuario("Usuario"),Forbbiden("Forbbiden");
+	SUPER_ADMIN("Super_admin"), TENANT_ADMIN("Tenant_admin"), USUARIO("Usuario"),Forbbiden("Forbbiden");
 
 	private String tipoUsuario;
 
