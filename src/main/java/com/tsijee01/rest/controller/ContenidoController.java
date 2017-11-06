@@ -26,7 +26,6 @@ import com.tsijee01.persistence.model.Pelicula;
 import com.tsijee01.persistence.model.Serie;
 import com.tsijee01.rest.dto.CategoriaDTO;
 import com.tsijee01.rest.dto.ContenidoDTO;
-import com.tsijee01.rest.dto.PathDTO;
 import com.tsijee01.rest.dto.SearchContenidoOmbdapi;
 import com.tsijee01.service.ContenidoService;
 import com.tsijee01.util.PageUtils;
@@ -135,16 +134,17 @@ public class ContenidoController {
 	public ResponseEntity<Long> altaContenido(HttpServletRequest request,
 			@RequestParam(name = "proveedorContenidoId", required = true) Long proveedorContenidoId,
 			@RequestParam(name = "omdbId", required = true) String omdbId,
-			@RequestBody PathDTO path,
+			@RequestParam(name = "path", required = true) String path,
 			@RequestParam(name = "esSerie", required = true) Boolean esSerie,
 			@RequestParam(name = "esDestacado", required = true) Boolean esDestacado) {
-		String url = path.getPath();
 		ContenidoDTO cont = this.getContenidoOmdbById(omdbId);
+		path=path.replace("%26token", "&token");
+		path=path.replace("/o/videos/","/o/videos%2F");
 		Long id = null;
 		if (esSerie) {
 			id = contenidoService.altaSerie(mapper.map(cont, Serie.class), proveedorContenidoId, esDestacado);
 		} else {
-			id = contenidoService.altaPelicula(mapper.map(cont, Pelicula.class), proveedorContenidoId, url ,
+			id = contenidoService.altaPelicula(mapper.map(cont, Pelicula.class), proveedorContenidoId, path,
 					esDestacado);
 		}
 		return new ResponseEntity<Long>(id, HttpStatus.OK);
