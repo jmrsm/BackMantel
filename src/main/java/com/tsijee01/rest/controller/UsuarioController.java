@@ -46,6 +46,8 @@ public class UsuarioController {
 	public ResponseEntity<List<ContenidoDTO>> listarFavoritos(HttpServletRequest request,
 			@RequestParam(name = "usuarioId", required = true) Long id) {
 
+		
+		
 		List<Contenido> listarFavoritos = userService.listarFavoritos(id);
 			return new ResponseEntity<List<ContenidoDTO>>(mapper.mapAsList(listarFavoritos, ContenidoDTO.class),HttpStatus.OK);
 

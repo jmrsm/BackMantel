@@ -3,6 +3,7 @@ package com.tsijee01.rest.controller;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,9 +33,19 @@ public class LoginController {
 			if (tUE.get().tipoUsuario().equals(TipoUsuarioEnum.Forbbiden.tipoUsuario())) {
 				return new ResponseEntity<LoginDTO>(HttpStatus.FORBIDDEN);
 			} else {
+				
 				LoginDTO lDTO = new LoginDTO();
 				lDTO.setId(loginService.obtenerId(email));
 				lDTO.setTipoUsuario(tUE.get().tipoUsuario());
+				
+				HttpSession sesion = request.getSession();
+				if(tUE.get().equals(TipoUsuarioEnum.SUPER_ADMIN)){
+					sesion.setAttribute("SUPER_ADMIN", Optional.of(email));	
+				}else if(tUE.get().equals(TipoUsuarioEnum.TENANT_ADMIN)){
+					sesion.setAttribute("TENANT_ADMIN", Optional.of(email));	
+				}else if (tUE.get().equals(TipoUsuarioEnum.USUARIO)){
+					sesion.setAttribute("USUARIO", Optional.of(email));	
+				}
 				return new ResponseEntity<LoginDTO>(lDTO, HttpStatus.OK);
 			}
 		} else {

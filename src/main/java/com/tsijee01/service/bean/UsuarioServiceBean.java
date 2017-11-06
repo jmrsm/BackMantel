@@ -10,10 +10,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.tsijee01.persistence.model.AdminTenant;
 import com.tsijee01.persistence.model.Contenido;
 import com.tsijee01.persistence.model.HistorialContenido;
+import com.tsijee01.persistence.model.SuperAdmin;
 import com.tsijee01.persistence.model.Usuario;
+import com.tsijee01.persistence.repository.AdminTenantRepository;
 import com.tsijee01.persistence.repository.HistorialContenidoRepository;
+import com.tsijee01.persistence.repository.SuperAdminRepository;
 import com.tsijee01.persistence.repository.UsuarioRepository;
 import com.tsijee01.service.UsuarioService;
 import com.tsijee01.util.Password;
@@ -23,6 +27,12 @@ public class UsuarioServiceBean implements UsuarioService{
 
 	@Autowired
 	private UsuarioRepository usuarioRepository; 
+	
+	@Autowired
+	private AdminTenantRepository adminTenantRepository; 
+	
+	@Autowired
+	private SuperAdminRepository superadminRepository; 
 	
 	@Autowired
 	private Password passwordUtil;
@@ -91,8 +101,16 @@ public class UsuarioServiceBean implements UsuarioService{
 	@Override
 	public boolean crearUser(String email, String password, String nombre, String apellido) {
 
-		Optional<Usuario> sa = usuarioRepository.findOneByEmail(email);
-		if(sa.isPresent()){
+		Optional<SuperAdmin> sa = superadminRepository.findOneByEmail(email);
+		if (sa.isPresent()){
+			return false;
+		}
+		Optional<AdminTenant> at = adminTenantRepository.findOneByEmail(email);
+		if (at.isPresent()){
+			return false;
+		}
+		Optional<Usuario> u = usuarioRepository.findOneByEmail(email);
+		if(u.isPresent()){
 			//Si el usuario ya existe
 			return false;
 		}else{
