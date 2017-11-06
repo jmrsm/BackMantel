@@ -375,7 +375,7 @@ public class ContenidoController {
 		
 		String res = "";
 		Date fecha = new Date();
-		DateFormat formato = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		DateFormat formato = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 		res = formato.format(fecha);
 		return new ResponseEntity<String>(res, HttpStatus.OK);
 	}
