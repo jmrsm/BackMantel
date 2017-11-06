@@ -233,7 +233,9 @@ public class ContenidoServiceBean implements ContenidoService {
 			Optional<Director> od = directorRepository.findByNombreCompleto(dir.getNombreCompleto());
 			dir.setId(od.isPresent() ? od.get().getId() : directorRepository.save(dir).getId());
 		});
-		cont.setProveedorContenido(proveedorContenidoRepository.findOne(proveedorContenidoId).get());
+		ProveedorContenido pc= proveedorContenidoRepository.findOne(proveedorContenidoId).get();
+		
+		cont.setProveedorContenido(pc);
 		cont.setEsDestacado(esDestacado);
 		
 		
@@ -366,6 +368,11 @@ public class ContenidoServiceBean implements ContenidoService {
 		}else {
 			return new Long(0);
 		}
+	}
+	
+	@Override
+	public Page<Pelicula> buscarTodasLasPeliculas(Pageable pag) {
+		return peliculaRepositoy.findAll(pag);
 	}
 
 }
