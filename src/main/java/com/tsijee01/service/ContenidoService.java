@@ -48,5 +48,7 @@ public interface ContenidoService {
 	Long verContenido(Long usuarioId, Long contenidoId);
 	
 	Page<Pelicula> buscarTodasLasPeliculas(Pageable pag);
+
+	Long altaEpisodio(Long serieId, String path, int episodio, int temporada);
 	
 }

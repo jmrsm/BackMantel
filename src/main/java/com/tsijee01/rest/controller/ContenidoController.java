@@ -136,7 +136,7 @@ public class ContenidoController {
 			@RequestParam(name = "omdbId", required = true) String omdbId,
 			@RequestParam(name = "path", required = true) String path,
 			@RequestParam(name = "esSerie", required = true) Boolean esSerie,
-			@RequestParam(name = "esDestacado", required = true) Boolean esDestacado) {
+			@RequestParam(name = "esDestacado", required = true) Boolean esDestacado			) {
 		ContenidoDTO cont = this.getContenidoOmdbById(omdbId);
 		path=path.replace("%26token", "&token");
 		path=path.replace("/o/videos/","/o/videos%2F");
@@ -147,6 +147,22 @@ public class ContenidoController {
 			id = contenidoService.altaPelicula(mapper.map(cont, Pelicula.class), proveedorContenidoId, path,
 					esDestacado);
 		}
+		return new ResponseEntity<Long>(id, HttpStatus.OK);
+	}
+	
+	@RequestMapping(path = "api/admin/episodioOmdb", method = RequestMethod.POST)
+	public ResponseEntity<Long> altaEpisodio(HttpServletRequest request,
+			@RequestParam(name = "idSerie", required = true) Long idSerie,
+			@RequestParam(name = "path", required = true) String path,
+			@RequestParam(name = "episodio", required = false) int episodio,
+			@RequestParam(name = "temporada", required = false) int temporada) {
+		
+		//ContenidoDTO cont = this.getContenidoOmdbById(idSerie);
+		path=path.replace("%26token", "&token");
+		path=path.replace("/o/videos/","/o/videos%2F");
+		Long id = null;
+		id = contenidoService.altaEpisodio(idSerie, path, episodio, temporada);
+		
 		return new ResponseEntity<Long>(id, HttpStatus.OK);
 	}
 

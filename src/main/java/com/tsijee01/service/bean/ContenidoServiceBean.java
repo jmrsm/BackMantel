@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tsijee01.persistence.model.Actor;
 import com.tsijee01.persistence.model.AdminTenant;
+import com.tsijee01.persistence.model.CapituloSerie;
 import com.tsijee01.persistence.model.Categoria;
 import com.tsijee01.persistence.model.Contenido;
 import com.tsijee01.persistence.model.Director;
@@ -40,6 +41,7 @@ import com.tsijee01.persistence.repository.HistorialContenidoRepository;
 import com.tsijee01.persistence.repository.PeliculRepository;
 import com.tsijee01.persistence.repository.ProveedorContenidoRepository;
 import com.tsijee01.persistence.repository.SerieRepository;
+import com.tsijee01.persistence.repository.TemporadaSerieRepository;
 import com.tsijee01.persistence.repository.UsuarioRepository;
 import com.tsijee01.rest.dto.ContenidoDTO;
 import com.tsijee01.rest.dto.TipoContenidoEnum;
@@ -88,6 +90,9 @@ public class ContenidoServiceBean implements ContenidoService {
 	
 	@Autowired 
 	AdminTenantRepository adminTenantRepository;
+	
+	@Autowired
+	TemporadaSerieRepository temporadaSerieRepository;
 	
 	@Autowired
 	MapperFacade mapper;
@@ -200,7 +205,7 @@ public class ContenidoServiceBean implements ContenidoService {
 
 	@Override
 	public Long altaSerie(Serie serie, Long proveedorContenidoId, Boolean esDestacado) {
-
+		
 		this.guardarContenido(serie, proveedorContenidoId, esDestacado);
 		serie.setTemporadas(new ArrayList<TemporadaSerie>());
 		return serieRepository.save(serie).getId();
@@ -373,6 +378,33 @@ public class ContenidoServiceBean implements ContenidoService {
 	@Override
 	public Page<Pelicula> buscarTodasLasPeliculas(Pageable pag) {
 		return peliculaRepositoy.findAll(pag);
+	}
+
+	@Override
+	public Long altaEpisodio(Long idSerie, String path, int episodio, int temporada) {
+		
+		Optional<Serie> s = serieRepository.findOne(idSerie);
+		Optional <TemporadaSerie> t = temporadaSerieRepository.findByTemporadaAndSerie(temporada, s.get());
+		
+		CapituloSerie c = new CapituloSerie();
+		c.setCapitulo(episodio);
+		c.setPath(path);
+		
+		if (!t.isPresent()) {
+			TemporadaSerie tp = new TemporadaSerie();
+			tp.setTemporada(temporada);
+			tp.setCapitulos(new ArrayList<CapituloSerie>());
+			tp.getCapitulos().add(c);
+			tp.setSerie(s.get());
+			List<TemporadaSerie> lt = new ArrayList<TemporadaSerie>();
+			lt.add(tp);
+			s.get().setTemporadas(lt);;
+		}
+		else {
+			t.get().getCapitulos().add(c);
+		}
+				
+		return serieRepository.save(s.get()).getId();
 	}
 
 }

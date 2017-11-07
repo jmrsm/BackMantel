@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Fetch;
@@ -31,6 +32,10 @@ public class TemporadaSerie {
 	@JoinColumn(name = "id_capitulo")
 	@Fetch (FetchMode.SELECT)
 	private List <CapituloSerie> capitulos;
+	
+	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE })
+	@JoinColumn(name = "id_Serie")
+	private Serie serie;
 
 	public Long getId() {
 		return id;
@@ -38,6 +43,14 @@ public class TemporadaSerie {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Serie getSerie() {
+		return serie;
+	}
+
+	public void setSerie(Serie serie) {
+		this.serie = serie;
 	}
 
 	public int getTemporada() {
