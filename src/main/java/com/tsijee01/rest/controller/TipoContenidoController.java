@@ -26,9 +26,9 @@ public class TipoContenidoController {
 	@RequestMapping(path = "api/superAdmin/tipoContenido", method = RequestMethod.GET)
 	public ResponseEntity<List<String>> obtenerCategoriasContenido(HttpServletRequest request) {
 
-		String mailAdmin = (String) request.getSession()
+		String mailSuperAdmin = (String) request.getSession()
 				.getAttribute("SUPER_ADMIN");
-		if (mailAdmin==null){
+		if (mailSuperAdmin==null){
 			return new ResponseEntity<List<String>>(HttpStatus.FORBIDDEN);
 		}
 		

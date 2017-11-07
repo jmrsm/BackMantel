@@ -113,9 +113,9 @@ public class ContenidoController {
 	@RequestMapping(path = "api/usuario/categoria", method = RequestMethod.GET)
 	public ResponseEntity<List<CategoriaDTO>> buscarContenido(HttpServletRequest request) {
 
-		String mailAdmin = (String) request.getSession()
+		String mailUsuario = (String) request.getSession()
 				.getAttribute("USUARIO");
-		if (mailAdmin==null){
+		if (mailUsuario==null){
 			return new ResponseEntity<List<CategoriaDTO>>(HttpStatus.FORBIDDEN);
 		}
 		List<CategoriaDTO> categorias = mapper.mapAsList(contenidoService.listarCategorias(), CategoriaDTO.class);
@@ -131,9 +131,9 @@ public class ContenidoController {
 			@RequestParam(name = "sort", required = false) String sortField,
 			@RequestParam(name = "order", required = false) String sortOrder,
 			@RequestParam(name = "_q", required = false) String query) {
-		String mailAdmin = (String) request.getSession()
+		String mailUsuario = (String) request.getSession()
 				.getAttribute("USUARIO");
-		if (mailAdmin==null){
+		if (mailUsuario==null){
 			return new ResponseEntity<Page<ContenidoDTO>>(HttpStatus.FORBIDDEN);
 		}
 		Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
@@ -153,9 +153,9 @@ public class ContenidoController {
 	public ResponseEntity<Long> verContenido(HttpServletRequest request,
 			@RequestParam(name = "usuarioID", required = true) Long usuarioId,
 			@RequestParam(name = "contenidoId", required = true) Long contenidoId) {
-		String mailAdmin = (String) request.getSession()
+		String mailUsuario = (String) request.getSession()
 				.getAttribute("USUARIO");
-		if (mailAdmin==null){
+		if (mailUsuario==null){
 			return new ResponseEntity<Long>(HttpStatus.FORBIDDEN);
 		}
 		Long segundosVistos = contenidoService.verContenido(usuarioId, contenidoId);
@@ -220,9 +220,9 @@ public class ContenidoController {
 			@RequestParam(name = "sort", required = false) String sortField,
 			@RequestParam(name = "order", required = false) String sortOrder,
 			@RequestParam(name = "generoId", required = true) Long generoId) {
-		String mailAdmin = (String) request.getSession()
+		String mailUsuario = (String) request.getSession()
 				.getAttribute("USUARIO");
-		if (mailAdmin==null){
+		if (mailUsuario==null){
 			return new ResponseEntity<Page<ContenidoDTO>>(HttpStatus.FORBIDDEN);
 		}		Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
 		Page<Pelicula> pelis = contenidoService.buscarPeliculaPorGenero(pag, generoId);
@@ -242,9 +242,9 @@ public class ContenidoController {
 			@RequestParam(name = "sort", required = false) String sortField,
 			@RequestParam(name = "order", required = false) String sortOrder,
 			@RequestParam(name = "actorId", required = true) Long actorId) {
-		String mailAdmin = (String) request.getSession()
+		String mailUsuario = (String) request.getSession()
 				.getAttribute("USUARIO");
-		if (mailAdmin==null){
+		if (mailUsuario==null){
 			return new ResponseEntity<Page<ContenidoDTO>>(HttpStatus.FORBIDDEN);
 		}
 		Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
@@ -265,9 +265,9 @@ public class ContenidoController {
 			@RequestParam(name = "sort", required = false) String sortField,
 			@RequestParam(name = "order", required = false) String sortOrder,
 			@RequestParam(name = "directorId", required = true) Long directorId) {
-		String mailAdmin = (String) request.getSession()
+		String mailUsuario = (String) request.getSession()
 				.getAttribute("USUARIO");
-		if (mailAdmin==null){
+		if (mailUsuario==null){
 			return new ResponseEntity<Page<ContenidoDTO>>(HttpStatus.FORBIDDEN);
 		}
 		Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
@@ -288,9 +288,9 @@ public class ContenidoController {
 			@RequestParam(name = "idUsuario", required = true) Long idUsuario,
 			@RequestParam(name = "idContenido", required = true) Long idContenido,
 			@RequestParam(name = "Tiempo", required = true) Long tiempo) {
-		String mailAdmin = (String) request.getSession()
+		String mailUsuario = (String) request.getSession()
 				.getAttribute("USUARIO");
-		if (mailAdmin==null){
+		if (mailUsuario==null){
 			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
 		}
 				if (tiempo != 0)
@@ -305,9 +305,9 @@ public class ContenidoController {
 			@RequestParam(name = "usuarioId", required = true) Long usuarioId,
 			@RequestParam(name = "esFavorito", required = true) Boolean esFavorito) {
 
-		String mailAdmin = (String) request.getSession()
+		String mailUsuario = (String) request.getSession()
 				.getAttribute("USUARIO");
-		if (mailAdmin==null){
+		if (mailUsuario==null){
 			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
 		}
 		contenidoService.marcarFavorito(contenidoId, esFavorito, usuarioId);
@@ -347,9 +347,9 @@ public class ContenidoController {
 			@RequestParam(name = "_start", required = true) int start,
 			@RequestParam(name = "_end", required = true) int end  ) {
 
-		String mailAdmin = (String) request.getSession()
+		String mailUsuario = (String) request.getSession()
 				.getAttribute("USUARIO");
-		if (mailAdmin==null){
+		if (mailUsuario==null){
 			return new ResponseEntity<Page<ContenidoDTO>>(HttpStatus.FORBIDDEN);
 		}
 		Pageable pag = PageUtils.getPageRequest(start, end, null, null);
@@ -367,9 +367,9 @@ public class ContenidoController {
 	@RequestMapping(path = "api/usuario/relojSistema", method = RequestMethod.GET)
 	public ResponseEntity<String> relojSistema(HttpServletRequest request) {
 
-		String mailAdmin = (String) request.getSession()
+		String mailUsuario = (String) request.getSession()
 				.getAttribute("USUARIO");
-		if (mailAdmin==null){
+		if (mailUsuario==null){
 			return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
 		}
 		
