@@ -54,7 +54,7 @@ public class LoginServiceBean implements LoginService {
 		Optional<Usuario> u = usuarioRepository.findOneByEmail(email);
 		if (u.isPresent()) {
 			if (passwordUtil.checkearPassword(password, u.get().getPassowd())) {
-				return Optional.of(TipoUsuarioEnum.Usuario);
+				return Optional.of(TipoUsuarioEnum.USUARIO);
 			} else {
 				return Optional.of(TipoUsuarioEnum.Forbbiden);
 			}

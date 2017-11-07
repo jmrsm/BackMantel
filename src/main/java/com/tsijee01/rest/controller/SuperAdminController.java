@@ -1,6 +1,7 @@
 package com.tsijee01.rest.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -58,6 +59,11 @@ public class SuperAdminController {
 			@RequestBody SuperAdminDTO superAdminDTO,
 			@RequestParam(name = "password", required = true) String password) {
 
+		String mailSuperAdmin = (String) request.getSession()
+				.getAttribute("SUPER_ADMIN");
+		if (mailSuperAdmin==null){
+			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+		}
 		if (superAdminService.altaSuperAdmin(mapper.map(superAdminDTO, SuperAdmin.class), password)) {
 			return new ResponseEntity<Object>(HttpStatus.OK);
 		} else {
@@ -69,7 +75,11 @@ public class SuperAdminController {
 	public ResponseEntity<?> altaAdminTenant(HttpServletRequest request, @RequestBody AdminTenantDTO adminTenant,
 			@RequestParam(name = "proveedorId", required = true) Long proveedorId,
 			@RequestParam(name = "password", required = true) String password) {
-
+		String mailSuperAdmin = (String) request.getSession()
+				.getAttribute("SUPER_ADMIN");
+		if (mailSuperAdmin==null){
+			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+		}
 		if (administradorService.altaAdmin(mapper.map(adminTenant, AdminTenant.class), proveedorId, password)) {
 			return new ResponseEntity<Object>(HttpStatus.OK);
 		} else {
@@ -81,6 +91,11 @@ public class SuperAdminController {
 	@RequestMapping(path = "api/superAdmin/proveedorContenido", method = RequestMethod.GET)
 	public ResponseEntity<List<ProveedorContenidoDTO>> obtenerAdministradorContenido(HttpServletRequest request) {
 
+		String mailSuperAdmin = (String) request.getSession()
+				.getAttribute("SUPER_ADMIN");
+		if (mailSuperAdmin==null){
+			return new ResponseEntity<List<ProveedorContenidoDTO>>(HttpStatus.FORBIDDEN);
+		}
 		return new ResponseEntity<List<ProveedorContenidoDTO>>(
 				mapper.mapAsList(proveedorContenidoService.findAll(), ProveedorContenidoDTO.class), HttpStatus.OK);
 	}
@@ -94,6 +109,11 @@ public class SuperAdminController {
 			@RequestParam(name = "order", required = false) String sortOrder,
 			@RequestParam(name = "_q", required = false) String query) {
 
+		String mailSuperAdmin = (String) request.getSession()
+				.getAttribute("SUPER_ADMIN");
+		if (mailSuperAdmin==null){
+			return new ResponseEntity<Page<UsuarioDTO>>(HttpStatus.FORBIDDEN);
+		}
 		Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
 		Page<UsuarioDTO> dtoPage;
 		if (StringUtils.isEmpty(query)) {
@@ -118,6 +138,12 @@ public class SuperAdminController {
 		@RequestMapping(path = "api/superAdmin/usuario", method = RequestMethod.GET)
 		public ResponseEntity<UsuarioDTO> obtenerusuarios(HttpServletRequest request,
 				@RequestParam(name = "usuarioId", required = true) Long usuarioId){
+
+			String mailSuperAdmin = (String) request.getSession()
+					.getAttribute("SUPER_ADMIN");
+			if (mailSuperAdmin==null){
+				return new ResponseEntity<UsuarioDTO>(HttpStatus.FORBIDDEN);
+			}
 			
 			Usuario u = usuarioService.buscarPorId(usuarioId);
 			return new ResponseEntity<UsuarioDTO>(mapper.map(u, UsuarioDTO.class), HttpStatus.OK);
@@ -128,7 +154,12 @@ public class SuperAdminController {
 	@RequestMapping(path = "api/superAdmin/proveedorContenido", method = RequestMethod.POST)
 	public ResponseEntity<?> altaProveedorContenido(HttpServletRequest request,
 			@RequestParam(name = "nombre", required = true) String nombreProveedorContenido) {
-
+		String mailSuperAdmin = (String) request.getSession()
+				.getAttribute("SUPER_ADMIN");
+		if (mailSuperAdmin==null){
+			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+		}
+		
 		if (proveedorContenidoService.altaProveedorContenido(nombreProveedorContenido)) {
 			return new ResponseEntity<Object>(HttpStatus.OK);
 		} else {
