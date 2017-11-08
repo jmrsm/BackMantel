@@ -1,10 +1,14 @@
 package com.tsijee01.persistence.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class CapituloSerie {
@@ -19,6 +23,26 @@ public class CapituloSerie {
 	
 	@Column(nullable = false)
 	private int capitulo;
+	
+	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE })
+	@JoinColumn(name = "id_Temporada")
+	private TemporadaSerie temporada;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public TemporadaSerie getTemporada() {
+		return temporada;
+	}
+
+	public void setTemporada(TemporadaSerie temporada) {
+		this.temporada = temporada;
+	}
 
 	public String getPath() {
 		return path;

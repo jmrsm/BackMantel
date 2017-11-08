@@ -23,7 +23,7 @@ public class Serie extends Contenido {
 		
 	}
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade={CascadeType.REMOVE})
+	@OneToMany(fetch = FetchType.LAZY, cascade={CascadeType.PERSIST})
 	@JoinColumn(name = "id_temporada")
 	@Fetch (FetchMode.SELECT)
 	private List<TemporadaSerie> temporadas;

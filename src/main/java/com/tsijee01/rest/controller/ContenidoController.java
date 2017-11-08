@@ -189,14 +189,13 @@ public class ContenidoController {
 		return new ResponseEntity<Long>(id, HttpStatus.OK);
 	}
 	
-	@RequestMapping(path = "api/admin/episodioOmdb", method = RequestMethod.POST)
+	@RequestMapping(path = "api/admin/episodio", method = RequestMethod.POST)
 	public ResponseEntity<Long> altaEpisodio(HttpServletRequest request,
 			@RequestParam(name = "idSerie", required = true) Long idSerie,
 			@RequestParam(name = "path", required = true) String path,
 			@RequestParam(name = "episodio", required = false) int episodio,
 			@RequestParam(name = "temporada", required = false) int temporada) {
 		
-		//ContenidoDTO cont = this.getContenidoOmdbById(idSerie);
 		path=path.replace("%26token", "&token");
 		path=path.replace("/o/videos/","/o/videos%2F");
 		Long id = null;

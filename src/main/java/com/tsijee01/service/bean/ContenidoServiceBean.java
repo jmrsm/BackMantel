@@ -32,6 +32,7 @@ import com.tsijee01.persistence.model.TemporadaSerie;
 import com.tsijee01.persistence.model.Usuario;
 import com.tsijee01.persistence.repository.ActorRepository;
 import com.tsijee01.persistence.repository.AdminTenantRepository;
+import com.tsijee01.persistence.repository.CapituloRepository;
 import com.tsijee01.persistence.repository.CategoriaContenidoRepository;
 import com.tsijee01.persistence.repository.ContenidoRepository;
 import com.tsijee01.persistence.repository.DirectorRepository;
@@ -55,6 +56,9 @@ public class ContenidoServiceBean implements ContenidoService {
 	@Autowired
 	ContenidoRepository contenidoRepository;
 	
+	@Autowired
+	CapituloRepository capituloRepository;
+		
 	@Autowired
 	PeliculRepository peliculaRepositoy;
 
@@ -383,28 +387,28 @@ public class ContenidoServiceBean implements ContenidoService {
 	@Override
 	public Long altaEpisodio(Long idSerie, String path, int episodio, int temporada) {
 		
+		Long idTemp = null;
 		Optional<Serie> s = serieRepository.findOne(idSerie);
 		Optional <TemporadaSerie> t = temporadaSerieRepository.findByTemporadaAndSerie(temporada, s.get());
-		
-		CapituloSerie c = new CapituloSerie();
-		c.setCapitulo(episodio);
-		c.setPath(path);
 		
 		if (!t.isPresent()) {
 			TemporadaSerie tp = new TemporadaSerie();
 			tp.setTemporada(temporada);
 			tp.setCapitulos(new ArrayList<CapituloSerie>());
-			tp.getCapitulos().add(c);
 			tp.setSerie(s.get());
-			List<TemporadaSerie> lt = new ArrayList<TemporadaSerie>();
-			lt.add(tp);
-			s.get().setTemporadas(lt);;
+			idTemp = temporadaSerieRepository.save(tp).getId();
 		}
 		else {
-			t.get().getCapitulos().add(c);
+			idTemp = t.get().getId();
 		}
+		
+		CapituloSerie c = new CapituloSerie();
+		c.setCapitulo(episodio);
+		c.setPath(path);
+		
+		c.setTemporada(temporadaSerieRepository.findOne(idTemp).get());		
 				
-		return serieRepository.save(s.get()).getId();
+		return capituloRepository.save(c).getId();
 	}
 
 }

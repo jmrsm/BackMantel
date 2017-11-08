@@ -28,7 +28,7 @@ public class TemporadaSerie {
 	@Column
 	private int temporada;
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade={CascadeType.REMOVE})
+	@OneToMany(fetch = FetchType.LAZY, cascade={CascadeType.PERSIST})
 	@JoinColumn(name = "id_capitulo")
 	@Fetch (FetchMode.SELECT)
 	private List <CapituloSerie> capitulos;
