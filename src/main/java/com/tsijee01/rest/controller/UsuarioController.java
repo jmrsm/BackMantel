@@ -20,7 +20,7 @@ import ma.glasnost.orika.MapperFacade;
 
 @RestController
 public class UsuarioController {
-	
+
 	@Autowired
 	private UsuarioService userService;
 
@@ -33,12 +33,7 @@ public class UsuarioController {
 			@RequestParam(name = "password", required = true) String password,
 			@RequestParam(name = "nombre", required = true) String nombre,
 			@RequestParam(name = "apellido", required = true) String apellido) {
-		String mailUsuario = (String) request.getSession()
-				.getAttribute("");
-		if (mailUsuario==null){
-			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
-		}
-		
+
 		if (userService.crearUser(email, password, nombre, apellido)) {
 			return new ResponseEntity<Object>(HttpStatus.OK);
 		} else {
@@ -46,20 +41,17 @@ public class UsuarioController {
 		}
 
 	}
-	
+
 	@RequestMapping(path = "api/usuario/listarFavoritos", method = RequestMethod.GET)
 	public ResponseEntity<List<ContenidoDTO>> listarFavoritos(HttpServletRequest request,
 			@RequestParam(name = "usuarioId", required = true) Long id) {
-		String mailUsuario = (String) request.getSession()
-				.getAttribute("USUARIO");
-		if (mailUsuario==null){
+		String mailUsuario = (String) request.getSession().getAttribute("USUARIO");
+		if (mailUsuario == null) {
 			return new ResponseEntity<List<ContenidoDTO>>(HttpStatus.FORBIDDEN);
 		}
-		
-		
-		
 		List<Contenido> listarFavoritos = userService.listarFavoritos(id);
-			return new ResponseEntity<List<ContenidoDTO>>(mapper.mapAsList(listarFavoritos, ContenidoDTO.class),HttpStatus.OK);
+		return new ResponseEntity<List<ContenidoDTO>>(mapper.mapAsList(listarFavoritos, ContenidoDTO.class),
+				HttpStatus.OK);
 
 	}
 }

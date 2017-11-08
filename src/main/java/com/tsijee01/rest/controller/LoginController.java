@@ -40,11 +40,11 @@ public class LoginController {
 				
 				HttpSession sesion = request.getSession();
 				if(tUE.get().equals(TipoUsuarioEnum.SUPER_ADMIN)){
-					sesion.setAttribute("SUPER_ADMIN", Optional.of(new String(email)));	
+					sesion.setAttribute("SUPER_ADMIN", email);	
 				}else if(tUE.get().equals(TipoUsuarioEnum.TENANT_ADMIN)){
-					sesion.setAttribute("TENANT_ADMIN",  Optional.of(new String(email)));		
+					sesion.setAttribute("TENANT_ADMIN",  email);		
 				}else if (tUE.get().equals(TipoUsuarioEnum.USUARIO)){
-					sesion.setAttribute("USUARIO",  Optional.of(new String(email)));	
+					sesion.setAttribute("USUARIO",  email);	
 				}
 				return new ResponseEntity<LoginDTO>(lDTO, HttpStatus.OK);
 			}
