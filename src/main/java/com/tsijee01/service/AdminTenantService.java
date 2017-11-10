@@ -6,6 +6,8 @@ public interface AdminTenantService {
 
 	boolean altaAdminTenant(AdminTenant at);
 	
+	AdminTenant ObtenerAdminTenat(String email);
+	
 	String existeUser(String email);
 
 	String idUser(String email);

@@ -1,5 +1,7 @@
 package com.tsijee01.persistence.model;
 
+import java.util.Date;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,13 +13,23 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedEntityGraphs;
+import javax.persistence.NamedSubgraph;
 
 @Entity
-
+@NamedEntityGraphs({
 @NamedEntityGraph(name = "HistorialContenido.ConContenido", attributeNodes = {
 	       @NamedAttributeNode(value = "contenido")
-	    })
-
+	    }),
+@NamedEntityGraph(name = "HistorialContenido.Full", attributeNodes = {
+        @NamedAttributeNode(value = "contenido", subgraph = "ContenidoYProveedor")
+       ,@NamedAttributeNode(value = "contenido")
+    }, subgraphs = {
+        @NamedSubgraph(name = "ContenidoYProveedor", attributeNodes = {
+            @NamedAttributeNode(value = "proveedorContenido")
+        })
+    })
+})
 public class HistorialContenido {
 
 	@Id
@@ -46,6 +58,21 @@ public class HistorialContenido {
 	
 	@Column(nullable = true)
 	private boolean favorito;
+
+	@Column
+	private Date fechaReproduccion;
+	
+	public Date getFechaReproduccion() {
+		return fechaReproduccion;
+	}
+
+	public void setFechaReproduccion(Date fechaReproduccion) {
+		this.fechaReproduccion = fechaReproduccion;
+	}
+
+	public void setTiempoDeReproduccion(long tiempoDeReproduccion) {
+		this.tiempoDeReproduccion = tiempoDeReproduccion;
+	}
 
 	public boolean isVisto() {
 		return visto;

@@ -60,6 +60,11 @@ public class AdminTenantServiceBean implements AdminTenantService {
 		return ""+adminRepository.findOneByEmail(email).get().getId();
 		
 	}
+
+	@Override
+	public AdminTenant ObtenerAdminTenat(String email) {
+		return this.adminRepository.findOneByEmail(email).get();
+	}
 	
 
 }

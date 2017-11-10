@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -322,6 +323,7 @@ public class ContenidoServiceBean implements ContenidoService {
 		else 
 		{
 			HistorialContenido hn = new HistorialContenido();
+			hn.setFechaReproduccion(new Date());
 			hn.setContenido(cont.get());
 			hn.setUsuario(u.get());
 			hn.setTiempoDeReproduccion(tiempo);
@@ -375,6 +377,10 @@ public class ContenidoServiceBean implements ContenidoService {
 		if (h.isPresent()){
 			return h.get().getTiempoDeReproduccion();
 		}else {
+			HistorialContenido hc = new HistorialContenido();
+			hc.setContenido(cont.get());
+			hc.setFavorito(false);
+			hc.setFechaReproduccion(new Date());
 			return new Long(0);
 		}
 	}
