@@ -3,6 +3,7 @@ package com.tsijee01.persistence.repository;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,8 @@ import org.springframework.data.repository.Repository;
 public interface BaseRepository<T, ID extends Serializable> extends Repository<T, ID>, JpaSpecificationExecutor<T> {
 
 	void delete(T deleted);
+	
+	Stream<T> stream();
 
 	List<T> findAll();
 

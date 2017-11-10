@@ -145,6 +145,7 @@ public class SuperAdminController {
 	@RequestMapping(path = "api/superAdmin/proveedorContenido", method = RequestMethod.POST)
 	public ResponseEntity<?> altaProveedorContenido(HttpServletRequest request,
 			@RequestParam(name = "nombre", required = true) String nombreProveedorContenido) {
+		
 		String mailSuperAdmin = (String) request.getSession().getAttribute("SUPER_ADMIN");
 		if (mailSuperAdmin == null) {
 			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
