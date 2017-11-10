@@ -19,4 +19,6 @@ public interface HistorialContenidoRepository extends BaseRepository<HistorialCo
 	
 	@EntityGraph("HistorialContenido.ConContenido")
 	List<HistorialContenido> findByFavoritoAndUsuario(Boolean f,Usuario u) ;
+
+	Optional <HistorialContenido> findByUsuarioAndContenido(Usuario usuario, Contenido contenido);
 }

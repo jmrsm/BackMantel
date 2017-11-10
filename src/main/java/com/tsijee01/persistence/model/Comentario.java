@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -20,6 +22,10 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 @Entity
+@NamedEntityGraph(name = "Comentario.RespondeA", attributeNodes = {
+	       @NamedAttributeNode(value = "respondeA")
+	    })
+
 public class Comentario {
 
 	@Id
@@ -32,7 +38,7 @@ public class Comentario {
 	@Fetch (FetchMode.SELECT)
 	public List<Comentario> respuestas;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade={CascadeType.REMOVE})
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_responde_comentario")
 	@Fetch (FetchMode.SELECT)
 	public Comentario respondeA;

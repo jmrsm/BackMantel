@@ -2,6 +2,7 @@ package com.tsijee01.service.bean;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,6 +21,7 @@ import com.tsijee01.persistence.model.Actor;
 import com.tsijee01.persistence.model.AdminTenant;
 import com.tsijee01.persistence.model.CapituloSerie;
 import com.tsijee01.persistence.model.Categoria;
+import com.tsijee01.persistence.model.Comentario;
 import com.tsijee01.persistence.model.Contenido;
 import com.tsijee01.persistence.model.Director;
 import com.tsijee01.persistence.model.EventoDeportivo;
@@ -34,6 +36,7 @@ import com.tsijee01.persistence.repository.ActorRepository;
 import com.tsijee01.persistence.repository.AdminTenantRepository;
 import com.tsijee01.persistence.repository.CapituloRepository;
 import com.tsijee01.persistence.repository.CategoriaContenidoRepository;
+import com.tsijee01.persistence.repository.ComentarioRepository;
 import com.tsijee01.persistence.repository.ContenidoRepository;
 import com.tsijee01.persistence.repository.DirectorRepository;
 import com.tsijee01.persistence.repository.EventoDeportivoRepository;
@@ -55,6 +58,9 @@ public class ContenidoServiceBean implements ContenidoService {
 
 	@Autowired
 	ContenidoRepository contenidoRepository;
+	
+	@Autowired
+	ComentarioRepository comentarioRepository;
 	
 	@Autowired
 	CapituloRepository capituloRepository;
@@ -410,5 +416,80 @@ public class ContenidoServiceBean implements ContenidoService {
 				
 		return capituloRepository.save(c).getId();
 	}
+
+	@Override
+	public void comentarContenido(Long contenidoId, String comentario, Long usuarioId) {
+		
+		Optional<Contenido> cont = contenidoRepository.findOne(contenidoId);
+		Comentario coment = new Comentario();
+		Optional<Usuario> u = usuarioRepository.findOne(usuarioId);
+		
+		
+		if (cont.isPresent()) {
+			coment.setContenidoComentario(comentario);
+			coment.setContenido(cont.get());
+			coment.setUsuario(u.get());
+		}
+		else 
+		{
+			
+		}
+		
+		comentarioRepository.save(coment).getId();
+	}
+
+	@Override
+	public void marcarSpoiler(Long comentarioId, Long usuarioId) {
+
+		Optional<Comentario> c = comentarioRepository.findOne(comentarioId);
+		if (c.isPresent()) {
+			Optional<Usuario> u = usuarioRepository.findOne(usuarioId);
+			c.get().getMarcaSpoiler().add(u.get());
+			comentarioRepository.save(c.get());
+		}
+	}
+
+	@Override
+	public void valorarContenido(Long contenidoId, int puntaje, Long usuarioId) {
+		
+		Optional<Usuario> u = usuarioRepository.findOne(usuarioId);
+		Optional<Contenido> cont = contenidoRepository.findOne(contenidoId);
+		
+		
+		Optional<HistorialContenido> hc = historialContenidoRepository.findByUsuarioAndContenido(u.get(),cont.get());
+		if (!hc.isPresent()) {
+			hc = historialContenidoRepository.findByUsuarioAndContenido(u.get(),cont.get());
+			hc.get().setContenido(cont.get());
+			hc.get().setUsuario(u.get());
+			hc.get().setVisto(false);
+			hc.get().setFavorito(false);
+			
+		}
+		else
+		{
+			if (hc.get().getPuntuacion()!=0) {
+				return;
+			}
+		}
+		
+		
+		hc.get().setPuntuacion(puntaje);
+		
+		BigDecimal cantVotos = new BigDecimal(cont.get().getCantVotos());
+		BigDecimal punt = new BigDecimal(puntaje);
+		
+		BigDecimal ranking = cont.get().getRanking().multiply(cantVotos);
+		cont.get().setCantVotos(cont.get().getCantVotos() + 1);
+		ranking = ranking.add(punt);
+
+		BigDecimal uno = new BigDecimal(1);
+		cantVotos = cantVotos.add(uno);
+		ranking = ranking.divide(cantVotos, 1, BigDecimal.ROUND_HALF_UP);
+		cont.get().setRanking(ranking);
+		
+		contenidoRepository.save(cont.get());
+		historialContenidoRepository.save(hc.get());
+	}
+
 
 }

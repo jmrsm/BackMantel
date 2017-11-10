@@ -1,5 +1,7 @@
 package com.tsijee01.persistence.model;
 
+import java.math.BigDecimal;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -67,8 +69,8 @@ public class HistorialContenido {
 		return puntuacion;
 	}
 
-	public void setPuntuacion(int puntuacion) {
-		this.puntuacion = puntuacion;
+	public void setPuntuacion(int puntaje) {
+		this.puntuacion = puntaje;
 	}
 
 	public boolean isFavorito() {

@@ -1,5 +1,6 @@
 package com.tsijee01.rest.controller;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -27,6 +28,7 @@ import com.tsijee01.persistence.model.Serie;
 import com.tsijee01.rest.dto.CategoriaDTO;
 import com.tsijee01.rest.dto.ContenidoDTO;
 import com.tsijee01.rest.dto.SearchContenidoOmbdapi;
+import com.tsijee01.service.ComentarioService;
 import com.tsijee01.service.ContenidoService;
 import com.tsijee01.util.PageUtils;
 
@@ -38,7 +40,7 @@ public class ContenidoController {
 
 	@Autowired
 	private ContenidoService contenidoService;
-
+	
 	@Autowired
 	private MapperFacade mapper;
 
@@ -395,5 +397,40 @@ public class ContenidoController {
 		res = formato.format(fecha);
 		return new ResponseEntity<String>(res, HttpStatus.OK);
 	}
+	
+	@RequestMapping(path = "api/usuario/comentarContenido", method = RequestMethod.POST)
+	public ResponseEntity<?> comentarContenido(HttpServletRequest request,
+			@RequestParam(name = "contenidoId", required = true) Long contenidoId,
+			@RequestParam(name = "usuarioId", required = true) Long usuarioId,
+			@RequestParam(name = "comentario", required = true) String comentario) {
+
+//		String mailUsuario = (String) request.getSession()
+//				.getAttribute("USUARIO");
+//		if (mailUsuario==null){
+//			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+//		}
+//		
+		
+		contenidoService.comentarContenido(contenidoId, comentario, usuarioId);
+		return new ResponseEntity<Object>(HttpStatus.OK);
+
+	}
+	
+	@RequestMapping(path = "api/usuario/valorarContenido", method = RequestMethod.PUT)
+	public ResponseEntity<?> valorarContenido(HttpServletRequest request,
+			@RequestParam(name = "contenidoId", required = true) Long contenidoId,
+			@RequestParam(name = "usuarioId", required = true) Long usuarioId,
+			@RequestParam(name = "puntaje", required = true) int puntaje) {
+
+//		String mailUsuario = (String) request.getSession()
+//				.getAttribute("USUARIO");
+//		if (mailUsuario==null){
+//			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+//		}
+		contenidoService.valorarContenido(contenidoId, puntaje, usuarioId);
+		return new ResponseEntity<Object>( HttpStatus.OK);
+
+	}
+	
 	
 }

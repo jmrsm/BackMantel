@@ -71,7 +71,7 @@ public abstract class Contenido {
 	private Boolean esDestacado;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
-	@JoinColumn(name = "id")
+	@JoinColumn(name = "id_contenido")
 	@Fetch(FetchMode.SELECT)
 	private List<Comentario> comentarios;
 
