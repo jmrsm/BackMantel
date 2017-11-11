@@ -71,10 +71,10 @@ public class SuperAdminController {
 			@RequestParam(name = "proveedorId", required = true) Long proveedorId,
 			@RequestParam(name = "password", required = true) String password) {
 
-		String mailSuperAdmin = (String) request.getSession().getAttribute("SUPER_ADMIN");
-		if (mailSuperAdmin == null) {
-			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
-		}
+//		String mailSuperAdmin = (String) request.getSession().getAttribute("SUPER_ADMIN");
+//		if (mailSuperAdmin == null) {
+//			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+//		}
 		if (administradorService.altaAdmin(mapper.map(adminTenant, AdminTenant.class), proveedorId, password)) {
 			return new ResponseEntity<Object>(HttpStatus.OK);
 		} else {
@@ -86,10 +86,10 @@ public class SuperAdminController {
 	@RequestMapping(path = "api/superAdmin/proveedorContenido", method = RequestMethod.GET)
 	public ResponseEntity<List<ProveedorContenidoDTO>> obtenerAdministradorContenido(HttpServletRequest request) {
 
-		String mailSuperAdmin = (String) request.getSession().getAttribute("SUPER_ADMIN");
-		if (mailSuperAdmin == null) {
-			return new ResponseEntity<List<ProveedorContenidoDTO>>(HttpStatus.FORBIDDEN);
-		}
+//		String mailSuperAdmin = (String) request.getSession().getAttribute("SUPER_ADMIN");
+//		if (mailSuperAdmin == null) {
+//			return new ResponseEntity<List<ProveedorContenidoDTO>>(HttpStatus.FORBIDDEN);
+//		}
 		return new ResponseEntity<List<ProveedorContenidoDTO>>(
 				mapper.mapAsList(proveedorContenidoService.findAll(), ProveedorContenidoDTO.class), HttpStatus.OK);
 	}
@@ -146,10 +146,10 @@ public class SuperAdminController {
 	public ResponseEntity<?> altaProveedorContenido(HttpServletRequest request,
 			@RequestParam(name = "nombre", required = true) String nombreProveedorContenido) {
 		
-		String mailSuperAdmin = (String) request.getSession().getAttribute("SUPER_ADMIN");
-		if (mailSuperAdmin == null) {
-			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
-		}
+//		String mailSuperAdmin = (String) request.getSession().getAttribute("SUPER_ADMIN");
+//		if (mailSuperAdmin == null) {
+//			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+//		}
 
 		if (proveedorContenidoService.altaProveedorContenido(nombreProveedorContenido)) {
 			return new ResponseEntity<Object>(HttpStatus.OK);
@@ -157,7 +157,20 @@ public class SuperAdminController {
 			return new ResponseEntity<Object>(HttpStatus.CONFLICT);
 		}
 	}
-
+	
+	@RequestMapping(path = "api/superAdmin/bloquearUsuario", method = RequestMethod.PUT)
+	public ResponseEntity<?> bloquearUsuario(HttpServletRequest request, 
+			@RequestParam(name = "usuarioId", required = true) Long idUsuario,
+			@RequestParam(name = "bloquear", required = true) Boolean habilitado) {
+		
+//		String mailSuperAdmin = (String) request.getSession().getAttribute("SUPER_ADMIN");
+//		if (mailSuperAdmin == null) {
+//			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+//		}
+		
+		superAdminService.bloquearUsuario(idUsuario, habilitado);
+		return null;
+	}
 }
 
 // @RequestMapping(path = "api/superAdmin/proveedorContenido/{id}", method =

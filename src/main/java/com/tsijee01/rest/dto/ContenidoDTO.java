@@ -1,6 +1,7 @@
 package com.tsijee01.rest.dto;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -260,8 +261,11 @@ public class ContenidoDTO {
 	public void setRanking(String ranking) {
 		if (!ranking.equals("N/A")){
 			this.ranking = new BigDecimal(ranking);
+			BigDecimal dos = new BigDecimal (2);
+			this.ranking = this.ranking.divide(dos, 10, RoundingMode.HALF_UP);
 		}else {
-			this.ranking = new BigDecimal(5);
+			this.ranking = new BigDecimal(2.5);
+			
 		}
 		
 

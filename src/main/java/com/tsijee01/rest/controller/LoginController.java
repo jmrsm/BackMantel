@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tsijee01.persistence.model.TipoUsuarioEnum;
+import com.tsijee01.persistence.model.Usuario;
+import com.tsijee01.persistence.repository.UsuarioRepository;
 import com.tsijee01.rest.dto.LoginDTO;
 import com.tsijee01.service.LoginService.LoginService;
 
@@ -22,6 +24,9 @@ public class LoginController {
 
 	@Autowired
 	private LoginService loginService;
+	
+	@Autowired
+	private UsuarioRepository usuarioRepository;
 
 	@RequestMapping(path = "api/public/login", method = RequestMethod.GET)
 	public ResponseEntity<LoginDTO> loginAdministradorTenant(HttpServletRequest request,
@@ -44,7 +49,13 @@ public class LoginController {
 				}else if(tUE.get().equals(TipoUsuarioEnum.TENANT_ADMIN)){
 					sesion.setAttribute("TENANT_ADMIN",  email);		
 				}else if (tUE.get().equals(TipoUsuarioEnum.USUARIO)){
-					sesion.setAttribute("USUARIO",  email);	
+					Optional<Usuario> u = usuarioRepository.findByEmail(email);
+					if (!u.get().isHabilitado()) {
+						return new ResponseEntity<LoginDTO>(HttpStatus.FORBIDDEN);
+					}
+					else {		
+						sesion.setAttribute("USUARIO",  email);	
+					}
 				}
 				return new ResponseEntity<LoginDTO>(lDTO, HttpStatus.OK);
 			}

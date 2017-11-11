@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 import com.tsijee01.persistence.model.AdminTenant;
 import com.tsijee01.persistence.model.ProveedorContenido;
 import com.tsijee01.persistence.model.SuperAdmin;
+import com.tsijee01.persistence.model.Usuario;
 import com.tsijee01.persistence.repository.AdminTenantRepository;
 import com.tsijee01.persistence.repository.ProveedorContenidoRepository;
 import com.tsijee01.persistence.repository.SuperAdminRepository;
+import com.tsijee01.persistence.repository.UsuarioRepository;
 import com.tsijee01.service.SuperAdminService;
 import com.tsijee01.util.Password;
 
@@ -19,6 +21,9 @@ public class SuperAdminServiceBean implements SuperAdminService {
 
 	@Autowired
 	private SuperAdminRepository superAdminRepository;
+	
+	@Autowired
+	private UsuarioRepository usuarioRepository;
 
 	@Autowired
 	private AdminTenantRepository adminTenantRepository;
@@ -59,6 +64,21 @@ public class SuperAdminServiceBean implements SuperAdminService {
 			return false;
 		}
 
+	}
+
+	@Override
+	public void bloquearUsuario(Long idUsuario, Boolean habilitado) {
+		
+		Optional <Usuario> u = usuarioRepository.findOne(idUsuario);
+		
+		if (u.isPresent()){
+			u.get().setHabilitado(!habilitado);
+		}
+		else {
+		return;
+		}
+		
+		usuarioRepository.save(u.get());
 	}
 
 }
