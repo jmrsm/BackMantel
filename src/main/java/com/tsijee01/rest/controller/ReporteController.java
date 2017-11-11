@@ -39,7 +39,7 @@ public class ReporteController {
 
 	
 	// reporte admin
-	@RequestMapping(path = "api/superAdmin/obtenerReportes", method = RequestMethod.POST)
+	@RequestMapping(path = "api/admin/obtenerReportes", method = RequestMethod.POST)
 	public ResponseEntity<?> obtenerReporteAdmin(HttpServletRequest request) {
 
 		String mailAdmin = (String) request.getSession().getAttribute("TENANT_ADMIN");

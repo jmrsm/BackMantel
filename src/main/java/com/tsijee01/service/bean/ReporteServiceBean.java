@@ -53,17 +53,17 @@ public class ReporteServiceBean implements ReporteService {
 
 		ReporteSuperAdminDTO ret = new ReporteSuperAdminDTO();
 
-		Stream<HistorialContenido> historial = historialContenidoRepository.stream();
+		Stream<HistorialContenido> historial = historialContenidoRepository.findAll().stream();
 
-		ret.setCantuUsuarioTotales(usuarioRepository.stream().count());
+		ret.setCantuUsuarioTotales(usuarioRepository.findAll().stream().count());
 
-		ret.setCantuUsuarioHabilitados(usuarioRepository.stream().filter(Usuario::isHabilitado).count());
+		ret.setCantuUsuarioHabilitados(usuarioRepository.findAll().stream().filter(Usuario::isHabilitado).count());
 
 		ret.setHorasTotalesVisualizadas(
 				historial.filter(h -> h.isVisto()).mapToLong(HistorialContenido::getTiempoDeReproduccion).sum() / 360);
 
 		// cantidad de contenido de cada empresa
-		Map<ProveedorContenido, Long> proveedorCantContenido = contenidoRepository.stream()
+		Map<ProveedorContenido, Long> proveedorCantContenido = contenidoRepository.findAll().stream()
 				.collect(Collectors.groupingBy(Contenido::getProveedorContenido, Collectors.counting()));
 
 		List<PorveedorCantidadDTO> proveedorCantidad = new ArrayList<PorveedorCantidadDTO>();
@@ -155,7 +155,7 @@ public class ReporteServiceBean implements ReporteService {
 
 		ReporteAdminDTO ret = new ReporteAdminDTO();
 
-		Stream<HistorialContenido> historial = historialContenidoRepository.stream();
+		Stream<HistorialContenido> historial = historialContenidoRepository.findAll().stream();
 
 		ret.setCantidadVisualizacionesTotales(historial.filter(h -> h.isVisto())
 				.filter(h -> h.getContenido().getProveedorContenido().getId() == id).count());
