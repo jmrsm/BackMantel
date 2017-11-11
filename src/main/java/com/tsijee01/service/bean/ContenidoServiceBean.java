@@ -25,6 +25,7 @@ import com.tsijee01.persistence.model.Categoria;
 import com.tsijee01.persistence.model.Comentario;
 import com.tsijee01.persistence.model.Contenido;
 import com.tsijee01.persistence.model.Director;
+import com.tsijee01.persistence.model.Evento;
 import com.tsijee01.persistence.model.EventoDeportivo;
 import com.tsijee01.persistence.model.EventoEspectaculo;
 import com.tsijee01.persistence.model.HistorialContenido;
@@ -42,6 +43,7 @@ import com.tsijee01.persistence.repository.ContenidoRepository;
 import com.tsijee01.persistence.repository.DirectorRepository;
 import com.tsijee01.persistence.repository.EventoDeportivoRepository;
 import com.tsijee01.persistence.repository.EventoEspectaculoRepository;
+import com.tsijee01.persistence.repository.EventoRepository;
 import com.tsijee01.persistence.repository.HistorialContenidoRepository;
 import com.tsijee01.persistence.repository.PeliculRepository;
 import com.tsijee01.persistence.repository.ProveedorContenidoRepository;
@@ -59,13 +61,13 @@ public class ContenidoServiceBean implements ContenidoService {
 
 	@Autowired
 	ContenidoRepository contenidoRepository;
-	
+
 	@Autowired
 	ComentarioRepository comentarioRepository;
-	
+
 	@Autowired
 	CapituloRepository capituloRepository;
-		
+
 	@Autowired
 	PeliculRepository peliculaRepositoy;
 
@@ -92,19 +94,22 @@ public class ContenidoServiceBean implements ContenidoService {
 
 	@Autowired
 	SerieRepository serieRepository;
-	
+
 	@Autowired
 	HistorialContenidoRepository historialContenidoRepository;
 
-	@Autowired 
+	@Autowired
 	UsuarioRepository usuarioRepository;
-	
-	@Autowired 
+
+	@Autowired
 	AdminTenantRepository adminTenantRepository;
-	
+
 	@Autowired
 	TemporadaSerieRepository temporadaSerieRepository;
-	
+
+	@Autowired
+	EventoRepository eventoRepository;
+
 	@Autowired
 	MapperFacade mapper;
 
@@ -134,7 +139,7 @@ public class ContenidoServiceBean implements ContenidoService {
 		if (tcEnum.equals(TipoContenidoEnum.EVENTO_DEPORTIVO)) {
 			EventoDeportivo eventoDeportivo = mapper.map(contenido, EventoDeportivo.class);
 			eventoDeportivo = (EventoDeportivo) this.crearContenido(eventoDeportivo);
-			if (contenido.getEsPago()){
+			if (contenido.getEsPago()) {
 				eventoDeportivo.setEsPago(true);
 				eventoDeportivo.setPrecio(contenido.getPrecio());
 				eventoDeportivo.setFechaInicio(contenido.getFechaInicio());
@@ -145,14 +150,14 @@ public class ContenidoServiceBean implements ContenidoService {
 			eventoDeportivoRepository.save(eventoDeportivo);
 		} else if (tcEnum.equals(TipoContenidoEnum.EVENTO_ESPECTACULO)) {
 			EventoEspectaculo espectaculo = mapper.map(contenido, EventoEspectaculo.class);
-			
+
 			espectaculo = (EventoEspectaculo) this.crearContenido(espectaculo);
-			if (contenido.getEsPago()){
+			if (contenido.getEsPago()) {
 				espectaculo.setEsPago(true);
 				espectaculo.setPrecio(contenido.getPrecio());
 				espectaculo.setFechaInicio(contenido.getFechaInicio());
 			}
-			
+
 			eventoEspectaculoRepositoy.save(espectaculo);
 		} else if (tcEnum.equals(TipoContenidoEnum.PELICULA)) {
 			Pelicula peli = mapper.map(contenido, Pelicula.class);
@@ -216,11 +221,10 @@ public class ContenidoServiceBean implements ContenidoService {
 
 	@Override
 	public Long altaSerie(Serie serie, Long proveedorContenidoId, Boolean esDestacado) {
-		
+
 		this.guardarContenido(serie, proveedorContenidoId, esDestacado);
 		serie.setTemporadas(new ArrayList<TemporadaSerie>());
 		return serieRepository.save(serie).getId();
-		
 
 	}
 
@@ -230,7 +234,7 @@ public class ContenidoServiceBean implements ContenidoService {
 		this.guardarContenido(peli, proveedorContenidoId, esDestacado);
 		peli.setPath(path);
 		return peliculaRepositoy.save(peli).getId();
-		
+
 	}
 
 	private void guardarContenido(Contenido cont, Long proveedorContenidoId, Boolean esDestacado) {
@@ -249,12 +253,11 @@ public class ContenidoServiceBean implements ContenidoService {
 			Optional<Director> od = directorRepository.findByNombreCompleto(dir.getNombreCompleto());
 			dir.setId(od.isPresent() ? od.get().getId() : directorRepository.save(dir).getId());
 		});
-		ProveedorContenido pc= proveedorContenidoRepository.findOne(proveedorContenidoId).get();
-		
+		ProveedorContenido pc = proveedorContenidoRepository.findOne(proveedorContenidoId).get();
+
 		cont.setProveedorContenido(pc);
 		cont.setEsDestacado(esDestacado);
-		
-		
+
 	}
 
 	@Override
@@ -294,9 +297,9 @@ public class ContenidoServiceBean implements ContenidoService {
 
 		return categoriaRepository.findAll();
 	}
-	
-	public List<Pelicula> recomendarAUsuario(Long usuarioId){
-		Optional <Usuario> usuario = usuarioRepository.findOne(usuarioId);
+
+	public List<Pelicula> recomendarAUsuario(Long usuarioId) {
+		Optional<Usuario> usuario = usuarioRepository.findOne(usuarioId);
 		List<HistorialContenido> contenido = historialContenidoRepository.findByUsuario(usuario.get());
 		return null;
 	}
@@ -306,8 +309,9 @@ public class ContenidoServiceBean implements ContenidoService {
 		Optional<Contenido> cont = contenidoRepository.findOne(contenidoId);
 		cont.get().setEsDestacado(esDestacado);
 		contenidoRepository.save(cont.get());
-		
+
 	}
+
 	@Override
 	public List<Contenido> obtenermicontenido(String email) {
 		Optional<AdminTenant> admin = adminTenantRepository.findOneByEmail(email);
@@ -317,17 +321,15 @@ public class ContenidoServiceBean implements ContenidoService {
 
 	@Override
 	public void guardarReproduccion(Long idUsuario, Long idContenido, Long tiempo) {
-		
+
 		Optional<Usuario> u = usuarioRepository.findOne(idUsuario);
 		Optional<Contenido> cont = contenidoRepository.findOne(idContenido);
 		Optional<HistorialContenido> h = historialContenidoRepository.findByContenidoAndUsuario(cont.get(), u.get());
-		
+
 		if (h.isPresent() && h.get().isVisto()) {
 			h.get().setTiempoDeReproduccion(tiempo);
 			historialContenidoRepository.save(h.get());
-		}
-		else 
-		{
+		} else {
 			HistorialContenido hn = new HistorialContenido();
 			hn.setFechaReproduccion(new Date());
 			hn.setContenido(cont.get());
@@ -354,19 +356,18 @@ public class ContenidoServiceBean implements ContenidoService {
 			hn.setVisto(false);
 			hn.setFavorito(esFavorito);
 			historialContenidoRepository.save(hn);
-		}
-		else {
+		} else {
 			h.get().setFavorito(esFavorito);
 			historialContenidoRepository.save(h.get());
 		}
 	}
 
 	public List<ContenidoDTO> listarContenidoProveedor(String email) {
-		
+
 		List<ContenidoDTO> ret = new ArrayList<>();
 		AdminTenant at = adminTenantRepository.findOneByEmail(email).get();
 		ProveedorContenido pc = at.getProveedorContenido();
-		
+
 		ret.addAll(mapper.mapAsList(peliculaRepositoy.findByProveedorContenido(pc), ContenidoDTO.class));
 		ret.addAll(mapper.mapAsList(serieRepository.findByProveedorContenido(pc), ContenidoDTO.class));
 		ret.addAll(mapper.mapAsList(eventoDeportivoRepository.findByProveedorContenido(pc), ContenidoDTO.class));
@@ -376,13 +377,13 @@ public class ContenidoServiceBean implements ContenidoService {
 
 	@Override
 	public Long verContenido(Long usuarioId, Long contenidoId) {
-		
+
 		Optional<Contenido> cont = contenidoRepository.findOne(contenidoId);
 		Optional<Usuario> u = usuarioRepository.findOne(usuarioId);
 		Optional<HistorialContenido> h = historialContenidoRepository.findByContenidoAndUsuario(cont.get(), u.get());
-		if (h.isPresent()){
+		if (h.isPresent()) {
 			return h.get().getTiempoDeReproduccion();
-		}else {
+		} else {
 			HistorialContenido hc = new HistorialContenido();
 			hc.setContenido(cont.get());
 			hc.setFavorito(false);
@@ -390,7 +391,7 @@ public class ContenidoServiceBean implements ContenidoService {
 			return new Long(0);
 		}
 	}
-	
+
 	@Override
 	public Page<Pelicula> buscarTodasLasPeliculas(Pageable pag) {
 		return peliculaRepositoy.findAll(pag);
@@ -398,49 +399,45 @@ public class ContenidoServiceBean implements ContenidoService {
 
 	@Override
 	public Long altaEpisodio(Long idSerie, String path, int episodio, int temporada) {
-		
+
 		Long idTemp = null;
 		Optional<Serie> s = serieRepository.findOne(idSerie);
-		Optional <TemporadaSerie> t = temporadaSerieRepository.findByTemporadaAndSerie(temporada, s.get());
-		
+		Optional<TemporadaSerie> t = temporadaSerieRepository.findByTemporadaAndSerie(temporada, s.get());
+
 		if (!t.isPresent()) {
 			TemporadaSerie tp = new TemporadaSerie();
 			tp.setTemporada(temporada);
 			tp.setCapitulos(new ArrayList<CapituloSerie>());
 			tp.setSerie(s.get());
 			idTemp = temporadaSerieRepository.save(tp).getId();
-		}
-		else {
+		} else {
 			idTemp = t.get().getId();
 		}
-		
+
 		CapituloSerie c = new CapituloSerie();
 		c.setCapitulo(episodio);
 		c.setPath(path);
-		
-		c.setTemporada(temporadaSerieRepository.findOne(idTemp).get());		
-				
+
+		c.setTemporada(temporadaSerieRepository.findOne(idTemp).get());
+
 		return capituloRepository.save(c).getId();
 	}
 
 	@Override
 	public void comentarContenido(Long contenidoId, String comentario, Long usuarioId) {
-		
+
 		Optional<Contenido> cont = contenidoRepository.findOne(contenidoId);
 		Comentario coment = new Comentario();
 		Optional<Usuario> u = usuarioRepository.findOne(usuarioId);
-		
-		
+
 		if (cont.isPresent()) {
 			coment.setContenidoComentario(comentario);
 			coment.setContenido(cont.get());
 			coment.setUsuario(u.get());
+		} else {
+
 		}
-		else 
-		{
-			
-		}
-		
+
 		comentarioRepository.save(coment).getId();
 	}
 
@@ -457,33 +454,29 @@ public class ContenidoServiceBean implements ContenidoService {
 
 	@Override
 	public void valorarContenido(Long contenidoId, int puntaje, Long usuarioId) {
-		
+
 		Optional<Usuario> u = usuarioRepository.findOne(usuarioId);
 		Optional<Contenido> cont = contenidoRepository.findOne(contenidoId);
-		
-		
-		Optional<HistorialContenido> hc = historialContenidoRepository.findByUsuarioAndContenido(u.get(),cont.get());
+
+		Optional<HistorialContenido> hc = historialContenidoRepository.findByUsuarioAndContenido(u.get(), cont.get());
 		if (!hc.isPresent()) {
-			hc = historialContenidoRepository.findByUsuarioAndContenido(u.get(),cont.get());
+			hc = historialContenidoRepository.findByUsuarioAndContenido(u.get(), cont.get());
 			hc.get().setContenido(cont.get());
 			hc.get().setUsuario(u.get());
 			hc.get().setVisto(false);
 			hc.get().setFavorito(false);
-			
-		}
-		else
-		{
-			if (hc.get().getPuntuacion()!=0) {
+
+		} else {
+			if (hc.get().getPuntuacion() != 0) {
 				return;
 			}
 		}
-		
-		
+
 		hc.get().setPuntuacion(puntaje);
-		
+
 		BigDecimal cantVotos = new BigDecimal(cont.get().getCantVotos());
 		BigDecimal punt = new BigDecimal(puntaje);
-		
+
 		BigDecimal ranking = cont.get().getRanking().multiply(cantVotos);
 		cont.get().setCantVotos(cont.get().getCantVotos() + 1);
 		ranking = ranking.add(punt);
@@ -492,10 +485,59 @@ public class ContenidoServiceBean implements ContenidoService {
 		cantVotos = cantVotos.add(uno);
 		ranking = ranking.divide(cantVotos, 1, BigDecimal.ROUND_HALF_UP);
 		cont.get().setRanking(ranking);
-		
+
 		contenidoRepository.save(cont.get());
 		historialContenidoRepository.save(hc.get());
 	}
 
+	@Override
+	public boolean comprarEspectaculo(Long idContenido, String emailUsuario) {
+
+		Optional<Evento> evento = eventoRepository.findOne(idContenido);
+
+		if (!evento.isPresent() || !evento.get().getEsPago()) {
+			return false;
+		} else {
+			Optional<Usuario> u = usuarioRepository.findByEmail(emailUsuario);
+			if (!u.isPresent()) {
+				return false;
+			} else {
+				Optional<HistorialContenido> hc = historialContenidoRepository.findByContenidoAndUsuario(evento.get(),
+						u.get());
+				if (hc.isPresent()) {
+					hc.get().setPagado(true);
+				} else {
+					HistorialContenido h = new HistorialContenido();
+					h.setContenido(evento.get());
+					h.setUsuario(u.get());
+					h.setPagado(true);
+				}
+			}
+		}
+		return true;
+	}
+
+	@Override
+	public boolean verificarPagoEspectaculo(Long idContenido, String emailUsuario) {
+		Optional<Evento> evento = eventoRepository.findOne(idContenido);
+
+		if (!evento.isPresent() || !evento.get().getEsPago()) {
+			return false;
+		} else {
+			Optional<Usuario> u = usuarioRepository.findByEmail(emailUsuario);
+			if (!u.isPresent()) {
+				return false;
+			} else {
+				Optional<HistorialContenido> hc = historialContenidoRepository.findByContenidoAndUsuario(evento.get(),
+						u.get());
+				if (hc.isPresent()) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+		}
+
+	}
 
 }

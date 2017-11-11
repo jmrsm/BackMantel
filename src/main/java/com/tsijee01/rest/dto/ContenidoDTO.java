@@ -38,7 +38,6 @@ public class ContenidoDTO {
 	
 	private Date fechaInicio;
 	
-	
 	// si es evento deportivo
 	private String eventoDeportivoNombreEquipoVisitante;
 
@@ -103,7 +102,6 @@ public class ContenidoDTO {
 	public void setId(long id) {
 		this.id = id;
 	}
-
 
 	public int getPrecio() {
 		return precio;
@@ -206,7 +204,8 @@ public class ContenidoDTO {
 	}
 
 	public void setCategorias(String categorias) {
-		this.categorias = Arrays.asList(categorias.split(",")).stream().map(CategoriaDTO::new)
+		
+		this.categorias = Arrays.asList(categorias.split(",")).stream().map(x-> x.trim()).map(CategoriaDTO::new)
 				.collect(Collectors.toList());
 	}
 

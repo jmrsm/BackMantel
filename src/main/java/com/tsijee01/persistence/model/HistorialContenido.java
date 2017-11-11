@@ -54,11 +54,14 @@ public class HistorialContenido {
 	// en caso de que lo haya visto 
 	@Column(nullable = true)
 	private long tiempoDeReproduccion;
-
 	
 	@Column(nullable = true)
 	private boolean favorito;
 
+	@Column(nullable = true)
+	private boolean pagado;
+
+	
 	@Column
 	private Date fechaReproduccion;
 	
@@ -130,4 +133,12 @@ public class HistorialContenido {
 		this.tiempoDeReproduccion = tiempoDeReproduccion;
 	}
 
+	public boolean isPagado() {
+		return pagado;
+	}
+
+	public void setPagado(boolean pagado) {
+		this.pagado = pagado;
+	}
+	
 }
