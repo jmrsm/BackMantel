@@ -1,7 +1,6 @@
 package com.tsijee01.service;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -57,5 +56,9 @@ public interface ContenidoService {
 	void marcarSpoiler(Long comentarioId, Long usuarioId);
 
 	void valorarContenido(Long contenidoId, int puntaje, Long usuarioId);
+
+	boolean comprarEspectaculo(Long idContenido, String emailUsuario);
+
+	boolean verificarPagoEspectaculo(Long idContenido, String emailUsuario);
 
 }
