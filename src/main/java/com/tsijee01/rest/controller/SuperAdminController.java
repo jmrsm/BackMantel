@@ -171,6 +171,20 @@ public class SuperAdminController {
 		superAdminService.bloquearUsuario(idUsuario, habilitado);
 		return null;
 	}
+	
+	@RequestMapping(path = "api/superAdmin/bloquearContenido", method = RequestMethod.PUT)
+	public ResponseEntity<?> bloquearContenido(HttpServletRequest request, 
+			@RequestParam(name = "contenidoId", required = true) Long idContenido,
+			@RequestParam(name = "bloquear", required = true) Boolean bloquear) {
+		
+//		String mailSuperAdmin = (String) request.getSession().getAttribute("SUPER_ADMIN");
+//		if (mailSuperAdmin == null) {
+//			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+//		}
+		
+		superAdminService.bloquearContenido(idContenido, bloquear);
+		return null;
+	}
 }
 
 // @RequestMapping(path = "api/superAdmin/proveedorContenido/{id}", method =

@@ -69,6 +69,17 @@ public abstract class Contenido {
 	
 	@Column(length = 100, nullable = false)
 	private Boolean esDestacado;
+	
+	@Column(nullable = false)
+	private Boolean esBloqueado;
+
+	public Boolean getEsBloqueado() {
+		return esBloqueado;
+	}
+
+	public void setEsBloqueado(Boolean esBloqueado) {
+		this.esBloqueado = esBloqueado;
+	}
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
 	@JoinColumn(name = "id_contenido")

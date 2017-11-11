@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tsijee01.persistence.model.AdminTenant;
+import com.tsijee01.persistence.model.Contenido;
 import com.tsijee01.persistence.model.ProveedorContenido;
 import com.tsijee01.persistence.model.SuperAdmin;
 import com.tsijee01.persistence.model.Usuario;
 import com.tsijee01.persistence.repository.AdminTenantRepository;
+import com.tsijee01.persistence.repository.ContenidoRepository;
 import com.tsijee01.persistence.repository.ProveedorContenidoRepository;
 import com.tsijee01.persistence.repository.SuperAdminRepository;
 import com.tsijee01.persistence.repository.UsuarioRepository;
@@ -24,6 +26,9 @@ public class SuperAdminServiceBean implements SuperAdminService {
 	
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+
+	@Autowired
+	private ContenidoRepository contenidoRepository;
 
 	@Autowired
 	private AdminTenantRepository adminTenantRepository;
@@ -79,6 +84,22 @@ public class SuperAdminServiceBean implements SuperAdminService {
 		}
 		
 		usuarioRepository.save(u.get());
+	}
+
+	@Override
+	public void bloquearContenido(Long idContenido, Boolean bloquear) {
+		
+		Optional <Contenido> cont = contenidoRepository.findOne(idContenido);
+		
+		if (cont.isPresent()){
+			cont.get().setEsBloqueado(bloquear);
+		}
+		else {
+		return;
+		}
+		
+		contenidoRepository.save(cont.get());
+		
 	}
 
 }
