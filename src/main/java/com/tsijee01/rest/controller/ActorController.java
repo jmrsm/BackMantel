@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,6 +29,7 @@ public class ActorController {
 
 	// crear nuevo actor en el sistema por ahora no se considera el caso de que
 	// ya venga con contenido
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/admin/actor", method = RequestMethod.POST)
 	public ResponseEntity<?> altaActor(HttpServletRequest request, @RequestBody ActorDTO actor) {
 		
@@ -46,6 +48,7 @@ public class ActorController {
 	
 	
 	// obtener todos los actores en el sistema
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/admin/actor", method = RequestMethod.GET)
 	public ResponseEntity<?> listarActores(HttpServletRequest request) {
 

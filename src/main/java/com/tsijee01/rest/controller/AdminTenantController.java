@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,6 +33,7 @@ public class AdminTenantController {
 	MapperFacade mapper;
 	
 	//obtener id admin
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/admin/getID", method = RequestMethod.GET)
 	public ResponseEntity<?> listarActores(HttpServletRequest request ,@RequestParam(name = "email", required = true) String email) {
 		
@@ -44,6 +46,7 @@ public class AdminTenantController {
 		return new ResponseEntity<Object>(adminService.idUser(email), HttpStatus.OK);
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/admin/listarmicontenido", method = RequestMethod.GET)
 	public ResponseEntity<List<ContenidoDTO>> listarmicontenido(HttpServletRequest request,
 			@RequestParam(name = "email", required = false) String email) {

@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +27,7 @@ public class ReporteController {
 	AdminTenantService adminTenantService;
 
 	// reporte super admin
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/superAdmin/obtenerReportes", method = RequestMethod.GET)
 	public ResponseEntity<?> obtenerReporteSuperAdmin(HttpServletRequest request) {
 
@@ -40,6 +42,7 @@ public class ReporteController {
 
 	
 	// reporte admin
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/admin/obtenerReportes", method = RequestMethod.GET)
 	public ResponseEntity<?> obtenerReporteAdmin(HttpServletRequest request) {
 
@@ -54,6 +57,7 @@ public class ReporteController {
 	}
 	
 	// reporte usuario
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/usuario/obtenerReportes", method = RequestMethod.GET)
 	public ResponseEntity<?> obtenerReporteUsuario(HttpServletRequest request
 			) {

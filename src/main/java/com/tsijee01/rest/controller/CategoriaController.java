@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,6 +36,7 @@ public class CategoriaController {
 	private MapperFacade mapper;
 
 	// crear nueva categoria de contenido
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/superAdmin/categoriaContenido", method = RequestMethod.POST)
 	public ResponseEntity<?> altaCategoriaContenido(HttpServletRequest request,
 			@RequestParam(name = "nombre", required = true) String nombreCategoria) {
@@ -53,6 +55,7 @@ public class CategoriaController {
 	}
 
 	// crear nueva categoria de contenido
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/superAdmin/categoriaContenido", method = RequestMethod.GET)
 	public ResponseEntity<List<CategoriaDTO>> obtenerCategoriasContenido(HttpServletRequest request) {
 		String mailSuperAdmin = (String) request.getSession()

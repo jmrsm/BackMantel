@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -54,6 +55,7 @@ public class SuperAdminController {
 
 	// Esto no puede ser publica hay que borrarla antes de entregar
 	// API para crear super Admin
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/superAdmin/superAdmin", method = RequestMethod.POST)
 	public ResponseEntity<?> altaSuperAdministrador(HttpServletRequest request,
 			@RequestBody SuperAdminDTO superAdminDTO,
@@ -66,6 +68,7 @@ public class SuperAdminController {
 		}
 	}
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/superAdmin/admin", method = RequestMethod.POST)
 	public ResponseEntity<?> altaAdminTenant(HttpServletRequest request, @RequestBody AdminTenantDTO adminTenant,
 			@RequestParam(name = "proveedorId", required = true) Long proveedorId,
@@ -82,6 +85,7 @@ public class SuperAdminController {
 		}
 	}
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	// obtener todos los proveedores de contenido junto con sus administradores
 	@RequestMapping(path = "api/superAdmin/proveedorContenido", method = RequestMethod.GET)
 	public ResponseEntity<List<ProveedorContenidoDTO>> obtenerAdministradorContenido(HttpServletRequest request) {
@@ -94,6 +98,7 @@ public class SuperAdminController {
 				mapper.mapAsList(proveedorContenidoService.findAll(), ProveedorContenidoDTO.class), HttpStatus.OK);
 	}
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	// obtener todos los usuarios finales del sistema
 	@RequestMapping(path = "api/superAdmin/usuarios", method = RequestMethod.GET)
 	public ResponseEntity<Page<UsuarioDTO>> obtenerusuarios(HttpServletRequest request,
@@ -127,6 +132,7 @@ public class SuperAdminController {
 		return new ResponseEntity<Page<UsuarioDTO>>(dtoPage, HttpStatus.OK);
 	}
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	// obtener todos los usuarios finales del sistema
 	@RequestMapping(path = "api/superAdmin/usuario", method = RequestMethod.GET)
 	public ResponseEntity<UsuarioDTO> obtenerusuarios(HttpServletRequest request,
@@ -141,6 +147,7 @@ public class SuperAdminController {
 		return new ResponseEntity<UsuarioDTO>(mapper.map(u, UsuarioDTO.class), HttpStatus.OK);
 	}
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	// crear nuevo proveedor de contenido
 	@RequestMapping(path = "api/superAdmin/proveedorContenido", method = RequestMethod.POST)
 	public ResponseEntity<?> altaProveedorContenido(HttpServletRequest request,
@@ -158,6 +165,7 @@ public class SuperAdminController {
 		}
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/superAdmin/bloquearUsuario", method = RequestMethod.PUT)
 	public ResponseEntity<?> bloquearUsuario(HttpServletRequest request, 
 			@RequestParam(name = "usuarioId", required = true) Long idUsuario,
@@ -172,6 +180,7 @@ public class SuperAdminController {
 		return null;
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/superAdmin/bloquearContenido", method = RequestMethod.PUT)
 	public ResponseEntity<?> bloquearContenido(HttpServletRequest request, 
 			@RequestParam(name = "contenidoId", required = true) Long idContenido,

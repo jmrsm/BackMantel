@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -49,6 +50,7 @@ public class ContenidoController {
 	private String omdbapikey;
 
 	// crear nuevo contenido
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/admin/contenido", method = RequestMethod.POST)
 	public ResponseEntity<?> altaCategoriaContenido(HttpServletRequest request, @RequestBody ContenidoDTO contenido) {
 		String mailAdmin = (String) request.getSession().getAttribute("TENANT_ADMIN");
@@ -63,6 +65,7 @@ public class ContenidoController {
 	}
 
 	// buscar contenido en Omdb para los admin
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/admin/contenidoOmdb", method = RequestMethod.GET)
 	public ResponseEntity<SearchContenidoOmbdapi> buscarContenidoOmdb(HttpServletRequest request,
 			@RequestParam(name = "nombre", required = true) String nombre,
@@ -81,6 +84,7 @@ public class ContenidoController {
 		}
 	}
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/admin/destacado", method = RequestMethod.POST)
 	public ResponseEntity<?> marcarDestacado(HttpServletRequest request,
 			@RequestParam(name = "contenidoId", required = true) Long contenidoId,
@@ -95,6 +99,7 @@ public class ContenidoController {
 	}
 
 	// buscar contenido en Omdb para los admin
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/admin/tiposContenido", method = RequestMethod.GET)
 	public ResponseEntity<List<CategoriaDTO>> listarTiposContenido(HttpServletRequest request) {
 
@@ -106,6 +111,7 @@ public class ContenidoController {
 				mapper.mapAsList(contenidoService.obtenerTiposContenido(), CategoriaDTO.class), HttpStatus.OK);
 	}
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/usuario/categoria", method = RequestMethod.GET)
 	public ResponseEntity<List<CategoriaDTO>> buscarContenido(HttpServletRequest request) {
 
@@ -119,6 +125,7 @@ public class ContenidoController {
 	}
 
 	// buscar contenido usuario final
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/usuario/listarPeliculasPorTitulo", method = RequestMethod.GET)
 	public ResponseEntity<Page<ContenidoDTO>> buscarContenido(HttpServletRequest request,
 			@RequestParam(name = "_start", required = true) int start,
@@ -143,6 +150,7 @@ public class ContenidoController {
 	}
 
 	// si ya la vio devuelve el último segundo visto sino 0
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/usuario/verContenido", method = RequestMethod.GET)
 	public ResponseEntity<Long> verContenido(HttpServletRequest request,
 			@RequestParam(name = "usuarioID", required = true) Long usuarioId,
@@ -156,6 +164,7 @@ public class ContenidoController {
 
 	}
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/admin/contenidoOmdb", method = RequestMethod.POST)
 	public ResponseEntity<Long> altaContenido(HttpServletRequest request,
 			@RequestParam(name = "proveedorContenidoId", required = true) Long proveedorContenidoId,
@@ -181,6 +190,7 @@ public class ContenidoController {
 		return new ResponseEntity<Long>(id, HttpStatus.OK);
 	}
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/admin/episodio", method = RequestMethod.POST)
 	public ResponseEntity<Long> altaEpisodio(HttpServletRequest request,
 			@RequestParam(name = "idSerie", required = true) Long idSerie,
@@ -243,6 +253,7 @@ public class ContenidoController {
 		return new ResponseEntity<Page<ContenidoDTO>>(dtoPage, HttpStatus.OK);
 	}
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/usuario/listarPorActor", method = RequestMethod.GET)
 	public ResponseEntity<Page<ContenidoDTO>> listarPorActor(HttpServletRequest request,
 			@RequestParam(name = "_start", required = true) int start,
@@ -265,6 +276,7 @@ public class ContenidoController {
 		return new ResponseEntity<Page<ContenidoDTO>>(dtoPage, HttpStatus.OK);
 	}
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/usuario/listarPorDirector", method = RequestMethod.GET)
 	public ResponseEntity<Page<ContenidoDTO>> listarPorDirector(HttpServletRequest request,
 			@RequestParam(name = "_start", required = true) int start,
@@ -289,6 +301,7 @@ public class ContenidoController {
 
 	// crear una api que reciba el contenido que está viendo un usuario
 	// junto al tiempo de reproducción
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/usuario/guardarReproduccion", method = RequestMethod.GET)
 	public ResponseEntity<?> guardarReproduccion(HttpServletRequest request,
 			@RequestParam(name = "idUsuario", required = true) Long idUsuario,
@@ -304,6 +317,7 @@ public class ContenidoController {
 		return new ResponseEntity<Object>(HttpStatus.OK);
 	}
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/usuario/favorito", method = RequestMethod.POST)
 	public ResponseEntity<?> marcarFavorito(HttpServletRequest request,
 			@RequestParam(name = "contenidoId", required = true) Long contenidoId,
@@ -345,6 +359,7 @@ public class ContenidoController {
 		}
 	}
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/usuario/listarTodasPeliculas", method = RequestMethod.GET)
 	public ResponseEntity<Page<ContenidoDTO>> buscarTodoContenido(HttpServletRequest request,
 			@RequestParam(name = "_start", required = true) int start,
@@ -366,6 +381,7 @@ public class ContenidoController {
 		return new ResponseEntity<Page<ContenidoDTO>>(dtoPage, HttpStatus.OK);
 	}
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/usuario/listarTodasSeries", method = RequestMethod.GET)
 	public ResponseEntity<Page<ContenidoDTO>> buscarTodasSeries(HttpServletRequest request,
 			@RequestParam(name = "_start", required = true) int start,
@@ -387,6 +403,7 @@ public class ContenidoController {
 		return new ResponseEntity<Page<ContenidoDTO>>(dtoPage, HttpStatus.OK);
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/usuario/relojSistema", method = RequestMethod.GET)
 	public ResponseEntity<String> relojSistema(HttpServletRequest request) {
 
@@ -402,6 +419,7 @@ public class ContenidoController {
 		return new ResponseEntity<String>(res, HttpStatus.OK);
 	}
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/usuario/comentarContenido", method = RequestMethod.POST)
 	public ResponseEntity<?> comentarContenido(HttpServletRequest request,
 			@RequestParam(name = "contenidoId", required = true) Long contenidoId,
@@ -420,6 +438,7 @@ public class ContenidoController {
 
 	}
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/usuario/valorarContenido", method = RequestMethod.PUT)
 	public ResponseEntity<?> valorarContenido(HttpServletRequest request,
 			@RequestParam(name = "contenidoId", required = true) Long contenidoId,
@@ -436,6 +455,7 @@ public class ContenidoController {
 
 	}
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/usuario/comprarEspectaculoPayPerView/", method = RequestMethod.POST)
 	public ResponseEntity<?> comprarEspectaculoPayPerView(HttpServletRequest request,
 			@RequestParam(name = "idContenido", required = true) Long idContenido,
@@ -453,6 +473,7 @@ public class ContenidoController {
 
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/usuario/verificarPagoEspectaculo", method = RequestMethod.GET)
 	public ResponseEntity<Boolean> verificarPagoEspectaculoPayPerView(HttpServletRequest request,
 			@RequestParam(name = "idContenido", required = true) Long idContenido,
