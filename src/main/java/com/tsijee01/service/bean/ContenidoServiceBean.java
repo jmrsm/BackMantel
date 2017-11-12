@@ -394,7 +394,12 @@ public class ContenidoServiceBean implements ContenidoService {
 
 	@Override
 	public Page<Pelicula> buscarTodasLasPeliculas(Pageable pag) {
-		return peliculaRepositoy.findAll(pag);
+		return peliculaRepositoy.findByEsBloqueadoFalse(pag);
+	}
+	
+	@Override
+	public Page<Serie> buscarTodasLasSeries(Pageable pag) {
+		return serieRepositoy.findByEsBloqueadoFalse(pag);
 	}
 
 	@Override

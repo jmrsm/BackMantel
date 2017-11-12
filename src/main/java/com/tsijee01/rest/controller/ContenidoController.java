@@ -366,6 +366,27 @@ public class ContenidoController {
 		return new ResponseEntity<Page<ContenidoDTO>>(dtoPage, HttpStatus.OK);
 	}
 
+	@RequestMapping(path = "api/usuario/listarTodasSeries", method = RequestMethod.GET)
+	public ResponseEntity<Page<ContenidoDTO>> buscarTodasSeries(HttpServletRequest request,
+			@RequestParam(name = "_start", required = true) int start,
+			@RequestParam(name = "_end", required = true) int end) {
+
+		String mailUsuario = (String) request.getSession().getAttribute("USUARIO");
+		if (mailUsuario == null) {
+			return new ResponseEntity<Page<ContenidoDTO>>(HttpStatus.FORBIDDEN);
+		}
+		Pageable pag = PageUtils.getPageRequest(start, end, null, null);
+		Page<Serie> series = contenidoService.buscarTodasLasSeries(pag);
+
+		Page<ContenidoDTO> dtoPage = series.map(new Converter<Serie, ContenidoDTO>() {
+			@Override
+			public ContenidoDTO convert(Serie serie) {
+				return mapper.map(serie, ContenidoDTO.class);
+			}
+		});
+		return new ResponseEntity<Page<ContenidoDTO>>(dtoPage, HttpStatus.OK);
+	}
+	
 	@RequestMapping(path = "api/usuario/relojSistema", method = RequestMethod.GET)
 	public ResponseEntity<String> relojSistema(HttpServletRequest request) {
 

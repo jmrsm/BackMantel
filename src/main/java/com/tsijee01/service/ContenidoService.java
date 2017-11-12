@@ -61,4 +61,7 @@ public interface ContenidoService {
 
 	boolean verificarPagoEspectaculo(Long idContenido, String emailUsuario);
 
+	Page<Serie> buscarTodasLasSeries(Pageable pag);
+
+
 }

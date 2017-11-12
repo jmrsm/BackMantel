@@ -70,8 +70,8 @@ public abstract class Contenido {
 	@Column(length = 100, nullable = false)
 	private Boolean esDestacado;
 	
-	@Column(nullable = false)
-	private Boolean esBloqueado;
+	@Column(nullable = true)
+	private boolean esBloqueado;
 
 	public Boolean getEsBloqueado() {
 		return esBloqueado;

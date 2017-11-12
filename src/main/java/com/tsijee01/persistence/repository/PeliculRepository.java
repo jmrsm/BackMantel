@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.tsijee01.persistence.model.Actor;
@@ -27,4 +28,6 @@ public interface PeliculRepository extends BaseRepository<Pelicula, Long>{
 
 	List<Pelicula>  findByProveedorContenido(ProveedorContenido pc);
 
+	Page<Pelicula> findByEsBloqueadoFalse(Pageable pag);
+	
 }

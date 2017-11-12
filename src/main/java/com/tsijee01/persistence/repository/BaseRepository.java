@@ -28,5 +28,6 @@ public interface BaseRepository<T, ID extends Serializable> extends Repository<T
 	
 	Page<T> findAll(Specification<T> specification, Pageable pageable);
 	
+	
 	Iterable<T> findAll(Sort sort);
 }
