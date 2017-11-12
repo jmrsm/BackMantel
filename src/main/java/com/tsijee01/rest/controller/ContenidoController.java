@@ -231,6 +231,7 @@ public class ContenidoController {
 
 	}
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/usuario/listarPorGenero", method = RequestMethod.GET)
 	public ResponseEntity<Page<ContenidoDTO>> listarPorGenero(HttpServletRequest request,
 			@RequestParam(name = "_start", required = true) int start,
