@@ -177,16 +177,20 @@ public class ReporteServiceBean implements ReporteService {
 						.mapToLong(HistorialContenido::getTiempoDeReproduccion).sum() / 360);
 
 		List<ProveedorCantidadHorasDTO> proveedorCantidadHoras = new ArrayList<ProveedorCantidadHorasDTO>();
-		List<ProveedorContenido> proveedores = proveedorContenidoRepository.findAll();
-		for (ProveedorContenido proveedor : proveedores) {
-			ProveedorCantidadHorasDTO pCHDTO = new ProveedorCantidadHorasDTO();
-			pCHDTO.setNombreProveedor(proveedor.getNombre());
-			pCHDTO.setCantidadHoras(
-					historial.filter(h -> h.getContenido().getProveedorContenido().getId() == proveedor.getId())
-							.mapToLong(h -> h.getTiempoDeReproduccion()).sum() / 360);
-			proveedorCantidadHoras.add(pCHDTO);
-		}
+//		List<ProveedorContenido> proveedores = proveedorContenidoRepository.findAll();
+//		for (ProveedorContenido proveedor : proveedores) {
+		
+		ProveedorContenido proveedor = proveedorContenidoRepository.findOne(id).get();
+		
+//			ProveedorCantidadHorasDTO pCHDTO = new ProveedorCantidadHorasDTO();
+//			pCHDTO.setNombreProveedor(proveedor.getNombre());
+//			pCHDTO.setCantidadHoras(
+//					historial.filter(h -> h.getContenido().getProveedorContenido().getId() == proveedor.getId())
+//							.mapToLong(h -> h.getTiempoDeReproduccion()).sum() / 360);
+//			proveedorCantidadHoras.add(pCHDTO);
+//		}
 
+		
 		final Map<String, TemporalAdjuster> ADJUSTERS = new HashMap<>();
 		ADJUSTERS.put("day", TemporalAdjusters.ofDateAdjuster(d -> d));
 		ADJUSTERS.put("week", TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
