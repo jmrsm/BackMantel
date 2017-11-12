@@ -26,5 +26,5 @@ public interface PeliculRepository extends BaseRepository<Pelicula, Long>{
 	Page<Pelicula> findByActores(Pageable pag, Actor actor);
 
 	List<Pelicula>  findByProveedorContenido(ProveedorContenido pc);
-
+	
 }

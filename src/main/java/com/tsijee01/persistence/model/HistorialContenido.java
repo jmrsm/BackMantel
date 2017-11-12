@@ -26,7 +26,9 @@ import javax.persistence.NamedSubgraph;
        ,@NamedAttributeNode(value = "contenido")
     }, subgraphs = {
         @NamedSubgraph(name = "ContenidoYProveedor", attributeNodes = {
-            @NamedAttributeNode(value = "proveedorContenido")
+            @NamedAttributeNode(value = "proveedorContenido"),
+            @NamedAttributeNode(value = "categorias")
+            
         })
     })
 })
@@ -61,7 +63,6 @@ public class HistorialContenido {
 	@Column(nullable = true)
 	private boolean pagado;
 
-	
 	@Column
 	private Date fechaReproduccion;
 	
