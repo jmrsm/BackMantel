@@ -15,6 +15,7 @@ import com.tsijee01.persistence.model.Usuario;
 @Repository
 public interface HistorialContenidoRepository extends BaseRepository<HistorialContenido , Long >{
 
+	@EntityGraph("HistorialContenido.Full")
 	List<HistorialContenido>  findByUsuario(Usuario usuario);
 
 	Optional<HistorialContenido> findByContenidoAndUsuario(Contenido contenido, Usuario usuario);

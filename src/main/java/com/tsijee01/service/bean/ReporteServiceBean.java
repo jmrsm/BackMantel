@@ -10,28 +10,34 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tsijee01.persistence.model.Categoria;
 import com.tsijee01.persistence.model.Contenido;
 import com.tsijee01.persistence.model.HistorialContenido;
 import com.tsijee01.persistence.model.ProveedorContenido;
 import com.tsijee01.persistence.model.Usuario;
+import com.tsijee01.persistence.repository.CategoriaContenidoRepository;
 import com.tsijee01.persistence.repository.ContenidoRepository;
 import com.tsijee01.persistence.repository.HistorialContenidoRepository;
 import com.tsijee01.persistence.repository.ProveedorContenidoRepository;
 import com.tsijee01.persistence.repository.UsuarioRepository;
+import com.tsijee01.rest.dto.ContenidoBasicDTO;
+import com.tsijee01.rest.dto.HorasPorCategoriaDTO;
 import com.tsijee01.rest.dto.HorasVistasPorUnidadDeTiempoDTO;
 import com.tsijee01.rest.dto.PorveedorCantidadDTO;
 import com.tsijee01.rest.dto.ProveedorCantidadHorasDTO;
 import com.tsijee01.rest.dto.ReporteAdminDTO;
 import com.tsijee01.rest.dto.ReporteSuperAdminDTO;
+import com.tsijee01.rest.dto.ReporteUsuarioDTO;
 import com.tsijee01.service.ReporteService;
+
+import ma.glasnost.orika.MapperFacade;
 
 @Service
 public class ReporteServiceBean implements ReporteService {
@@ -47,6 +53,12 @@ public class ReporteServiceBean implements ReporteService {
 
 	@Autowired
 	private ContenidoRepository contenidoRepository;
+
+	@Autowired
+	private CategoriaContenidoRepository categoriaContenidoRepository;
+	
+	@Autowired
+	MapperFacade mapper;
 
 	@Override
 	public ReporteSuperAdminDTO obtenerReporteSuperAdmin() {
@@ -237,6 +249,31 @@ public class ReporteServiceBean implements ReporteService {
 
 		ret.setHorasVistasPorAnio(horasVistasPorAnioList);
 
+		return ret;
+	}
+
+	@Override
+	public ReporteUsuarioDTO obtenerReporteUsuario(String mailUsuario) {
+
+		ReporteUsuarioDTO ret = new ReporteUsuarioDTO();
+
+		Optional<Usuario> usuario = usuarioRepository.findByEmail(mailUsuario);
+		List<HistorialContenido> historial = historialContenidoRepository.findByUsuario(usuario.get());
+		ret.setHorasTotalesPerdidas(historial.stream().mapToLong(h -> h.getTiempoDeReproduccion()).sum() / 360);
+		List<HorasPorCategoriaDTO> horasPorCategoriaLista = new ArrayList<HorasPorCategoriaDTO>();
+		for (Categoria cat : categoriaContenidoRepository.findAll()) {
+			HorasPorCategoriaDTO horasPorCategoria = new HorasPorCategoriaDTO(); 
+			horasPorCategoria.setNombreCategoria(cat.getNombreCategoria());
+			horasPorCategoria.setHorasVistas(historial.stream()
+					.filter(hc -> hc.getContenido().getCategorias().contains(cat)).mapToLong(h -> h.getTiempoDeReproduccion()).sum()/360);
+			 horasPorCategoriaLista.add(horasPorCategoria);
+		}
+		ret.setHorasPorCategoria(horasPorCategoriaLista);
+		List<Contenido> contFavNoVisto = historial.stream().filter(hc -> hc.isFavorito() && !hc.isVisto()).map(h -> h.getContenido()).collect(Collectors.toList());
+		ret.setContenidoFavoritoNoVisto(mapper.mapAsList(contFavNoVisto, ContenidoBasicDTO.class));
+		List<Contenido> contMejorPuntuadoNoVisto = historial.stream().filter(hc -> !hc.isFavorito() && !hc.isVisto() && hc.getPuntuacion() >= 7).map(h -> h.getContenido()).collect(Collectors.toList());
+		ret.setContenidoMejorPuntuadoNoVisto((mapper.mapAsList(contMejorPuntuadoNoVisto, ContenidoBasicDTO.class)));
+		
 		return ret;
 	}
 
