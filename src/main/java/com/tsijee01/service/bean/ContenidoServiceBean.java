@@ -178,31 +178,36 @@ public class ContenidoServiceBean implements ContenidoService {
 		Optional<ProveedorContenido> pc = proveedorContenidoRepository.findOne(cont.getProveedorContenido().getId());
 		cont.setProveedorContenido(pc.get());
 		List<Actor> actores = new ArrayList<Actor>();
-		cont.getActores().forEach(act -> {
-			Actor a = new Actor();
-			a.setId(act.getId());
-			actores.add(a);
-		});
-		actores.forEach(act -> {
-			cont.getActores().remove(act);
-			Actor actorDB = actorRepository.findOne(act.getId()).get();
-			actorDB.getContenidos().add(cont);
-			cont.getActores().add(actorDB);
-		});
+		if (cont.getActores() !=null){
+			cont.getActores().forEach(act -> {
+				Actor a = new Actor();
+				a.setId(act.getId());
+				actores.add(a);
+			});
+			actores.forEach(act -> {
+				cont.getActores().remove(act);
+				Actor actorDB = actorRepository.findOne(act.getId()).get();
+				actorDB.getContenidos().add(cont);
+				cont.getActores().add(actorDB);
+			});
+		}
+		
+		if (cont.getCategorias() != null){
+			List<Categoria> categorias = new ArrayList<Categoria>();
+			cont.getCategorias().forEach(cat -> {
+				Categoria c = new Categoria();
+				c.setId(cat.getId());
+				categorias.add(c);
+			});
+			categorias.forEach(cat -> {
+				cont.getCategorias().remove(cat);
+				Categoria categoriaDB = categoriaRepository.findOne(cat.getId()).get();
+				categoriaDB.getContenidoCategoria().add(cont);
+				cont.getCategorias().add(categoriaDB);
+			});
 
-		List<Categoria> categorias = new ArrayList<Categoria>();
-		cont.getCategorias().forEach(cat -> {
-			Categoria c = new Categoria();
-			c.setId(cat.getId());
-			categorias.add(c);
-		});
-		categorias.forEach(cat -> {
-			cont.getCategorias().remove(cat);
-			Categoria categoriaDB = categoriaRepository.findOne(cat.getId()).get();
-			categoriaDB.getContenidoCategoria().add(cont);
-			cont.getCategorias().add(categoriaDB);
-		});
-
+		}
+		if (cont.getDirectores()!=null){
 		List<Director> directores = new ArrayList<Director>();
 		cont.getDirectores().forEach(dir -> {
 			Director d = new Director();
@@ -215,6 +220,8 @@ public class ContenidoServiceBean implements ContenidoService {
 			direcotrDB.getContenido().add(cont);
 			cont.getDirectores().add(direcotrDB);
 		});
+		}
+		
 
 		return cont;
 	}
@@ -511,11 +518,13 @@ public class ContenidoServiceBean implements ContenidoService {
 						u.get());
 				if (hc.isPresent()) {
 					hc.get().setPagado(true);
+					historialContenidoRepository.save(hc.get());
 				} else {
 					HistorialContenido h = new HistorialContenido();
 					h.setContenido(evento.get());
 					h.setUsuario(u.get());
 					h.setPagado(true);
+					historialContenidoRepository.save(h);
 				}
 			}
 		}

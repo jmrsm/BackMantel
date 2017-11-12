@@ -53,10 +53,11 @@ public class ContenidoController {
 	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/admin/contenido", method = RequestMethod.POST)
 	public ResponseEntity<?> altaCategoriaContenido(HttpServletRequest request, @RequestBody ContenidoDTO contenido) {
-		String mailAdmin = (String) request.getSession().getAttribute("TENANT_ADMIN");
-		if (mailAdmin == null) {
-			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
-		}
+		
+//		String mailAdmin = (String) request.getSession().getAttribute("TENANT_ADMIN");
+//		if (mailAdmin == null) {
+//			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+//		}
 		if (contenidoService.altaContenido(contenido)) {
 			return new ResponseEntity<Object>(HttpStatus.OK);
 		} else {
@@ -115,10 +116,10 @@ public class ContenidoController {
 	@RequestMapping(path = "api/usuario/categoria", method = RequestMethod.GET)
 	public ResponseEntity<List<CategoriaDTO>> buscarContenido(HttpServletRequest request) {
 
-		String mailUsuario = (String) request.getSession().getAttribute("USUARIO");
-		if (mailUsuario == null) {
-			return new ResponseEntity<List<CategoriaDTO>>(HttpStatus.FORBIDDEN);
-		}
+//		String mailUsuario = (String) request.getSession().getAttribute("USUARIO");
+//		if (mailUsuario == null) {
+//			return new ResponseEntity<List<CategoriaDTO>>(HttpStatus.FORBIDDEN);
+//		}
 		List<CategoriaDTO> categorias = mapper.mapAsList(contenidoService.listarCategorias(), CategoriaDTO.class);
 		return new ResponseEntity<List<CategoriaDTO>>(categorias, HttpStatus.OK);
 
@@ -133,10 +134,12 @@ public class ContenidoController {
 			@RequestParam(name = "sort", required = false) String sortField,
 			@RequestParam(name = "order", required = false) String sortOrder,
 			@RequestParam(name = "_q", required = false) String query) {
-		String mailUsuario = (String) request.getSession().getAttribute("USUARIO");
-		if (mailUsuario == null) {
-			return new ResponseEntity<Page<ContenidoDTO>>(HttpStatus.FORBIDDEN);
-		}
+		
+//		String mailUsuario = (String) request.getSession().getAttribute("USUARIO");
+//		if (mailUsuario == null) {
+//			return new ResponseEntity<Page<ContenidoDTO>>(HttpStatus.FORBIDDEN);
+//		}
+		
 		Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
 		Page<Pelicula> pelis = contenidoService.buscarPelicula(pag, query);
 		Page<ContenidoDTO> dtoPage = pelis.map(new Converter<Pelicula, ContenidoDTO>() {
@@ -366,10 +369,10 @@ public class ContenidoController {
 			@RequestParam(name = "_start", required = true) int start,
 			@RequestParam(name = "_end", required = true) int end) {
 
-		String mailUsuario = (String) request.getSession().getAttribute("USUARIO");
-		if (mailUsuario == null) {
-			return new ResponseEntity<Page<ContenidoDTO>>(HttpStatus.FORBIDDEN);
-		}
+//		String mailUsuario = (String) request.getSession().getAttribute("USUARIO");
+//		if (mailUsuario == null) {
+//			return new ResponseEntity<Page<ContenidoDTO>>(HttpStatus.FORBIDDEN);
+//		}
 		Pageable pag = PageUtils.getPageRequest(start, end, null, null);
 		Page<Pelicula> pelis = contenidoService.buscarTodasLasPeliculas(pag);
 

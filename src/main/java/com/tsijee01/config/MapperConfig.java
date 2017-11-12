@@ -70,6 +70,11 @@ public class MapperConfig extends ConfigurableMapper {
 				.customize(new CustomMapper<ContenidoDTO, Contenido>() {
 					@Override
 					public void mapAtoB(ContenidoDTO a, Contenido b, MappingContext context) {
+						if (a.getRanking()==null){
+							b.setRanking(new BigDecimal(0));
+						}
+						
+						
 //						b.setDuracion(a.getDuracion()) ;
 //						b.setId(a.getId());
 //						b.setFechaPublicado(new Date()); 
