@@ -108,10 +108,11 @@ public class SuperAdminController {
 			@RequestParam(name = "order", required = false) String sortOrder,
 			@RequestParam(name = "_q", required = false) String query) {
 
-		String mailSuperAdmin = (String) request.getSession().getAttribute("SUPER_ADMIN");
-		if (mailSuperAdmin == null) {
-			return new ResponseEntity<Page<UsuarioDTO>>(HttpStatus.FORBIDDEN);
-		}
+//		String mailSuperAdmin = (String) request.getSession().getAttribute("SUPER_ADMIN");
+//		if (mailSuperAdmin == null) {
+//			return new ResponseEntity<Page<UsuarioDTO>>(HttpStatus.FORBIDDEN);
+//		}
+
 		Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
 		Page<UsuarioDTO> dtoPage;
 		if (StringUtils.isEmpty(query)) {

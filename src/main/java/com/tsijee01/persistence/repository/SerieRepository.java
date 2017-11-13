@@ -16,4 +16,6 @@ public interface SerieRepository extends BaseRepository <Serie, Long>{
 
 	Page<Serie> findByEsBloqueadoFalse(Pageable pag);
 
+	Page<Serie> findByTituloContainingOrDescipcionContaining(Pageable pag, String query, String query2);
+
 }

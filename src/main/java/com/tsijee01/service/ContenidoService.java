@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tsijee01.persistence.model.Categoria;
 import com.tsijee01.persistence.model.Contenido;
+import com.tsijee01.persistence.model.Evento;
 import com.tsijee01.persistence.model.Pelicula;
 import com.tsijee01.persistence.model.Serie;
 import com.tsijee01.rest.dto.ContenidoDTO;
@@ -63,5 +64,14 @@ public interface ContenidoService {
 
 	Page<Serie> buscarTodasLasSeries(Pageable pag);
 
+	Page<Evento> listarEventos(Pageable pag);
+
+	Page<Evento> listarEventosConBusqueda(Pageable pag, String query);
+
+	Page<Pelicula> listarPeliculas(Pageable pag);
+
+	Page<Serie> buscarSerie(Pageable pag, String query);
+
+	Page<Serie> listarSeries(Pageable pag);
 
 }
