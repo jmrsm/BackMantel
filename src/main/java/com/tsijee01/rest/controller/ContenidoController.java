@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
@@ -25,15 +24,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import com.tsijee01.persistence.model.Contenido;
 import com.tsijee01.persistence.model.Evento;
 import com.tsijee01.persistence.model.Pelicula;
 import com.tsijee01.persistence.model.Serie;
-import com.tsijee01.persistence.model.Usuario;
 import com.tsijee01.rest.dto.CategoriaDTO;
 import com.tsijee01.rest.dto.ContenidoDTO;
 import com.tsijee01.rest.dto.SearchContenidoOmbdapi;
-import com.tsijee01.rest.dto.UsuarioDTO;
+import com.tsijee01.service.AdminTenantService;
 import com.tsijee01.service.ContenidoService;
 import com.tsijee01.util.PageUtils;
 
@@ -45,6 +42,9 @@ public class ContenidoController {
 	@Autowired
 	private ContenidoService contenidoService;
 
+	@Autowired
+	private AdminTenantService adminTenantService;
+	
 	@Autowired
 	private MapperFacade mapper;
 
@@ -598,6 +598,27 @@ public class ContenidoController {
 			@RequestParam(name = "idContenido", required = true) Long idContenido) {
 		ContenidoDTO cont=mapper.map(contenidoService.verDatoContenido(idContenido), ContenidoDTO.class);
 		return new ResponseEntity<ContenidoDTO>(cont,HttpStatus.OK);
+	
+	@CrossOrigin(origins = "http://localhost:4200")
+	@RequestMapping(path = "api/superAdmin/esDestacado", method = RequestMethod.PUT)
+	public ResponseEntity<?> esDestacado(HttpServletRequest request, 
+			@RequestParam(name = "contenidoId", required = true) Long idContenido,
+			@RequestParam(name = "destacado", required = true) Boolean esDestacado,
+			@RequestParam(name = "email", required = false) String email) {
+		
+//		String mailAdmin = (String) request.getSession().getAttribute("SUPER_ADMIN");
+//		if (mailSuperAdmin == null) {
+//			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+//		}
+		
+		
+		
+		if (adminTenantService.esDestacado(idContenido, esDestacado, email)) {
+			return new ResponseEntity<Boolean>(HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+		}
 	}
 
 }

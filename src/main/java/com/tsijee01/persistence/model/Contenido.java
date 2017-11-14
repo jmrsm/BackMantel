@@ -17,12 +17,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 @Entity
+@NamedEntityGraph(name = "Contenido.ProveedorContenido", attributeNodes = {
+	       @NamedAttributeNode(value = "proveedorContenido")
+		})
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Contenido {
 

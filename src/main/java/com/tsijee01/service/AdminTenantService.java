@@ -11,4 +11,6 @@ public interface AdminTenantService {
 	String existeUser(String email);
 
 	String idUser(String email);
+
+	boolean esDestacado(Long idContenido, Boolean esDestacado, String email);
 }
