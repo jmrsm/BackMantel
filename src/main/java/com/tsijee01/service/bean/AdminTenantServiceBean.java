@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tsijee01.persistence.model.AdminTenant;
+import com.tsijee01.persistence.model.Contenido;
 import com.tsijee01.persistence.repository.AdminTenantRepository;
+import com.tsijee01.persistence.repository.ContenidoRepository;
 import com.tsijee01.rest.dto.AdminTenantDTO;
 import com.tsijee01.service.AdminTenantService;
 import com.tsijee01.util.Password;
@@ -16,6 +18,9 @@ public class AdminTenantServiceBean implements AdminTenantService {
 
 	@Autowired
 	private AdminTenantRepository adminRepository;
+	
+	@Autowired
+	private ContenidoRepository contenidoRepository;
 
 	@Autowired
 	private Password passwordUtil;
@@ -64,6 +69,23 @@ public class AdminTenantServiceBean implements AdminTenantService {
 	@Override
 	public AdminTenant ObtenerAdminTenat(String email) {
 		return this.adminRepository.findOneByEmail(email).get();
+	}
+
+	@Override
+	public boolean esDestacado(Long idContenido, Boolean esDestacado, String email) {
+		
+		Optional <AdminTenant> admin= adminRepository.findOneByEmail(email);
+		Optional <Contenido> c = contenidoRepository.findOne(idContenido);
+		Long idProv = c.get().getProveedorContenido().getId();
+		
+		if (admin.isPresent() && idProv == admin.get().getProveedorContenido().getId()) {
+			c.get().setEsDestacado(esDestacado);
+			contenidoRepository.save(c.get());
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 	
 

@@ -26,9 +26,11 @@ import org.springframework.web.client.RestTemplate;
 
 import com.tsijee01.persistence.model.Pelicula;
 import com.tsijee01.persistence.model.Serie;
+import com.tsijee01.persistence.repository.AdminTenantRepository;
 import com.tsijee01.rest.dto.CategoriaDTO;
 import com.tsijee01.rest.dto.ContenidoDTO;
 import com.tsijee01.rest.dto.SearchContenidoOmbdapi;
+import com.tsijee01.service.AdminTenantService;
 import com.tsijee01.service.ContenidoService;
 import com.tsijee01.util.PageUtils;
 
@@ -40,6 +42,9 @@ public class ContenidoController {
 	@Autowired
 	private ContenidoService contenidoService;
 
+	@Autowired
+	private AdminTenantService adminTenantService;
+	
 	@Autowired
 	private MapperFacade mapper;
 
@@ -93,8 +98,7 @@ public class ContenidoController {
 		String mailAdmin = (String) request.getSession().getAttribute("TENANT_ADMIN");
 		if (mailAdmin == null) {
 			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
-		}
-		contenidoService.marcarDestacado(contenidoId, esDestacado);
+		}contenidoService.marcarDestacado(contenidoId, esDestacado);
 		return new ResponseEntity<Object>(HttpStatus.OK);
 
 	}
@@ -494,6 +498,28 @@ public class ContenidoController {
 			return new ResponseEntity<Boolean>(false,HttpStatus.OK);
 		}
 
+	}
+	
+	@CrossOrigin(origins = "http://localhost:4200")
+	@RequestMapping(path = "api/superAdmin/esDestacado", method = RequestMethod.PUT)
+	public ResponseEntity<?> esDestacado(HttpServletRequest request, 
+			@RequestParam(name = "contenidoId", required = true) Long idContenido,
+			@RequestParam(name = "destacado", required = true) Boolean esDestacado,
+			@RequestParam(name = "email", required = false) String email) {
+		
+//		String mailAdmin = (String) request.getSession().getAttribute("SUPER_ADMIN");
+//		if (mailSuperAdmin == null) {
+//			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+//		}
+		
+		
+		
+		if (adminTenantService.esDestacado(idContenido, esDestacado, email)) {
+			return new ResponseEntity<Boolean>(HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+		}
 	}
 
 }
