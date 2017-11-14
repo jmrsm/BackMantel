@@ -41,11 +41,11 @@ public class CategoriaController {
 	public ResponseEntity<?> altaCategoriaContenido(HttpServletRequest request,
 			@RequestParam(name = "nombre", required = true) String nombreCategoria) {
 
-		String mailSuperAdmin = (String) request.getSession()
-				.getAttribute("SUPER_ADMIN");
-		if (mailSuperAdmin==null){
-			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
-		}
+//		String mailSuperAdmin = (String) request.getSession()
+//				.getAttribute("SUPER_ADMIN");
+//		if (mailSuperAdmin==null){
+//			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+//		}
 
 		if (categoriaContenidoService.altaCategoriaContenido(nombreCategoria)) {
 			return new ResponseEntity<Object>(HttpStatus.OK);
@@ -58,11 +58,11 @@ public class CategoriaController {
 	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/superAdmin/categoriaContenido", method = RequestMethod.GET)
 	public ResponseEntity<List<CategoriaDTO>> obtenerCategoriasContenido(HttpServletRequest request) {
-		String mailSuperAdmin = (String) request.getSession()
-				.getAttribute("SUPER_ADMIN");
-		if (mailSuperAdmin==null){
-			return new ResponseEntity<List<CategoriaDTO>>(HttpStatus.FORBIDDEN);
-		}
+//		String mailSuperAdmin = (String) request.getSession()
+//				.getAttribute("SUPER_ADMIN");
+//		if (mailSuperAdmin==null){
+//			return new ResponseEntity<List<CategoriaDTO>>(HttpStatus.FORBIDDEN);
+//		}
 		List<CategoriaDTO> cates = mapper.mapAsList(categoriaContenidoService.obtenerCategorias(), CategoriaDTO.class);
 		return new ResponseEntity<List<CategoriaDTO>>(cates, HttpStatus.OK);
 

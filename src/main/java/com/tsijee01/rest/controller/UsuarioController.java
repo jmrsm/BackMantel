@@ -48,10 +48,10 @@ public class UsuarioController {
 	@RequestMapping(path = "api/usuario/listarFavoritos", method = RequestMethod.GET)
 	public ResponseEntity<List<ContenidoDTO>> listarFavoritos(HttpServletRequest request,
 			@RequestParam(name = "usuarioId", required = true) Long id) {
-		String mailUsuario = (String) request.getSession().getAttribute("USUARIO");
-		if (mailUsuario == null) {
-			return new ResponseEntity<List<ContenidoDTO>>(HttpStatus.FORBIDDEN);
-		}
+//		String mailUsuario = (String) request.getSession().getAttribute("USUARIO");
+//		if (mailUsuario == null) {
+//			return new ResponseEntity<List<ContenidoDTO>>(HttpStatus.FORBIDDEN);
+//		}
 		List<Contenido> listarFavoritos = userService.listarFavoritos(id);
 		return new ResponseEntity<List<ContenidoDTO>>(mapper.mapAsList(listarFavoritos, ContenidoDTO.class),
 				HttpStatus.OK);

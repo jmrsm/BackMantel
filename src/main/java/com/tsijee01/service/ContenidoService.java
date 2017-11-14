@@ -73,5 +73,7 @@ public interface ContenidoService {
 	Page<Serie> buscarSerie(Pageable pag, String query);
 
 	Page<Serie> listarSeries(Pageable pag);
+	
+	Contenido verDatoContenido(Long idContenido);
 
 }

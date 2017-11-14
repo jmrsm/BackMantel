@@ -269,7 +269,7 @@ public class ContenidoServiceBean implements ContenidoService {
 
 	@Override
 	public Page<Pelicula> buscarPelicula(Pageable pag, String query) {
-		return peliculaRepositoy.findByTituloContainingOrDescripcionContaining(pag, query, query);
+		return peliculaRepositoy.findByTituloContainingOrDescipcionContaining(pag, query, query);
 	}
 
 	@Override
@@ -581,6 +581,12 @@ public class ContenidoServiceBean implements ContenidoService {
 	@Override
 	public Page<Serie> listarSeries(Pageable pag) {
 		return serieRepository.findAll(pag);
+	}
+	@Override
+	public Contenido verDatoContenido(Long idContenido) {
+		// TODO Auto-generated method stub
+		Optional<Contenido> cont= contenidoRepository.findOne(idContenido);
+		return cont.get();
 	}
 
 }

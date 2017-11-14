@@ -70,15 +70,26 @@ public class SuperAdminController {
 
 	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/superAdmin/admin", method = RequestMethod.POST)
-	public ResponseEntity<?> altaAdminTenant(HttpServletRequest request, @RequestBody AdminTenantDTO adminTenant,
-			@RequestParam(name = "proveedorId", required = true) Long proveedorId,
-			@RequestParam(name = "password", required = true) String password) {
+	public ResponseEntity<?> altaAdminTenant(HttpServletRequest request,
+			@RequestParam(name = "apellido", required = true) String apellido,
+ 			@RequestParam(name = "email", required = true) String email,
+ 			@RequestParam(name = "nombre", required = true) String nombre,
+ 			@RequestParam(name = "id", required = true) Long id,
+			@RequestParam(name = "password", required = true) String password,
+			@RequestParam(name = "proveedorContenidoId", required = true) Long proveedorContenidoId) {
 
 //		String mailSuperAdmin = (String) request.getSession().getAttribute("SUPER_ADMIN");
 //		if (mailSuperAdmin == null) {
 //			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
 //		}
-		if (administradorService.altaAdmin(mapper.map(adminTenant, AdminTenant.class), proveedorId, password)) {
+		AdminTenantDTO a = new AdminTenantDTO();
+		a.setApellido(apellido);
+		a.setEmail(email);
+		a.setId(id);
+		a.setNombre(nombre);
+
+		if (administradorService.altaAdmin(mapper.map(a, AdminTenant.class), proveedorContenidoId,
+  				password)){
 			return new ResponseEntity<Object>(HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Object>(HttpStatus.CONFLICT);
@@ -138,17 +149,17 @@ public class SuperAdminController {
 	@RequestMapping(path = "api/superAdmin/usuario", method = RequestMethod.GET)
 	public ResponseEntity<UsuarioDTO> obtenerusuarios(HttpServletRequest request,
 			@RequestParam(name = "usuarioId", required = true) Long usuarioId) {
-
-		String mailSuperAdmin = (String) request.getSession().getAttribute("SUPER_ADMIN");
-		if (mailSuperAdmin == null) {
-			return new ResponseEntity<UsuarioDTO>(HttpStatus.FORBIDDEN);
-		}
+//
+//		String mailSuperAdmin = (String) request.getSession().getAttribute("SUPER_ADMIN");
+//		if (mailSuperAdmin == null) {
+//			return new ResponseEntity<UsuarioDTO>(HttpStatus.FORBIDDEN);
+//		}
 
 		Usuario u = usuarioService.buscarPorId(usuarioId);
 		return new ResponseEntity<UsuarioDTO>(mapper.map(u, UsuarioDTO.class), HttpStatus.OK);
 	}
 
-	@CrossOrigin(origins = "http://localhost:4200")
+	//@CrossOrigin(origins = "http://localhost:4200")
 	// crear nuevo proveedor de contenido
 	@RequestMapping(path = "api/superAdmin/proveedorContenido", method = RequestMethod.POST)
 	public ResponseEntity<?> altaProveedorContenido(HttpServletRequest request,

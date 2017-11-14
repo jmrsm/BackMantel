@@ -37,11 +37,11 @@ public class AdminTenantController {
 	@RequestMapping(path = "api/admin/getID", method = RequestMethod.GET)
 	public ResponseEntity<?> listarActores(HttpServletRequest request ,@RequestParam(name = "email", required = true) String email) {
 		
-		String mailAdmin = (String) request.getSession()
-				.getAttribute("TENANT_ADMIN");
-		if (mailAdmin==null){
-			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
-		}
+//		String mailAdmin = (String) request.getSession()
+//				.getAttribute("TENANT_ADMIN");
+//		if (mailAdmin==null){
+//			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+//		}
 		
 		return new ResponseEntity<Object>(adminService.idUser(email), HttpStatus.OK);
 	}
@@ -51,11 +51,11 @@ public class AdminTenantController {
 	public ResponseEntity<List<ContenidoDTO>> listarmicontenido(HttpServletRequest request,
 			@RequestParam(name = "email", required = false) String email) {
 		//Manejo de sesión
-		String mailAdmin = (String) request.getSession()
-				.getAttribute("TENANT_ADMIN");
-		if (mailAdmin==null){
-			return new ResponseEntity<List<ContenidoDTO>>(HttpStatus.FORBIDDEN);
-		}
+//		String mailAdmin = (String) request.getSession()
+//				.getAttribute("TENANT_ADMIN");
+//		if (mailAdmin==null){
+//			return new ResponseEntity<List<ContenidoDTO>>(HttpStatus.FORBIDDEN);
+//		}
 		
 		List<ContenidoDTO> contenidos = contenidoService.listarContenidoProveedor(email);
 		return new ResponseEntity<List<ContenidoDTO>>(contenidos, HttpStatus.OK);

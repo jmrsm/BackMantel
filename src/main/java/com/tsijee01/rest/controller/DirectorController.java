@@ -32,11 +32,11 @@ public class DirectorController {
 	@RequestMapping(path = "api/admin/director", method = RequestMethod.POST)
 	public ResponseEntity<?> altaDirector(HttpServletRequest request, @RequestBody DirectorDTO director) {
 
-		String mailAdmin = (String) request.getSession()
-				.getAttribute("TENANT_ADMIN");
-		if (mailAdmin==null){
-			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
-		}
+//		String mailAdmin = (String) request.getSession()
+//				.getAttribute("TENANT_ADMIN");
+//		if (mailAdmin==null){
+//			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+//		}
 		if (directorService.altaDirector(mapper.map(director, Director.class))) {
 			return new ResponseEntity<Object>(HttpStatus.OK);
 		} else {
@@ -49,11 +49,11 @@ public class DirectorController {
 	@RequestMapping(path = "api/admin/director", method = RequestMethod.GET)
 	public ResponseEntity<?> listarDirectores(HttpServletRequest request) {
 
-		String mailAdmin = (String) request.getSession()
-				.getAttribute("TENANT_ADMIN");
-		if (mailAdmin==null){
-			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
-		}
+//		String mailAdmin = (String) request.getSession()
+//				.getAttribute("TENANT_ADMIN");
+//		if (mailAdmin==null){
+//			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+//		}
 		
 		return new ResponseEntity<Object>(mapper.mapAsList(directorService.findAll(), DirectorDTO.class), HttpStatus.OK);
 	}

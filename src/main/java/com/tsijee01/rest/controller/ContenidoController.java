@@ -77,10 +77,10 @@ public class ContenidoController {
 			@RequestParam(name = "nombre", required = true) String nombre,
 			@RequestParam(name = "year", required = false) String year) {
 
-		String mailAdmin = (String) request.getSession().getAttribute("TENANT_ADMIN");
-		if (mailAdmin == null) {
-			return new ResponseEntity<SearchContenidoOmbdapi>(HttpStatus.FORBIDDEN);
-		}
+//		String mailAdmin = (String) request.getSession().getAttribute("TENANT_ADMIN");
+//		if (mailAdmin == null) {
+//			return new ResponseEntity<SearchContenidoOmbdapi>(HttpStatus.FORBIDDEN);
+//		}
 		nombre = nombre.replace(" ", "+");
 		if (year == null || year.isEmpty()) {
 			return new ResponseEntity<SearchContenidoOmbdapi>(this.getContenidoByName(nombre), HttpStatus.OK);
@@ -95,10 +95,10 @@ public class ContenidoController {
 	public ResponseEntity<?> marcarDestacado(HttpServletRequest request,
 			@RequestParam(name = "contenidoId", required = true) Long contenidoId,
 			@RequestParam(name = "esDestacado", required = true) Boolean esDestacado) {
-		String mailAdmin = (String) request.getSession().getAttribute("TENANT_ADMIN");
-		if (mailAdmin == null) {
-			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
-		}
+//		String mailAdmin = (String) request.getSession().getAttribute("TENANT_ADMIN");
+//		if (mailAdmin == null) {
+//			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+//		}
 		contenidoService.marcarDestacado(contenidoId, esDestacado);
 		return new ResponseEntity<Object>(HttpStatus.OK);
 
@@ -109,10 +109,10 @@ public class ContenidoController {
 	@RequestMapping(path = "api/admin/tiposContenido", method = RequestMethod.GET)
 	public ResponseEntity<List<CategoriaDTO>> listarTiposContenido(HttpServletRequest request) {
 
-		String mailAdmin = (String) request.getSession().getAttribute("TENANT_ADMIN");
-		if (mailAdmin == null) {
-			return new ResponseEntity<List<CategoriaDTO>>(HttpStatus.FORBIDDEN);
-		}
+//		String mailAdmin = (String) request.getSession().getAttribute("TENANT_ADMIN");
+//		if (mailAdmin == null) {
+//			return new ResponseEntity<List<CategoriaDTO>>(HttpStatus.FORBIDDEN);
+//		}
 		return new ResponseEntity<List<CategoriaDTO>>(
 				mapper.mapAsList(contenidoService.obtenerTiposContenido(), CategoriaDTO.class), HttpStatus.OK);
 	}
@@ -254,10 +254,10 @@ public class ContenidoController {
 	public ResponseEntity<Long> verContenido(HttpServletRequest request,
 			@RequestParam(name = "usuarioID", required = true) Long usuarioId,
 			@RequestParam(name = "contenidoId", required = true) Long contenidoId) {
-		String mailUsuario = (String) request.getSession().getAttribute("USUARIO");
-		if (mailUsuario == null) {
-			return new ResponseEntity<Long>(HttpStatus.FORBIDDEN);
-		}
+//		String mailUsuario = (String) request.getSession().getAttribute("USUARIO");
+//		if (mailUsuario == null) {
+//			return new ResponseEntity<Long>(HttpStatus.FORBIDDEN);
+//		}
 		Long segundosVistos = contenidoService.verContenido(usuarioId, contenidoId);
 		return new ResponseEntity<Long>(segundosVistos, HttpStatus.OK);
 
@@ -272,10 +272,10 @@ public class ContenidoController {
 			@RequestParam(name = "esSerie", required = true) Boolean esSerie,
 			@RequestParam(name = "esDestacado", required = true) Boolean esDestacado) {
 
-		String mailAdmin = (String) request.getSession().getAttribute("TENANT_ADMIN");
-		if (mailAdmin == null) {
-			return new ResponseEntity<Long>(HttpStatus.FORBIDDEN);
-		}
+//		String mailAdmin = (String) request.getSession().getAttribute("TENANT_ADMIN");
+//		if (mailAdmin == null) {
+//			return new ResponseEntity<Long>(HttpStatus.FORBIDDEN);
+//		}
 		ContenidoDTO cont = this.getContenidoOmdbById(omdbId);
 		path = path.replace("%26token", "&token");
 		path = path.replace("/o/videos/", "/o/videos%2F");
@@ -338,10 +338,10 @@ public class ContenidoController {
 			@RequestParam(name = "sort", required = false) String sortField,
 			@RequestParam(name = "order", required = false) String sortOrder,
 			@RequestParam(name = "generoId", required = true) Long generoId) {
-		String mailUsuario = (String) request.getSession().getAttribute("USUARIO");
-		if (mailUsuario == null) {
-			return new ResponseEntity<Page<ContenidoDTO>>(HttpStatus.FORBIDDEN);
-		}
+//		String mailUsuario = (String) request.getSession().getAttribute("USUARIO");
+//		if (mailUsuario == null) {
+//			return new ResponseEntity<Page<ContenidoDTO>>(HttpStatus.FORBIDDEN);
+//		}
 		Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
 		Page<Pelicula> pelis = contenidoService.buscarPeliculaPorGenero(pag, generoId);
 		Page<ContenidoDTO> dtoPage = pelis.map(new Converter<Pelicula, ContenidoDTO>() {
@@ -361,10 +361,10 @@ public class ContenidoController {
 			@RequestParam(name = "sort", required = false) String sortField,
 			@RequestParam(name = "order", required = false) String sortOrder,
 			@RequestParam(name = "actorId", required = true) Long actorId) {
-		String mailUsuario = (String) request.getSession().getAttribute("USUARIO");
-		if (mailUsuario == null) {
-			return new ResponseEntity<Page<ContenidoDTO>>(HttpStatus.FORBIDDEN);
-		}
+//		String mailUsuario = (String) request.getSession().getAttribute("USUARIO");
+//		if (mailUsuario == null) {
+//			return new ResponseEntity<Page<ContenidoDTO>>(HttpStatus.FORBIDDEN);
+//		}
 		Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
 		Page<Pelicula> pelis = contenidoService.buscarPeliculaPorActor(pag, actorId);
 		Page<ContenidoDTO> dtoPage = pelis.map(new Converter<Pelicula, ContenidoDTO>() {
@@ -384,10 +384,10 @@ public class ContenidoController {
 			@RequestParam(name = "sort", required = false) String sortField,
 			@RequestParam(name = "order", required = false) String sortOrder,
 			@RequestParam(name = "directorId", required = true) Long directorId) {
-		String mailUsuario = (String) request.getSession().getAttribute("USUARIO");
-		if (mailUsuario == null) {
-			return new ResponseEntity<Page<ContenidoDTO>>(HttpStatus.FORBIDDEN);
-		}
+//		String mailUsuario = (String) request.getSession().getAttribute("USUARIO");
+//		if (mailUsuario == null) {
+//			return new ResponseEntity<Page<ContenidoDTO>>(HttpStatus.FORBIDDEN);
+//		}
 		Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
 		Page<Pelicula> pelis = contenidoService.buscarPeliculaPorDirector(pag, directorId);
 		Page<ContenidoDTO> dtoPage = pelis.map(new Converter<Pelicula, ContenidoDTO>() {
@@ -407,10 +407,10 @@ public class ContenidoController {
 			@RequestParam(name = "idUsuario", required = true) Long idUsuario,
 			@RequestParam(name = "idContenido", required = true) Long idContenido,
 			@RequestParam(name = "Tiempo", required = true) Long tiempo) {
-		String mailUsuario = (String) request.getSession().getAttribute("USUARIO");
-		if (mailUsuario == null) {
-			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
-		}
+//		String mailUsuario = (String) request.getSession().getAttribute("USUARIO");
+//		if (mailUsuario == null) {
+//			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+//		}
 		if (tiempo != 0)
 			contenidoService.guardarReproduccion(idUsuario, idContenido, tiempo);
 
@@ -424,17 +424,18 @@ public class ContenidoController {
 			@RequestParam(name = "usuarioId", required = true) Long usuarioId,
 			@RequestParam(name = "esFavorito", required = true) Boolean esFavorito) {
 
-		String mailUsuario = (String) request.getSession().getAttribute("USUARIO");
-		if (mailUsuario == null) {
-			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
-		}
+//		String mailUsuario = (String) request.getSession().getAttribute("USUARIO");
+//		if (mailUsuario == null) {
+//			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+//		}
 		contenidoService.marcarFavorito(contenidoId, esFavorito, usuarioId);
 		return new ResponseEntity<Object>(HttpStatus.OK);
 
 	}
 
 	// @PostConstruct
-	private void cargarPeliculas() {
+	@RequestMapping(path = "api/usuario/cargarPelicula", method = RequestMethod.GET)
+	private void cargarPeliculas(HttpServletRequest request) {
 
 		String idPeliculas = "tt0325980,tt1014759,tt0471537,tt0065856,tt0162661,tt0109707,tt0119008,tt1014759,tt3045616,tt1398941,tt1355683,tt2567026,tt0796992,tt1785450,tt3099498,tt2209764,tt1885299,tt1210819,tt1232829,tt1077368,tt0810913,tt0376136,tt1298650,tt1192628,tt1243957,tt1333667,tt1054606,tt0479468,tt0408236,tt0449088,tt0383574,tt0375920,tt0121164,tt0099733,tt0087800,"
 				+ "tt0196178,tt0210945,tt0247199,tt0264935,tt0266971,tt0301976,tt0332280,tt1355630,tt0468489,tt0488120,tt0805564,tt1175709,tt1120985,tt0005960,tt0780504,tt1124035,tt2865166,tt1817273,tt1602613,tt3077150,tt2366608,tt1596363,tt3783958,tt2062700,tt0083658,tt7027210,"
@@ -487,10 +488,10 @@ public class ContenidoController {
 			@RequestParam(name = "_start", required = true) int start,
 			@RequestParam(name = "_end", required = true) int end) {
 
-		String mailUsuario = (String) request.getSession().getAttribute("USUARIO");
-		if (mailUsuario == null) {
-			return new ResponseEntity<Page<ContenidoDTO>>(HttpStatus.FORBIDDEN);
-		}
+//		String mailUsuario = (String) request.getSession().getAttribute("USUARIO");
+//		if (mailUsuario == null) {
+//			return new ResponseEntity<Page<ContenidoDTO>>(HttpStatus.FORBIDDEN);
+//		}
 		Pageable pag = PageUtils.getPageRequest(start, end, null, null);
 		Page<Serie> series = contenidoService.buscarTodasLasSeries(pag);
 
@@ -507,10 +508,10 @@ public class ContenidoController {
 	@RequestMapping(path = "api/usuario/relojSistema", method = RequestMethod.GET)
 	public ResponseEntity<String> relojSistema(HttpServletRequest request) {
 
-		String mailUsuario = (String) request.getSession().getAttribute("USUARIO");
-		if (mailUsuario == null) {
-			return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
-		}
+//		String mailUsuario = (String) request.getSession().getAttribute("USUARIO");
+//		if (mailUsuario == null) {
+//			return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
+//		}
 
 		String res = "";
 		Date fecha = new Date();
@@ -590,6 +591,13 @@ public class ContenidoController {
 			return new ResponseEntity<Boolean>(false,HttpStatus.OK);
 		}
 
+	}
+	@CrossOrigin(origins = "http://localhost:4200")
+	@RequestMapping(path = "api/usuario/verDatoContenido", method = RequestMethod.GET)
+	public ResponseEntity<ContenidoDTO> verDatoContenido(HttpServletRequest request,
+			@RequestParam(name = "idContenido", required = true) Long idContenido) {
+		ContenidoDTO cont=mapper.map(contenidoService.verDatoContenido(idContenido), ContenidoDTO.class);
+		return new ResponseEntity<ContenidoDTO>(cont,HttpStatus.OK);
 	}
 
 }
