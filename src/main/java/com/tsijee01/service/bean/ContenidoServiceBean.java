@@ -135,7 +135,14 @@ public class ContenidoServiceBean implements ContenidoService {
 	public boolean altaContenido(ContenidoDTO contenido) {
 
 		TipoContenidoEnum tcEnum = contenido.getTipoContenido();
-
+		String poster = contenido.getFotoPortada(); 
+		poster = poster.replace("%26token", "&token");
+		poster = poster.replace("/o/imagenes/", "/o/imagenes%2F");
+		contenido.setFotoPortada(poster);
+		String path = contenido.getPath(); 
+		path = path.replace("%26token", "&token");
+		path = path.replace("/o/imagenes/", "/o/imagenes%2F");
+		contenido.setPath(path);
 		if (tcEnum.equals(TipoContenidoEnum.EVENTO_DEPORTIVO)) {
 			EventoDeportivo eventoDeportivo = mapper.map(contenido, EventoDeportivo.class);
 			eventoDeportivo = (EventoDeportivo) this.crearContenido(eventoDeportivo);
