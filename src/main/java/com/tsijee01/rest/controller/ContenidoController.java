@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
@@ -25,20 +24,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import com.tsijee01.persistence.model.Contenido;
 import com.tsijee01.persistence.model.Evento;
 import com.tsijee01.persistence.model.Pelicula;
 import com.tsijee01.persistence.model.Serie;
-import com.tsijee01.persistence.repository.AdminTenantRepository;
 import com.tsijee01.rest.dto.CategoriaDTO;
 import com.tsijee01.rest.dto.ContenidoDTO;
 import com.tsijee01.rest.dto.SearchContenidoOmbdapi;
 import com.tsijee01.service.AdminTenantService;
-import com.tsijee01.persistence.model.Usuario;
-import com.tsijee01.rest.dto.CategoriaDTO;
-import com.tsijee01.rest.dto.ContenidoDTO;
-import com.tsijee01.rest.dto.SearchContenidoOmbdapi;
-import com.tsijee01.rest.dto.UsuarioDTO;
 import com.tsijee01.service.ContenidoService;
 import com.tsijee01.util.PageUtils;
 
