@@ -269,7 +269,7 @@ public class ContenidoServiceBean implements ContenidoService {
 
 	@Override
 	public Page<Pelicula> buscarPelicula(Pageable pag, String query) {
-		return peliculaRepositoy.findByTituloContainingOrDescripcionContaining(pag, query, query);
+		return peliculaRepositoy.findByTituloContainingOrDescipcionContaining(pag, query, query);
 	}
 
 	@Override

@@ -30,6 +30,6 @@ public interface PeliculRepository extends BaseRepository<Pelicula, Long>{
 
 	Page<Pelicula> findByEsBloqueadoFalse(Pageable pag);
 
-	Page<Pelicula> findByTituloContainingOrDescripcionContaining(Pageable pag, String query, String query2);
+	Page<Pelicula> findByTituloContainingOrDescipcionContaining(Pageable pag, String query, String query2);
 	
 }
