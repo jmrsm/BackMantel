@@ -269,8 +269,7 @@ public class ContenidoServiceBean implements ContenidoService {
 
 	@Override
 	public Page<Pelicula> buscarPelicula(Pageable pag, String query) {
-		return peliculaRepositoy.findByTituloContaining(pag, query);
-
+		return peliculaRepositoy.findByTituloContainingOrDescipcionContaining(pag, query, query);
 	}
 
 	@Override
@@ -552,6 +551,36 @@ public class ContenidoServiceBean implements ContenidoService {
 			}
 		}
 
+	}
+	
+
+	@Override
+	public Page<Evento> listarEventos(Pageable pag) {
+		return eventoRepository.findAll(pag);
+		
+	}
+
+	@Override
+	public Page<Evento> listarEventosConBusqueda(Pageable pag, String query) {
+		return eventoRepository.findByTituloContainingOrDescipcionContaining(pag, query, query);
+		
+	}
+
+	@Override
+	public Page<Pelicula> listarPeliculas(Pageable pag) {
+		return peliculaRepositoy.findAll(pag);
+	}
+
+	@Override
+	public Page<Serie> buscarSerie(Pageable pag, String query) {
+		return serieRepository.findByTituloContainingOrDescipcionContaining(pag, query, query);
+		
+		
+	}
+
+	@Override
+	public Page<Serie> listarSeries(Pageable pag) {
+		return serieRepository.findAll(pag);
 	}
 
 }

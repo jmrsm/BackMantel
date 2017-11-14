@@ -9,6 +9,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.converter.Converter;
@@ -24,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.tsijee01.persistence.model.Contenido;
+import com.tsijee01.persistence.model.Evento;
 import com.tsijee01.persistence.model.Pelicula;
 import com.tsijee01.persistence.model.Serie;
 import com.tsijee01.persistence.repository.AdminTenantRepository;
@@ -31,6 +34,11 @@ import com.tsijee01.rest.dto.CategoriaDTO;
 import com.tsijee01.rest.dto.ContenidoDTO;
 import com.tsijee01.rest.dto.SearchContenidoOmbdapi;
 import com.tsijee01.service.AdminTenantService;
+import com.tsijee01.persistence.model.Usuario;
+import com.tsijee01.rest.dto.CategoriaDTO;
+import com.tsijee01.rest.dto.ContenidoDTO;
+import com.tsijee01.rest.dto.SearchContenidoOmbdapi;
+import com.tsijee01.rest.dto.UsuarioDTO;
 import com.tsijee01.service.ContenidoService;
 import com.tsijee01.util.PageUtils;
 
@@ -131,8 +139,8 @@ public class ContenidoController {
 
 	// buscar contenido usuario final
 	@CrossOrigin(origins = "http://localhost:4200")
-	@RequestMapping(path = "api/usuario/listarPeliculasPorTitulo", method = RequestMethod.GET)
-	public ResponseEntity<Page<ContenidoDTO>> buscarContenido(HttpServletRequest request,
+	@RequestMapping(path = "api/usuario/listarPeliculasConBusqueda", method = RequestMethod.GET)
+	public ResponseEntity<Page<ContenidoDTO>> buscarPeliculas(HttpServletRequest request,
 			@RequestParam(name = "_start", required = true) int start,
 			@RequestParam(name = "_end", required = true) int end,
 			@RequestParam(name = "sort", required = false) String sortField,
@@ -144,16 +152,107 @@ public class ContenidoController {
 //			return new ResponseEntity<Page<ContenidoDTO>>(HttpStatus.FORBIDDEN);
 //		}
 		
-		Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
-		Page<Pelicula> pelis = contenidoService.buscarPelicula(pag, query);
-		Page<ContenidoDTO> dtoPage = pelis.map(new Converter<Pelicula, ContenidoDTO>() {
-			@Override
-			public ContenidoDTO convert(Pelicula peli) {
-				return mapper.map(peli, ContenidoDTO.class);
-			}
-		});
-		return new ResponseEntity<Page<ContenidoDTO>>(dtoPage, HttpStatus.OK);
+		if (StringUtils.isEmpty(query)) {
+			Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
+			Page<Pelicula> pelis = contenidoService.listarPeliculas(pag);
+			Page<ContenidoDTO> dtoPage = pelis.map(new Converter<Pelicula, ContenidoDTO>() {
+				@Override
+				public ContenidoDTO convert(Pelicula peli) {
+					return mapper.map(peli, ContenidoDTO.class);
+				}
+			});
+			return new ResponseEntity<Page<ContenidoDTO>>(dtoPage, HttpStatus.OK);
+		}else {
+			Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
+			Page<Pelicula> pelis = contenidoService.buscarPelicula(pag, query);
+			Page<ContenidoDTO> dtoPage = pelis.map(new Converter<Pelicula, ContenidoDTO>() {
+				@Override
+				public ContenidoDTO convert(Pelicula peli) {
+					return mapper.map(peli, ContenidoDTO.class);
+				}
+			});
+			return new ResponseEntity<Page<ContenidoDTO>>(dtoPage, HttpStatus.OK);
+		}
+		
 
+	}
+	
+
+	// buscar contenido usuario final
+	@CrossOrigin(origins = "http://localhost:4200")
+	@RequestMapping(path = "api/usuario/listarSeriesConBusqueda", method = RequestMethod.GET)
+	public ResponseEntity<Page<ContenidoDTO>> buscarSeries(HttpServletRequest request,
+			@RequestParam(name = "_start", required = true) int start,
+			@RequestParam(name = "_end", required = true) int end,
+			@RequestParam(name = "sort", required = false) String sortField,
+			@RequestParam(name = "order", required = false) String sortOrder,
+			@RequestParam(name = "_q", required = false) String query) {
+		
+//		String mailUsuario = (String) request.getSession().getAttribute("USUARIO");
+//		if (mailUsuario == null) {
+//			return new ResponseEntity<Page<ContenidoDTO>>(HttpStatus.FORBIDDEN);
+//		}
+		
+		if (StringUtils.isEmpty(query)) {
+			Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
+			Page<Serie> series= contenidoService.listarSeries(pag);
+			Page<ContenidoDTO> dtoPage = series.map(new Converter<Serie, ContenidoDTO>() {
+				@Override
+				public ContenidoDTO convert(Serie serie) {
+					return mapper.map(serie, ContenidoDTO.class);
+				}
+			});
+			return new ResponseEntity<Page<ContenidoDTO>>(dtoPage, HttpStatus.OK);
+		}else {
+			Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
+			Page<Serie> series = contenidoService.buscarSerie(pag, query);
+			Page<ContenidoDTO> dtoPage = series.map(new Converter<Serie, ContenidoDTO>() {
+				@Override
+				public ContenidoDTO convert(Serie serie) {
+					return mapper.map(serie, ContenidoDTO.class);
+				}
+			});
+			return new ResponseEntity<Page<ContenidoDTO>>(dtoPage, HttpStatus.OK);
+		}
+		
+
+	}
+	
+	
+	
+	@CrossOrigin(origins = "http://localhost:4200")
+	// obtener todos los usuarios finales del sistema
+	@RequestMapping(path = "api/usuario/listarEventosConBusqueda", method = RequestMethod.GET)
+	public ResponseEntity<Page<ContenidoDTO>> obtenerEventosCOnBusqueda(HttpServletRequest request,
+			@RequestParam(name = "_start", required = true) int start,
+			@RequestParam(name = "_end", required = true) int end,
+			@RequestParam(name = "sort", required = false) String sortField,
+			@RequestParam(name = "order", required = false) String sortOrder,
+			@RequestParam(name = "_q", required = false) String query) {
+
+//		String mailSuperAdmin = (String) request.getSession().getAttribute("SUPER_ADMIN");
+//		if (mailSuperAdmin == null) {
+//			return new ResponseEntity<Page<UsuarioDTO>>(HttpStatus.FORBIDDEN);
+//		}
+
+		Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
+		Page<ContenidoDTO> dtoPage;
+		if (StringUtils.isEmpty(query)) {
+			dtoPage = contenidoService.listarEventos(pag).map(new Converter<Evento, ContenidoDTO>() {
+				@Override
+				public ContenidoDTO convert(Evento ev) {
+					return mapper.map(ev, ContenidoDTO.class);
+				}
+			});
+		} else {
+			dtoPage = contenidoService.listarEventosConBusqueda(pag, query).map(new Converter<Evento, ContenidoDTO>() {
+				@Override
+				public ContenidoDTO convert(Evento ev) {
+					return mapper.map(ev, ContenidoDTO.class);
+				}
+			});
+		}
+		return new ResponseEntity<Page<ContenidoDTO>>(dtoPage, HttpStatus.OK);
 	}
 
 	// si ya la vio devuelve el último segundo visto sino 0
