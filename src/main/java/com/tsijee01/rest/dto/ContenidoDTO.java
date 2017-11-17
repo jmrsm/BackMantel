@@ -31,11 +31,11 @@ public class ContenidoDTO {
 
 	private Boolean esDestacado;
 	
-	// si es evento
 	private Boolean esPago;
 	
 	private int precio;
-	
+
+	// si es evento
 	private Date fechaInicio;
 	
 	// si es evento deportivo

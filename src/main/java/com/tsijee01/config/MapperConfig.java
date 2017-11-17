@@ -1,17 +1,18 @@
 package com.tsijee01.config;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
 import com.tsijee01.persistence.model.AdminTenant;
+import com.tsijee01.persistence.model.Comentario;
 import com.tsijee01.persistence.model.Contenido;
 import com.tsijee01.persistence.model.EventoDeportivo;
 import com.tsijee01.persistence.model.EventoEspectaculo;
 import com.tsijee01.persistence.model.Pelicula;
 import com.tsijee01.persistence.model.Serie;
 import com.tsijee01.rest.dto.AdminTenantDTO;
+import com.tsijee01.rest.dto.ComentarioDTO;
 import com.tsijee01.rest.dto.ContenidoDTO;
 import com.tsijee01.rest.dto.TipoContenidoEnum;
 
@@ -41,7 +42,7 @@ public class MapperConfig extends ConfigurableMapper {
 		this.configureEventoDeportivoMapper();
 		this.configureSerieMapper();
 		this.configureEventoEspectaculoMapper();
-
+		this.configureComentarioMapper();
 	}
 
 	private void configureAdmintenantMapper() {
@@ -64,6 +65,25 @@ public class MapperConfig extends ConfigurableMapper {
 				}).byDefault().register();
 	}
 
+	private void configureComentarioMapper() {
+
+		this.factory.classMap(Comentario.class, ComentarioDTO.class)
+				.customize(new CustomMapper<Comentario, ComentarioDTO>() {
+					@Override
+					public void mapAtoB(Comentario a, ComentarioDTO b, MappingContext context) {
+						if (a.getMarcaSpoiler()!=null && a.getMarcaSpoiler().size() > 0) {
+							b.setEsSpoiler(true);
+						}
+					}
+
+					@Override
+					public void mapBtoA(ComentarioDTO b, Comentario a, MappingContext context) {
+						
+					}
+				}).byDefault().register();
+	}
+
+	
 	private void configureContenidoMapper() {
 
 		this.factory.classMap(ContenidoDTO.class, Contenido.class)
@@ -72,6 +92,12 @@ public class MapperConfig extends ConfigurableMapper {
 					public void mapAtoB(ContenidoDTO a, Contenido b, MappingContext context) {
 						if (a.getRanking()==null){
 							b.setRanking(new BigDecimal(0));
+							if (a.getEsPago()==null) {
+								b.setEsPago(false);
+							}
+							else {
+								b.setEsPago(a.getEsPago());
+							}
 						}
 						
 						

@@ -11,6 +11,8 @@ public class ComentarioDTO {
 	public UsuarioDTO usuario;
 	
 	public String contenidoComentario;
+	
+	public boolean esSpoiler;
 
 	public long getId() {
 		return id;
@@ -39,9 +41,19 @@ public class ComentarioDTO {
 	public String getContenidoComentario() {
 		return contenidoComentario;
 	}
-
+	
 	public void setContenidoComentario(String contenidoComentario) {
 		this.contenidoComentario = contenidoComentario;
 	}
+	
+	public boolean isEsSpoiler() {
+		return esSpoiler;
+	}
+
+	public void setEsSpoiler(boolean esSpoiler) {
+		this.esSpoiler = esSpoiler;
+	}
+
+	
 	
 }

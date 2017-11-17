@@ -478,7 +478,7 @@ public class ContenidoServiceBean implements ContenidoService {
 
 		Optional<HistorialContenido> hc = historialContenidoRepository.findByUsuarioAndContenido(u.get(), cont.get());
 		if (!hc.isPresent()) {
-			hc = historialContenidoRepository.findByUsuarioAndContenido(u.get(), cont.get());
+			hc = Optional.of(new HistorialContenido());
 			hc.get().setContenido(cont.get());
 			hc.get().setUsuario(u.get());
 			hc.get().setVisto(false);
@@ -591,9 +591,17 @@ public class ContenidoServiceBean implements ContenidoService {
 	}
 	@Override
 	public Contenido verDatoContenido(Long idContenido) {
-		// TODO Auto-generated method stub
 		Optional<Contenido> cont= contenidoRepository.findOne(idContenido);
 		return cont.get();
+	}
+
+	@Override
+	public void agregarPrecio(Long id, int precio) {
+		Optional<Contenido> cont= contenidoRepository.findOne(id);
+		cont.get().setEsPago(true);
+		cont.get().setPrecio(precio);
+		
+		contenidoRepository.save(cont.get());
 	}
 
 }

@@ -270,6 +270,8 @@ public class ContenidoController {
 			@RequestParam(name = "omdbId", required = true) String omdbId,
 			@RequestParam(name = "path", required = true) String path,
 			@RequestParam(name = "esSerie", required = true) Boolean esSerie,
+			@RequestParam(name = "esPago", required = true) Boolean esPago,
+			@RequestParam(name = "precio", required = false) int precio,
 			@RequestParam(name = "esDestacado", required = true) Boolean esDestacado) {
 
 //		String mailAdmin = (String) request.getSession().getAttribute("TENANT_ADMIN");
@@ -277,14 +279,20 @@ public class ContenidoController {
 //			return new ResponseEntity<Long>(HttpStatus.FORBIDDEN);
 //		}
 		ContenidoDTO cont = this.getContenidoOmdbById(omdbId);
+		cont.setEsPago(false);
 		path = path.replace("%26token", "&token");
 		path = path.replace("/o/videos/", "/o/videos%2F");
 		Long id = null;
+		
 		if (esSerie) {
 			id = contenidoService.altaSerie(mapper.map(cont, Serie.class), proveedorContenidoId, esDestacado);
 		} else {
 			id = contenidoService.altaPelicula(mapper.map(cont, Pelicula.class), proveedorContenidoId, path,
 					esDestacado);
+		}
+		
+		if (esPago) {
+			contenidoService.agregarPrecio(id, precio);
 		}
 		return new ResponseEntity<Long>(id, HttpStatus.OK);
 	}
@@ -470,6 +478,7 @@ public class ContenidoController {
 //		if (mailUsuario == null) {
 //			return new ResponseEntity<Page<ContenidoDTO>>(HttpStatus.FORBIDDEN);
 //		}
+		
 		Pageable pag = PageUtils.getPageRequest(start, end, null, null);
 		Page<Pelicula> pelis = contenidoService.buscarTodasLasPeliculas(pag);
 

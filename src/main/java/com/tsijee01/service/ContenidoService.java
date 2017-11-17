@@ -76,4 +76,6 @@ public interface ContenidoService {
 	
 	Contenido verDatoContenido(Long idContenido);
 
+	void agregarPrecio(Long id, int precio);
+
 }

@@ -77,6 +77,16 @@ public abstract class Contenido {
 	
 	@Column(nullable = true)
 	private boolean esBloqueado;
+	
+	@Column(nullable = false)
+	private boolean esPago;
+
+	public void setEsPago(boolean esPago) {
+		this.esPago = esPago;
+	}
+
+	@Column(nullable = false)
+	private int precio;
 
 	public Boolean getEsBloqueado() {
 		return esBloqueado;
@@ -246,6 +256,26 @@ public abstract class Contenido {
 
 	public void setEsDestacado(Boolean esDestacado) {
 		this.esDestacado = esDestacado;
+	}
+
+	public Boolean getEsPago() {
+		return esPago;
+	}
+
+	public void setEsPago(Boolean esPago) {
+		this.esPago = esPago;
+	}
+
+	public int getPrecio() {
+		return precio;
+	}
+
+	public void setPrecio(int precio) {
+		this.precio = precio;
+	}
+
+	public void setEsBloqueado(boolean esBloqueado) {
+		this.esBloqueado = esBloqueado;
 	}
 
 	
