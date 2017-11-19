@@ -575,7 +575,7 @@ public class ContenidoController {
 //		if (mailUsuario == null) {
 //			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
 //		}
-		if (contenidoService.comprarEspectaculo(idContenido, emailUsuario)) {
+		if (contenidoService.comprarContenido(idContenido, emailUsuario)) {
 			return new ResponseEntity<Object>(HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Object>(HttpStatus.CONFLICT);
@@ -594,7 +594,7 @@ public class ContenidoController {
 //			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
 //		}
 		
-		if (contenidoService.verificarPagoEspectaculo(idContenido, emailUsuario)) {
+		if (contenidoService.verificarPagoContenido(idContenido, emailUsuario)) {
 			return new ResponseEntity<Boolean>(true,HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Boolean>(false,HttpStatus.OK);
