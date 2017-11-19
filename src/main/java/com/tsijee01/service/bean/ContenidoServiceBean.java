@@ -509,25 +509,25 @@ public class ContenidoServiceBean implements ContenidoService {
 	}
 
 	@Override
-	public boolean comprarEspectaculo(Long idContenido, String emailUsuario) {
+	public boolean comprarContenido(Long idContenido, String emailUsuario) {
 
-		Optional<Evento> evento = eventoRepository.findOne(idContenido);
+		Optional<Contenido> cont = contenidoRepository.findOne(idContenido);
 
-		if (!evento.isPresent() || !evento.get().getEsPago()) {
+		if (!cont.isPresent() || !cont.get().getEsPago()) {
 			return false;
 		} else {
 			Optional<Usuario> u = usuarioRepository.findByEmail(emailUsuario);
 			if (!u.isPresent()) {
 				return false;
 			} else {
-				Optional<HistorialContenido> hc = historialContenidoRepository.findByContenidoAndUsuario(evento.get(),
+				Optional<HistorialContenido> hc = historialContenidoRepository.findByContenidoAndUsuario(cont.get(),
 						u.get());
 				if (hc.isPresent()) {
 					hc.get().setPagado(true);
 					historialContenidoRepository.save(hc.get());
 				} else {
 					HistorialContenido h = new HistorialContenido();
-					h.setContenido(evento.get());
+					h.setContenido(cont.get());
 					h.setUsuario(u.get());
 					h.setPagado(true);
 					historialContenidoRepository.save(h);
@@ -538,17 +538,17 @@ public class ContenidoServiceBean implements ContenidoService {
 	}
 
 	@Override
-	public boolean verificarPagoEspectaculo(Long idContenido, String emailUsuario) {
-		Optional<Evento> evento = eventoRepository.findOne(idContenido);
+	public boolean verificarPagoContenido(Long idContenido, String emailUsuario) {
+		Optional<Contenido> cont = contenidoRepository.findOne(idContenido);
 
-		if (!evento.isPresent() || !evento.get().getEsPago()) {
+		if (!cont.isPresent() || !cont.get().getEsPago()) {
 			return false;
 		} else {
 			Optional<Usuario> u = usuarioRepository.findByEmail(emailUsuario);
 			if (!u.isPresent()) {
 				return false;
 			} else {
-				Optional<HistorialContenido> hc = historialContenidoRepository.findByContenidoAndUsuario(evento.get(),
+				Optional<HistorialContenido> hc = historialContenidoRepository.findByContenidoAndUsuario(cont.get(),
 						u.get());
 				if (hc.isPresent()) {
 					return true;

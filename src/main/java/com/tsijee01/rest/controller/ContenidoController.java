@@ -566,7 +566,7 @@ public class ContenidoController {
 	}
 
 	@CrossOrigin(origins = "http://localhost:4200")
-	@RequestMapping(path = "api/usuario/comprarEspectaculoPayPerView/", method = RequestMethod.POST)
+	@RequestMapping(path = "api/usuario/comprarContenidoPayPerView/", method = RequestMethod.POST)
 	public ResponseEntity<?> comprarEspectaculoPayPerView(HttpServletRequest request,
 			@RequestParam(name = "idContenido", required = true) Long idContenido,
 			@RequestParam(name = "email", required = false) String emailUsuario) {

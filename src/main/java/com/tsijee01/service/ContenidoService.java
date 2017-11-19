@@ -58,9 +58,9 @@ public interface ContenidoService {
 
 	void valorarContenido(Long contenidoId, int puntaje, Long usuarioId);
 
-	boolean comprarEspectaculo(Long idContenido, String emailUsuario);
+	boolean comprarContenido(Long idContenido, String emailUsuario);
 
-	boolean verificarPagoEspectaculo(Long idContenido, String emailUsuario);
+	boolean verificarPagoContenido(Long idContenido, String emailUsuario);
 
 	Page<Serie> buscarTodasLasSeries(Pageable pag);
 
