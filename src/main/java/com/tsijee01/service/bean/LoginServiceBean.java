@@ -84,4 +84,27 @@ public class LoginServiceBean implements LoginService {
 
 	}
 
+	@Override
+	public Optional<Usuario> altaOLoginConGmail(String id, String email) {
+		Optional<Usuario> usr = usuarioRepository.findByEmail(email);
+		if (!usr.isPresent()){
+			Usuario dtos = new Usuario();
+			dtos.setEmail(email);
+			dtos.setGmailToken(id);
+			return this.altaUsuario(dtos);
+		}
+		if (usr.get().getGmailToken() == null || usr.get().getGmailToken().length() < 3) {
+			usr.get().setGmailToken(id);
+			usuarioRepository.save(usr.get());
+		} else if (!usr.get().getGmailToken().equals(org.apache.commons.codec.digest.DigestUtils.sha256Hex(id))) {
+			return Optional.empty();
+		}
+		return usr;
+	}
+
+	private Optional<Usuario> altaUsuario(Usuario dtos) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

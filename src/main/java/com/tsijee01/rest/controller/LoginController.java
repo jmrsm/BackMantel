@@ -25,7 +25,7 @@ public class LoginController {
 
 	@Autowired
 	private LoginService loginService;
-	
+
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 
@@ -40,23 +40,22 @@ public class LoginController {
 			if (tUE.get().tipoUsuario().equals(TipoUsuarioEnum.Forbbiden.tipoUsuario())) {
 				return new ResponseEntity<LoginDTO>(HttpStatus.FORBIDDEN);
 			} else {
-				
+
 				LoginDTO lDTO = new LoginDTO();
 				lDTO.setId(loginService.obtenerId(email));
 				lDTO.setTipoUsuario(tUE.get().tipoUsuario());
-				
+
 				HttpSession sesion = request.getSession();
-				if(tUE.get().equals(TipoUsuarioEnum.SUPER_ADMIN)){
-					sesion.setAttribute("SUPER_ADMIN", email);	
-				}else if(tUE.get().equals(TipoUsuarioEnum.TENANT_ADMIN)){
-					sesion.setAttribute("TENANT_ADMIN",  email);		
-				}else if (tUE.get().equals(TipoUsuarioEnum.USUARIO)){
+				if (tUE.get().equals(TipoUsuarioEnum.SUPER_ADMIN)) {
+					sesion.setAttribute("SUPER_ADMIN", email);
+				} else if (tUE.get().equals(TipoUsuarioEnum.TENANT_ADMIN)) {
+					sesion.setAttribute("TENANT_ADMIN", email);
+				} else if (tUE.get().equals(TipoUsuarioEnum.USUARIO)) {
 					Optional<Usuario> u = usuarioRepository.findByEmail(email);
 					if (!u.get().isHabilitado()) {
 						return new ResponseEntity<LoginDTO>(HttpStatus.FORBIDDEN);
-					}
-					else {		
-						sesion.setAttribute("USUARIO",  email);	
+					} else {
+						sesion.setAttribute("USUARIO", email);
 					}
 				}
 				return new ResponseEntity<LoginDTO>(lDTO, HttpStatus.OK);
@@ -65,6 +64,21 @@ public class LoginController {
 			return new ResponseEntity<LoginDTO>(HttpStatus.NOT_FOUND);
 		}
 
+	}
+
+	@RequestMapping(path = "/loginUsuarioFinalGmail/", method = RequestMethod.POST)
+	public ResponseEntity<?> loginUsuarioFinalGmail(HttpServletRequest request,
+			@RequestParam(name = "email", required = false) String email,
+			@RequestParam(name = "id", required = false) String id) {
+
+		Optional<Usuario> usuario = loginService.altaOLoginConGmail(id, email);
+		if (usuario.isPresent()) {
+			HttpSession sesion = request.getSession();
+			sesion.setAttribute("USUARIO", email);
+			return new ResponseEntity<Object>(HttpStatus.OK);
+
+		}
+		return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
 	}
 
 }

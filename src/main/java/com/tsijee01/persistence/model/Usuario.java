@@ -65,6 +65,10 @@ public class Usuario {
 	@Column
 	private boolean habilitado;
 
+	@Column(name= "gmail_token", length = 512, nullable = true)
+	private String gmailToken;
+
+	
 	public long getId() {
 		return id;
 	}
@@ -145,4 +149,12 @@ public class Usuario {
 		this.ultimoPago = ultimoPago;
 	}
 
+	public String getGmailToken() {
+		return gmailToken;
+	}
+
+	public void setGmailToken(String gmailToken) {
+		this.gmailToken = gmailToken;
+	}
+	
 }

@@ -3,6 +3,7 @@ package com.tsijee01.service.bean;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalLong;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -133,5 +134,32 @@ public class UsuarioServiceBean implements UsuarioService{
 		return listaHC.stream().map(x->x.getContenido()).collect(Collectors.toList());
 		
 	}
+	
+	
+//	public Optional<Usuario> altaUsuario(Usuario dtos) {
+//		Optional<SuperAdmin> sa = superadminRepository.findOneByEmail(email);
+//		if (sa.isPresent()){
+//			return Optional;
+//		}
+//		Optional<AdminTenant> at = adminTenantRepository.findOneByEmail(email);
+//		if (at.isPresent()){
+//			return false;
+//		}
+//		
+//		
+//		if (dtos.getGmailToken().isEmpty() && dtos.getGmailToken().length() < 3){
+//			String sha256hex = org.apache.commons.codec.digest.DigestUtils.sha256Hex(dtos.getPassword());
+//			dtos.setPassowd(passwordUtil.hasherPassword(password));
+//		}else {
+//			String sha256hex = org.apache.commons.codec.digest.DigestUtils.sha256Hex(dtos.getGmailToken());
+//			dtos.setGmailToken(sha256hex);
+//		}
+//		if (usuarioRepository.findByEmail(dtos.getEmail()).isPresent()){
+//			return null; 
+//		}else{
+//			return Optional.of(usuarioRepository.save(dtos));
+//		}
+//	}
+	
 }
 
