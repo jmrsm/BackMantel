@@ -608,6 +608,8 @@ public class ContenidoController {
 		ContenidoDTO cont=mapper.map(contenidoService.verDatoContenido(idContenido), ContenidoDTO.class);
 		return new ResponseEntity<ContenidoDTO>(cont,HttpStatus.OK);
 	}
+	
+	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/superAdmin/esDestacado", method = RequestMethod.PUT)
 	public ResponseEntity<?> esDestacado(HttpServletRequest request, 
