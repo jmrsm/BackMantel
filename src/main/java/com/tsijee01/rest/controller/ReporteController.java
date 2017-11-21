@@ -30,8 +30,7 @@ public class ReporteController {
 	// reporte super admin
 	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/superAdmin/obtenerReportes", method = RequestMethod.GET)
-	public ResponseEntity<?> obtenerReporteSuperAdmin(HttpServletRequest request,
-			@RequestParam(name = "email", required = true) String email) {
+	public ResponseEntity<?> obtenerReporteSuperAdmin(HttpServletRequest request) {
 
 //		String mailSuperAdmin = (String) request.getSession().getAttribute("SUPER_ADMIN");
 //		if (mailSuperAdmin == null) {
