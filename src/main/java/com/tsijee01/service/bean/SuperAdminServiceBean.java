@@ -72,12 +72,12 @@ public class SuperAdminServiceBean implements SuperAdminService {
 	}
 
 	@Override
-	public void bloquearUsuario(Long idUsuario, Boolean habilitado) {
+	public void bloquearUsuario(String mail, Boolean habilitado) {
 		
-		Optional <Usuario> u = usuarioRepository.findOne(idUsuario);
+		Optional <Usuario> u = usuarioRepository.findByEmail(mail);
 		
 		if (u.isPresent()){
-			u.get().setHabilitado(!habilitado);
+			u.get().setHabilitado(habilitado);
 		}
 		else {
 		return;

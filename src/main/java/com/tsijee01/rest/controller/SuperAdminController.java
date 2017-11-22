@@ -180,7 +180,7 @@ public class SuperAdminController {
 	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/superAdmin/bloquearUsuario", method = RequestMethod.PUT)
 	public ResponseEntity<?> bloquearUsuario(HttpServletRequest request, 
-			@RequestParam(name = "usuarioId", required = true) Long idUsuario,
+			@RequestParam(name = "email", required = true) String email,
 			@RequestParam(name = "bloquear", required = true) Boolean habilitado) {
 		
 //		String mailSuperAdmin = (String) request.getSession().getAttribute("SUPER_ADMIN");
@@ -188,7 +188,7 @@ public class SuperAdminController {
 //			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
 //		}
 		
-		superAdminService.bloquearUsuario(idUsuario, habilitado);
+		superAdminService.bloquearUsuario(email, habilitado);
 		return null;
 	}
 	

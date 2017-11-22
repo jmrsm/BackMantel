@@ -7,6 +7,6 @@ public interface SuperAdminService {
 
 	boolean altaSuperAdmin(SuperAdmin map, String password);
 	boolean altaAdmin(AdminTenant adminTenant, Long proveedorContenidoId, String passwordPlano);
-	void bloquearUsuario(Long idUsuario, Boolean habilitado);
+	void bloquearUsuario(String email, Boolean habilitado);
 	void bloquearContenido(Long idContenido, Boolean bloquear);
 }
