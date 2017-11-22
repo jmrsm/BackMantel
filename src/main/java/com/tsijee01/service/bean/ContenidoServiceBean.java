@@ -339,9 +339,16 @@ public class ContenidoServiceBean implements ContenidoService {
 		Optional<Contenido> cont = contenidoRepository.findOne(idContenido);
 		Optional<HistorialContenido> h = historialContenidoRepository.findByContenidoAndUsuario(cont.get(), u.get());
 
-		if (h.isPresent() && h.get().isVisto()) {
-			h.get().setTiempoDeReproduccion(tiempo);
-			historialContenidoRepository.save(h.get());
+		if (h.isPresent()) {
+			if (h.get().isVisto()){
+				h.get().setTiempoDeReproduccion(tiempo);
+				historialContenidoRepository.save(h.get());
+			}else {
+				h.get().setVisto(true);
+				h.get().setTiempoDeReproduccion(tiempo);
+				historialContenidoRepository.save(h.get());
+			}
+			
 		} else {
 			HistorialContenido hn = new HistorialContenido();
 			hn.setFechaReproduccion(new Date());
@@ -550,7 +557,7 @@ public class ContenidoServiceBean implements ContenidoService {
 			} else {
 				Optional<HistorialContenido> hc = historialContenidoRepository.findByContenidoAndUsuario(cont.get(),
 						u.get());
-				if (hc.isPresent()) {
+				if (hc.isPresent() && hc.get().isPagado()) {
 					return true;
 				} else {
 					return false;

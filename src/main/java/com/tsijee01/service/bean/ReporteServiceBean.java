@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,14 +64,14 @@ public class ReporteServiceBean implements ReporteService {
 
 		ReporteSuperAdminDTO ret = new ReporteSuperAdminDTO();
 
-		Stream<HistorialContenido> historial = historialContenidoRepository.findAll().stream();
+		List<HistorialContenido> historial = historialContenidoRepository.findAll();
 
 		ret.setCantuUsuarioTotales(usuarioRepository.findAll().stream().count());
 
 		ret.setCantuUsuarioHabilitados(usuarioRepository.findAll().stream().filter(Usuario::isHabilitado).count());
 
 		ret.setHorasTotalesVisualizadas(
-				historial.filter(h -> h.isVisto()).mapToLong(HistorialContenido::getTiempoDeReproduccion).sum() / 360);
+				historial.stream().filter(h -> h.isVisto()).mapToLong(HistorialContenido::getTiempoDeReproduccion).sum() / 360);
 
 		// cantidad de contenido de cada empresa
 		Map<ProveedorContenido, Long> proveedorCantContenido = contenidoRepository.findAll().stream()
@@ -93,11 +92,12 @@ public class ReporteServiceBean implements ReporteService {
 			ProveedorCantidadHorasDTO pCHDTO = new ProveedorCantidadHorasDTO();
 			pCHDTO.setNombreProveedor(proveedor.getNombre());
 			pCHDTO.setCantidadHoras(
-					historial.filter(h -> h.getContenido().getProveedorContenido().getId() == proveedor.getId())
+					historial.stream().filter(h -> h.getContenido().getProveedorContenido().getId() == proveedor.getId())
 							.mapToLong(h -> h.getTiempoDeReproduccion()).sum() / 360);
 			proveedorCantidadHoras.add(pCHDTO);
 		}
 
+		ret.setProveedorCantidadHoras(proveedorCantidadHoras);
 		final Map<String, TemporalAdjuster> ADJUSTERS = new HashMap<>();
 		ADJUSTERS.put("day", TemporalAdjusters.ofDateAdjuster(d -> d));
 		ADJUSTERS.put("week", TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
@@ -105,8 +105,8 @@ public class ReporteServiceBean implements ReporteService {
 		ADJUSTERS.put("year", TemporalAdjusters.firstDayOfYear());
 
 		Map<LocalDate, List<HistorialContenido>> horasVistasPorDia = historial
-				.collect(Collectors.groupingBy(h -> h.getFechaReproduccion().toInstant().atZone(ZoneId.systemDefault())
-						.toLocalDate().with(ADJUSTERS.get(ADJUSTERS.get("day")))));
+				.stream().collect(Collectors.groupingBy(h -> h.getFechaReproduccion().toInstant().atZone(ZoneId.systemDefault())
+						.toLocalDate().with(ADJUSTERS.get("day"))));
 
 		List<HorasVistasPorUnidadDeTiempoDTO> horasVistasPorDiaList = new ArrayList<HorasVistasPorUnidadDeTiempoDTO>();
 		horasVistasPorDia.keySet().forEach(x -> {
@@ -119,42 +119,42 @@ public class ReporteServiceBean implements ReporteService {
 		ret.setHorasVistasPorDia(horasVistasPorDiaList);
 
 		Map<LocalDate, List<HistorialContenido>> horasVistasPorSemana = historial
-				.collect(Collectors.groupingBy(h -> h.getFechaReproduccion().toInstant().atZone(ZoneId.systemDefault())
-						.toLocalDate().with(ADJUSTERS.get(ADJUSTERS.get("week")))));
+				.stream().collect(Collectors.groupingBy(h -> h.getFechaReproduccion().toInstant().atZone(ZoneId.systemDefault())
+						.toLocalDate().with(ADJUSTERS.get("week"))));
 
 		List<HorasVistasPorUnidadDeTiempoDTO> horasVistasPorSemanaList = new ArrayList<HorasVistasPorUnidadDeTiempoDTO>();
 		horasVistasPorSemana.keySet().forEach(x -> {
 			HorasVistasPorUnidadDeTiempoDTO horasVistasPorUnidad = new HorasVistasPorUnidadDeTiempoDTO();
 			horasVistasPorUnidad.setFecha(Date.from(x.atStartOfDay(ZoneId.systemDefault()).toInstant()));
 			horasVistasPorUnidad.setHorasVistas(
-					horasVistasPorDia.get(x).stream().mapToLong(y -> y.getTiempoDeReproduccion()).sum() / 360);
+					horasVistasPorSemana.get(x).stream().mapToLong(y -> y.getTiempoDeReproduccion()).sum() / 360);
 			horasVistasPorSemanaList.add(horasVistasPorUnidad);
 		});
-		ret.setHorasVistasPorMes(horasVistasPorSemanaList);
+		ret.setHorasVistasPorSemana(horasVistasPorSemanaList);
 
 		Map<LocalDate, List<HistorialContenido>> horasVistasPorMes = historial
-				.collect(Collectors.groupingBy(h -> h.getFechaReproduccion().toInstant().atZone(ZoneId.systemDefault())
-						.toLocalDate().with(ADJUSTERS.get(ADJUSTERS.get("month")))));
+				.stream().collect(Collectors.groupingBy(h -> h.getFechaReproduccion().toInstant().atZone(ZoneId.systemDefault())
+						.toLocalDate().with(ADJUSTERS.get("month"))));
 
 		List<HorasVistasPorUnidadDeTiempoDTO> horasVistasPorMesList = new ArrayList<HorasVistasPorUnidadDeTiempoDTO>();
 		horasVistasPorMes.keySet().forEach(x -> {
 			HorasVistasPorUnidadDeTiempoDTO horasVistasPorUnidad = new HorasVistasPorUnidadDeTiempoDTO();
 			horasVistasPorUnidad.setFecha(Date.from(x.atStartOfDay(ZoneId.systemDefault()).toInstant()));
 			horasVistasPorUnidad.setHorasVistas(
-					horasVistasPorDia.get(x).stream().mapToLong(y -> y.getTiempoDeReproduccion()).sum() / 360);
+					horasVistasPorMes.get(x).stream().mapToLong(y -> y.getTiempoDeReproduccion()).sum() / 360);
 			horasVistasPorMesList.add(horasVistasPorUnidad);
 		});
 		ret.setHorasVistasPorMes(horasVistasPorMesList);
 
 		Map<LocalDate, List<HistorialContenido>> horasVistasPorAnio = historial
-				.collect(Collectors.groupingBy(h -> h.getFechaReproduccion().toInstant().atZone(ZoneId.systemDefault())
-						.toLocalDate().with(ADJUSTERS.get(ADJUSTERS.get("year")))));
+				.stream().collect(Collectors.groupingBy(h -> h.getFechaReproduccion().toInstant().atZone(ZoneId.systemDefault())
+						.toLocalDate().with(ADJUSTERS.get("year"))));
 		List<HorasVistasPorUnidadDeTiempoDTO> horasVistasPorAnioList = new ArrayList<HorasVistasPorUnidadDeTiempoDTO>();
 		horasVistasPorAnio.keySet().forEach(x -> {
 			HorasVistasPorUnidadDeTiempoDTO horasVistasPorUnidad = new HorasVistasPorUnidadDeTiempoDTO();
 			horasVistasPorUnidad.setFecha(Date.from(x.atStartOfDay(ZoneId.systemDefault()).toInstant()));
 			horasVistasPorUnidad.setHorasVistas(
-					horasVistasPorDia.get(x).stream().mapToLong(y -> y.getTiempoDeReproduccion()).sum() / 360);
+					horasVistasPorAnio.get(x).stream().mapToLong(y -> y.getTiempoDeReproduccion()).sum() / 360);
 			horasVistasPorAnioList.add(horasVistasPorUnidad);
 		});
 		ret.setHorasVistasPorAnio(horasVistasPorAnioList);
@@ -167,39 +167,26 @@ public class ReporteServiceBean implements ReporteService {
 
 		ReporteAdminDTO ret = new ReporteAdminDTO();
 
-		Stream<HistorialContenido> historial = historialContenidoRepository.findAll().stream();
+		List<HistorialContenido> historial = historialContenidoRepository.findAll();
 
-		ret.setCantidadVisualizacionesTotales(historial.filter(h -> h.isVisto())
+		ret.setCantidadVisualizacionesTotales(historial.stream().filter(h -> h.isVisto())
 				.filter(h -> h.getContenido().getProveedorContenido().getId() == id).count());
 
 		ret.setHorasTotalesVisualizadas(
-				historial.filter(h -> h.isVisto()).filter(h -> h.getContenido().getProveedorContenido().getId() == id)
+				historial.stream().filter(h -> h.isVisto()).filter(h -> h.getContenido().getProveedorContenido().getId() == id)
 						.mapToLong(HistorialContenido::getTiempoDeReproduccion).sum() / 360);
 
-		List<ProveedorCantidadHorasDTO> proveedorCantidadHoras = new ArrayList<ProveedorCantidadHorasDTO>();
-//		List<ProveedorContenido> proveedores = proveedorContenidoRepository.findAll();
-//		for (ProveedorContenido proveedor : proveedores) {
-		
-		ProveedorContenido proveedor = proveedorContenidoRepository.findOne(id).get();
-		
-//			ProveedorCantidadHorasDTO pCHDTO = new ProveedorCantidadHorasDTO();
-//			pCHDTO.setNombreProveedor(proveedor.getNombre());
-//			pCHDTO.setCantidadHoras(
-//					historial.filter(h -> h.getContenido().getProveedorContenido().getId() == proveedor.getId())
-//							.mapToLong(h -> h.getTiempoDeReproduccion()).sum() / 360);
-//			proveedorCantidadHoras.add(pCHDTO);
-//		}
-
-		
 		final Map<String, TemporalAdjuster> ADJUSTERS = new HashMap<>();
-		ADJUSTERS.put("day", TemporalAdjusters.ofDateAdjuster(d -> d));
+		ADJUSTERS.put("day", TemporalAdjusters.ofDateAdjuster(d -> d)); 
 		ADJUSTERS.put("week", TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
 		ADJUSTERS.put("month", TemporalAdjusters.firstDayOfMonth());
 		ADJUSTERS.put("year", TemporalAdjusters.firstDayOfYear());
 
-		Map<LocalDate, List<HistorialContenido>> horasVistasPorDia = historial
-				.collect(Collectors.groupingBy(h -> h.getFechaReproduccion().toInstant().atZone(ZoneId.systemDefault())
-						.toLocalDate().with(ADJUSTERS.get(ADJUSTERS.get("day")))));
+		Map<LocalDate, List<HistorialContenido>> horasVistasPorDia = historial.stream().filter(h -> h.getFechaReproduccion()!=null)
+				.collect(Collectors.groupingBy(h -> h.getFechaReproduccion()
+						.toInstant().atZone(ZoneId.systemDefault())
+						.toLocalDate()
+		.with(ADJUSTERS.get("day"))));
 
 		List<HorasVistasPorUnidadDeTiempoDTO> horasVistasPorDiaList = new ArrayList<HorasVistasPorUnidadDeTiempoDTO>();
 		horasVistasPorDia.keySet().forEach(x -> {
@@ -211,43 +198,44 @@ public class ReporteServiceBean implements ReporteService {
 		});
 		ret.setHorasVistasPorDia(horasVistasPorDiaList);
 
-		Map<LocalDate, List<HistorialContenido>> horasVistasPorSemana = historial
+		Map<LocalDate, List<HistorialContenido>> horasVistasPorSemana = historial.stream().filter(h -> h.getFechaReproduccion()!=null)
 				.collect(Collectors.groupingBy(h -> h.getFechaReproduccion().toInstant().atZone(ZoneId.systemDefault())
-						.toLocalDate().with(ADJUSTERS.get(ADJUSTERS.get("week")))));
+						.toLocalDate().with(ADJUSTERS.get("week"))));
 
 		List<HorasVistasPorUnidadDeTiempoDTO> horasVistasPorSemanaList = new ArrayList<HorasVistasPorUnidadDeTiempoDTO>();
 		horasVistasPorSemana.keySet().forEach(x -> {
 			HorasVistasPorUnidadDeTiempoDTO horasVistasPorUnidad = new HorasVistasPorUnidadDeTiempoDTO();
 			horasVistasPorUnidad.setFecha(Date.from(x.atStartOfDay(ZoneId.systemDefault()).toInstant()));
 			horasVistasPorUnidad.setHorasVistas(
-					horasVistasPorDia.get(x).stream().mapToLong(y -> y.getTiempoDeReproduccion()).sum() / 360);
+					horasVistasPorSemana.get(x).stream().mapToLong(y -> y.getTiempoDeReproduccion()).sum() / 360);
 			horasVistasPorSemanaList.add(horasVistasPorUnidad);
 		});
-		ret.setHorasVistasPorMes(horasVistasPorSemanaList);
+		ret.setHorasVistasPorSemana(horasVistasPorSemanaList);
 
-		Map<LocalDate, List<HistorialContenido>> horasVistasPorMes = historial
+		Map<LocalDate, List<HistorialContenido>> horasVistasPorMes = historial.stream().filter(h -> h.getFechaReproduccion()!=null)
 				.collect(Collectors.groupingBy(h -> h.getFechaReproduccion().toInstant().atZone(ZoneId.systemDefault())
-						.toLocalDate().with(ADJUSTERS.get(ADJUSTERS.get("month")))));
+						.toLocalDate().with(ADJUSTERS.get("month"))));
 
 		List<HorasVistasPorUnidadDeTiempoDTO> horasVistasPorMesList = new ArrayList<HorasVistasPorUnidadDeTiempoDTO>();
 		horasVistasPorMes.keySet().forEach(x -> {
 			HorasVistasPorUnidadDeTiempoDTO horasVistasPorUnidad = new HorasVistasPorUnidadDeTiempoDTO();
 			horasVistasPorUnidad.setFecha(Date.from(x.atStartOfDay(ZoneId.systemDefault()).toInstant()));
 			horasVistasPorUnidad.setHorasVistas(
-					horasVistasPorDia.get(x).stream().mapToLong(y -> y.getTiempoDeReproduccion()).sum() / 360);
+					horasVistasPorMes.get(x).stream().mapToLong(y -> y.getTiempoDeReproduccion()).sum() / 360);
 			horasVistasPorMesList.add(horasVistasPorUnidad);
 		});
 		ret.setHorasVistasPorMes(horasVistasPorMesList);
 
-		Map<LocalDate, List<HistorialContenido>> horasVistasPorAnio = historial
+		Map<LocalDate, List<HistorialContenido>> horasVistasPorAnio = historial.stream().filter(h -> h.getFechaReproduccion()!=null)
 				.collect(Collectors.groupingBy(h -> h.getFechaReproduccion().toInstant().atZone(ZoneId.systemDefault())
-						.toLocalDate().with(ADJUSTERS.get(ADJUSTERS.get("year")))));
+						.toLocalDate().with(ADJUSTERS.get("year"))));
+		
 		List<HorasVistasPorUnidadDeTiempoDTO> horasVistasPorAnioList = new ArrayList<HorasVistasPorUnidadDeTiempoDTO>();
 		horasVistasPorAnio.keySet().forEach(x -> {
 			HorasVistasPorUnidadDeTiempoDTO horasVistasPorUnidad = new HorasVistasPorUnidadDeTiempoDTO();
 			horasVistasPorUnidad.setFecha(Date.from(x.atStartOfDay(ZoneId.systemDefault()).toInstant()));
 			horasVistasPorUnidad.setHorasVistas(
-					horasVistasPorDia.get(x).stream().mapToLong(y -> y.getTiempoDeReproduccion()).sum() / 360);
+					horasVistasPorAnio.get(x).stream().mapToLong(y -> y.getTiempoDeReproduccion()).sum() / 360);
 			horasVistasPorAnioList.add(horasVistasPorUnidad);
 		});
 
