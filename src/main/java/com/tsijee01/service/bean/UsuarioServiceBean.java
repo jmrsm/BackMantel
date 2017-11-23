@@ -1,16 +1,23 @@
 package com.tsijee01.service.bean;
 
-
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalLong;
 import java.util.stream.Collectors;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import com.paypal.base.codec.binary.Base64;
 import com.tsijee01.persistence.model.AdminTenant;
 import com.tsijee01.persistence.model.Contenido;
 import com.tsijee01.persistence.model.HistorialContenido;
@@ -25,6 +32,15 @@ import com.tsijee01.util.Password;
 
 @Service
 public class UsuarioServiceBean implements UsuarioService{
+
+	@Autowired
+	RestTemplate restTemplate;
+	
+	@Value("${paypalClientId}")
+	private String paypalClientId;
+
+	@Value("${paypalSecret}")
+	private String paypalSecret;
 
 	@Autowired
 	private UsuarioRepository usuarioRepository; 
@@ -134,7 +150,59 @@ public class UsuarioServiceBean implements UsuarioService{
 		return listaHC.stream().map(x->x.getContenido()).collect(Collectors.toList());
 		
 	}
+
+	@Override
+	public boolean crearSuscripcion(String email, String paypalToken) {
+		
+		return false;
+		
+
+		
+		
+//		restTemplate.set(
+//				"https://api.sandbox.paypal.com/v1/payments/billing-agreements/I-6EDLAK447HV9" + nombre + "&y=" + year + "&apikey=" + omdbapikey,
+//				SearchContenidoOmbdapi.class);
+//		// TODO Auto-generated method stub
+//		return false;
+	}
 	
+//	@PostConstruct
+	public void test(){
+		
+		RestTemplate restTemplate = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders();
+//		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+//		headers.setContentType(MediaType.APPLICATION_JSON);
+//		headers.set(headerName, headerValue);
+		String str = "AZLd59EEDCSAKB0XEEFx0EedYoNOJrNRb3anFHdpiuyMcJdYXymDE2GPm9C6O01xJ-vqOrT3rES7pFAT:EHdx9CNQvyZsD13vOJiHDEbvVRgPhadRLyDh41mRctwK0l1mZATpEXGR-R_ZEmeqFEPAdKiVaxMtjyic";
+//		byte[]   bytesEncoded = Base64.encodeBase64(str .getBytes());
+		byte[] encodedBytes = Base64.encodeBase64(str.getBytes());
+		System.out.println("encodedBytes " + new String(encodedBytes));
+		
+		headers.add("Authorization", "Basic " + encodedBytes);
+		headers.add("Content-Type", "application/json");
+		HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
+
+		ResponseEntity<Object> respEntity = restTemplate.exchange("https://api.sandbox.paypal.com/v1/payments/billing-agreements/I-6EDLAK447HV9", HttpMethod.GET, entity, Object.class);
+
+		Object resp = respEntity.getBody();
+		System.out.println(resp);
+		
+	}
+	
+//	public static Agreement get(APIContext apiContext, String agreementId) throws PayPalRESTException {
+//
+//		if (agreementId == null) {
+//			throw new IllegalArgumentException("agreementId cannot be null");
+//		}
+//		Object[] parameters = new Object[] {agreementId};
+//		String pattern = "v1/payments/billing-agreements/{0}";
+//		String resourcePath = RESTUtil.formatURIPath(pattern, parameters);
+//		String payLoad = "";
+//		return configureAndExecute(apiContext, HttpMethod.GET, resourcePath, payLoad, Agreement.class);
+//	}
+
+
 	
 //	public Optional<Usuario> altaUsuario(Usuario dtos) {
 //		Optional<SuperAdmin> sa = superadminRepository.findOneByEmail(email);

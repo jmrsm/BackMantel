@@ -240,7 +240,6 @@ public class ReporteServiceBean implements ReporteService {
 		});
 
 		ret.setHorasVistasPorAnio(horasVistasPorAnioList);
-
 		return ret;
 	}
 

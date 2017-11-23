@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
@@ -95,6 +96,7 @@ public class ContenidoController {
 	public ResponseEntity<?> marcarDestacado(HttpServletRequest request,
 			@RequestParam(name = "contenidoId", required = true) Long contenidoId,
 			@RequestParam(name = "esDestacado", required = true) Boolean esDestacado) {
+		
 //		String mailAdmin = (String) request.getSession().getAttribute("TENANT_ADMIN");
 //		if (mailAdmin == null) {
 //			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
@@ -346,10 +348,12 @@ public class ContenidoController {
 			@RequestParam(name = "sort", required = false) String sortField,
 			@RequestParam(name = "order", required = false) String sortOrder,
 			@RequestParam(name = "generoId", required = true) Long generoId) {
+		
 //		String mailUsuario = (String) request.getSession().getAttribute("USUARIO");
 //		if (mailUsuario == null) {
 //			return new ResponseEntity<Page<ContenidoDTO>>(HttpStatus.FORBIDDEN);
 //		}
+		
 		Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
 		Page<Pelicula> pelis = contenidoService.buscarPeliculaPorGenero(pag, generoId);
 		Page<ContenidoDTO> dtoPage = pelis.map(new Converter<Pelicula, ContenidoDTO>() {
@@ -369,10 +373,12 @@ public class ContenidoController {
 			@RequestParam(name = "sort", required = false) String sortField,
 			@RequestParam(name = "order", required = false) String sortOrder,
 			@RequestParam(name = "actorId", required = true) Long actorId) {
+		
 //		String mailUsuario = (String) request.getSession().getAttribute("USUARIO");
 //		if (mailUsuario == null) {
 //			return new ResponseEntity<Page<ContenidoDTO>>(HttpStatus.FORBIDDEN);
 //		}
+		
 		Pageable pag = PageUtils.getPageRequest(start, end, sortField, sortOrder);
 		Page<Pelicula> pelis = contenidoService.buscarPeliculaPorActor(pag, actorId);
 		Page<ContenidoDTO> dtoPage = pelis.map(new Converter<Pelicula, ContenidoDTO>() {
@@ -441,9 +447,8 @@ public class ContenidoController {
 
 	}
 
-	// @PostConstruct
-	@RequestMapping(path = "api/usuario/cargarPelicula", method = RequestMethod.GET)
-	private void cargarPeliculas(HttpServletRequest request) {
+	@PostConstruct
+	private void cargarPeliculas() {
 
 		String idPeliculas = "tt0325980,tt1014759,tt0471537,tt0065856,tt0162661,tt0109707,tt0119008,tt1014759,tt3045616,tt1398941,tt1355683,tt2567026,tt0796992,tt1785450,tt3099498,tt2209764,tt1885299,tt1210819,tt1232829,tt1077368,tt0810913,tt0376136,tt1298650,tt1192628,tt1243957,tt1333667,tt1054606,tt0479468,tt0408236,tt0449088,tt0383574,tt0375920,tt0121164,tt0099733,tt0087800,"
 				+ "tt0196178,tt0210945,tt0247199,tt0264935,tt0266971,tt0301976,tt0332280,tt1355630,tt0468489,tt0488120,tt0805564,tt1175709,tt1120985,tt0005960,tt0780504,tt1124035,tt2865166,tt1817273,tt1602613,tt3077150,tt2366608,tt1596363,tt3783958,tt2062700,tt0083658,tt7027210,"
@@ -464,6 +469,7 @@ public class ContenidoController {
 				e.printStackTrace();
 			}
 			ContenidoDTO cont = this.getContenidoOmdbById(peli);
+			cont.setEsPago(false);
 			contenidoService.altaPelicula(mapper.map(cont, Pelicula.class), new Long(1), "", false);
 		}
 	}
