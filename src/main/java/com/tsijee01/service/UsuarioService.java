@@ -30,4 +30,6 @@ public interface UsuarioService {
 	Page<Usuario> buscarPorMail(Pageable pag, String query);
 
 	Usuario buscarPorId(Long usuarioId);
+
+	boolean crearSuscripcion(String email, String paypalToken);
 }

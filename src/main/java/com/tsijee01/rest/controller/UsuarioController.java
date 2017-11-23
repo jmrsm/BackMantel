@@ -45,6 +45,20 @@ public class UsuarioController {
 	}
 
 	@CrossOrigin(origins = "http://localhost:4200")
+	@RequestMapping(path = "api/public/suscripción", method = RequestMethod.POST)
+	public ResponseEntity<?> crearSubscripcionUsuario(HttpServletRequest request,
+			@RequestParam(name = "email", required = true) String email,
+			@RequestParam(name = "paypalToken", required = true) String paypalToken) {
+
+		if (userService.crearSuscripcion(email, paypalToken)) {
+			return new ResponseEntity<Object>(HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Object>(HttpStatus.CONFLICT);
+		}
+
+	}
+	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/usuario/listarFavoritos", method = RequestMethod.GET)
 	public ResponseEntity<List<ContenidoDTO>> listarFavoritos(HttpServletRequest request,
 			@RequestParam(name = "usuarioId", required = true) Long id) {
