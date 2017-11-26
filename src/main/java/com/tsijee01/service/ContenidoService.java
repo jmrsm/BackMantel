@@ -7,12 +7,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.tsijee01.persistence.model.CapituloSerie;
 import com.tsijee01.persistence.model.Categoria;
 import com.tsijee01.persistence.model.Contenido;
 import com.tsijee01.persistence.model.Evento;
 import com.tsijee01.persistence.model.Pelicula;
 import com.tsijee01.persistence.model.Serie;
 import com.tsijee01.rest.dto.ContenidoDTO;
+import com.tsijee01.rest.dto.EpisodioDTO;
 
 public interface ContenidoService {
 
@@ -77,5 +79,7 @@ public interface ContenidoService {
 	Contenido verDatoContenido(Long idContenido);
 
 	void agregarPrecio(Long id, int precio);
+	
+	List<CapituloSerie> obtenerEpisodiosSeries(Long idSerie);
 
 }

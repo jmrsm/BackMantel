@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tsijee01.persistence.model.CapituloSerie;
 import com.tsijee01.persistence.model.Contenido;
 import com.tsijee01.rest.dto.ContenidoDTO;
 import com.tsijee01.service.UsuarioService;
@@ -71,4 +72,5 @@ public class UsuarioController {
 				HttpStatus.OK);
 
 	}
+	
 }

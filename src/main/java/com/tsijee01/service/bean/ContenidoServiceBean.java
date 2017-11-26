@@ -312,8 +312,8 @@ public class ContenidoServiceBean implements ContenidoService {
 	}
 
 	public List<Pelicula> recomendarAUsuario(Long usuarioId) {
-		Optional<Usuario> usuario = usuarioRepository.findOne(usuarioId);
-		List<HistorialContenido> contenido = historialContenidoRepository.findByUsuario(usuario.get());
+//		Optional<Usuario> usuario = usuarioRepository.findOne(usuarioId);
+//		List<HistorialContenido> contenido = historialContenidoRepository.findByUsuario(usuario.get());
 		return null;
 	}
 
@@ -609,6 +609,18 @@ public class ContenidoServiceBean implements ContenidoService {
 		cont.get().setPrecio(precio);
 		
 		contenidoRepository.save(cont.get());
+	}
+	
+	@Override
+	public List<CapituloSerie> obtenerEpisodiosSeries(Long idSerie) {
+		List<CapituloSerie> res = new ArrayList<CapituloSerie>();
+		Optional<Serie> s = serieRepository.findOne(idSerie);
+		List<TemporadaSerie> t = temporadaSerieRepository.findBySerie(s.get());
+		for (TemporadaSerie temp: t) {
+			List<CapituloSerie> aux = capituloRepository.findByTemporada(temp);
+			res.addAll(aux);
+		}
+		return res;
 	}
 
 }

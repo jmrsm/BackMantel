@@ -182,9 +182,8 @@ public class UsuarioServiceBean implements UsuarioService{
 		headers.add("Authorization", "Basic " + encodedBytes);
 		headers.add("Content-Type", "application/json");
 		HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
-
 		ResponseEntity<Object> respEntity = restTemplate.exchange("https://api.sandbox.paypal.com/v1/payments/billing-agreements/I-6EDLAK447HV9", HttpMethod.GET, entity, Object.class);
-
+															
 		Object resp = respEntity.getBody();
 		System.out.println(resp);
 		

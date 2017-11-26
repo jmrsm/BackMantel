@@ -25,11 +25,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.tsijee01.persistence.model.CapituloSerie;
+import com.tsijee01.persistence.model.Contenido;
 import com.tsijee01.persistence.model.Evento;
 import com.tsijee01.persistence.model.Pelicula;
 import com.tsijee01.persistence.model.Serie;
 import com.tsijee01.rest.dto.CategoriaDTO;
 import com.tsijee01.rest.dto.ContenidoDTO;
+import com.tsijee01.rest.dto.EpisodioDTO;
 import com.tsijee01.rest.dto.SearchContenidoOmbdapi;
 import com.tsijee01.service.AdminTenantService;
 import com.tsijee01.service.ContenidoService;
@@ -447,7 +450,7 @@ public class ContenidoController {
 
 	}
 
-	@PostConstruct
+//	@PostConstruct
 	private void cargarPeliculas() {
 
 		String idPeliculas = "tt0325980,tt1014759,tt0471537,tt0065856,tt0162661,tt0109707,tt0119008,tt1014759,tt3045616,tt1398941,tt1355683,tt2567026,tt0796992,tt1785450,tt3099498,tt2209764,tt1885299,tt1210819,tt1232829,tt1077368,tt0810913,tt0376136,tt1298650,tt1192628,tt1243957,tt1333667,tt1054606,tt0479468,tt0408236,tt0449088,tt0383574,tt0375920,tt0121164,tt0099733,tt0087800,"
@@ -636,6 +639,16 @@ public class ContenidoController {
 		else {
 			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
 		}
+	}
+	
+	@CrossOrigin(origins = "http://localhost:4200")
+	@RequestMapping(path = "api/usuario/obtenerEpisodios", method = RequestMethod.GET)
+	public ResponseEntity<List<EpisodioDTO>> ObtenerEpisodiosSerie(HttpServletRequest request,
+			@RequestParam(name = "serieId", required = true) Long idSerie) {
+		List<CapituloSerie> capitulosSerie = contenidoService.obtenerEpisodiosSeries(idSerie);
+		
+		return new ResponseEntity<List<EpisodioDTO>>(mapper.mapAsList(capitulosSerie, EpisodioDTO.class), HttpStatus.OK);
+		
 	}
 
 }
