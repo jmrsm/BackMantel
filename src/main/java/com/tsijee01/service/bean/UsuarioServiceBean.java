@@ -154,39 +154,10 @@ public class UsuarioServiceBean implements UsuarioService{
 	@Override
 	public boolean crearSuscripcion(String email, String paypalToken) {
 		
-		return false;
-		
-
-		
-		
-//		restTemplate.set(
-//				"https://api.sandbox.paypal.com/v1/payments/billing-agreements/I-6EDLAK447HV9" + nombre + "&y=" + year + "&apikey=" + omdbapikey,
-//				SearchContenidoOmbdapi.class);
-//		// TODO Auto-generated method stub
-//		return false;
-	}
-	
-//	@PostConstruct
-	public void test(){
-		
-		RestTemplate restTemplate = new RestTemplate();
-		HttpHeaders headers = new HttpHeaders();
-//		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-//		headers.setContentType(MediaType.APPLICATION_JSON);
-//		headers.set(headerName, headerValue);
-		String str = "AZLd59EEDCSAKB0XEEFx0EedYoNOJrNRb3anFHdpiuyMcJdYXymDE2GPm9C6O01xJ-vqOrT3rES7pFAT:EHdx9CNQvyZsD13vOJiHDEbvVRgPhadRLyDh41mRctwK0l1mZATpEXGR-R_ZEmeqFEPAdKiVaxMtjyic";
-//		byte[]   bytesEncoded = Base64.encodeBase64(str .getBytes());
-		byte[] encodedBytes = Base64.encodeBase64(str.getBytes());
-		System.out.println("encodedBytes " + new String(encodedBytes));
-		
-		headers.add("Authorization", "Basic " + encodedBytes);
-		headers.add("Content-Type", "application/json");
-		HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
-		ResponseEntity<Object> respEntity = restTemplate.exchange("https://api.sandbox.paypal.com/v1/payments/billing-agreements/I-6EDLAK447HV9", HttpMethod.GET, entity, Object.class);
-															
-		Object resp = respEntity.getBody();
-		System.out.println(resp);
-		
+		Optional<Usuario> u = usuarioRepository.findByEmail(email);
+		u.get().setAgreementId(paypalToken);
+		usuarioRepository.save(u.get());
+		return true;
 	}
 	
 //	public static Agreement get(APIContext apiContext, String agreementId) throws PayPalRESTException {

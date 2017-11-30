@@ -50,6 +50,9 @@ public class Usuario {
 	@Fetch(FetchMode.SELECT)
 	private HistorialPagos ultimoPago;
 
+	@Column(name= "agreementId", length = 512, nullable = true)
+	private String agreementId;
+	
 	@Column(length = 50, nullable = false)
 	private String email;
 
@@ -155,6 +158,14 @@ public class Usuario {
 
 	public void setGmailToken(String gmailToken) {
 		this.gmailToken = gmailToken;
+	}
+
+	public String getAgreementId() {
+		return agreementId;
+	}
+
+	public void setAgreementId(String agreementId) {
+		this.agreementId = agreementId;
 	}
 	
 }
