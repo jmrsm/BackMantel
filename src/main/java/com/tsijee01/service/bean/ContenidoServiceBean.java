@@ -623,4 +623,9 @@ public class ContenidoServiceBean implements ContenidoService {
 		return res;
 	}
 
+	@Override
+	public TemporadaSerie findTemporada(long id) {
+		return temporadaSerieRepository.findOne(id);
+	}
+
 }

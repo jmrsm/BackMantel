@@ -5,10 +5,14 @@ import com.tsijee01.persistence.model.TemporadaSerie;
 public class EpisodioDTO {
 
 	private long id;
+	
+	private int capitulo;
 
 	private String path;
 	
 	private TemporadaSerie temporada;
+	
+	private int temporadaN;
 
 	public long getId() {
 		return id;
@@ -33,4 +37,21 @@ public class EpisodioDTO {
 	public void setTemporada(TemporadaSerie temporada) {
 		this.temporada= temporada;
 	}
+
+	public int getCapitulo() {
+		return capitulo;
+	}
+
+	public void setCapitulo(int capitulo) {
+		this.capitulo = capitulo;
+	}
+
+	public int getTemporadaN() {
+		return temporadaN;
+	}
+
+	public void setTemporadaN(int temporadaN) {
+		this.temporadaN = temporadaN;
+	}
+
 }

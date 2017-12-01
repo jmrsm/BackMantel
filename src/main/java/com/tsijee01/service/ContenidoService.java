@@ -13,6 +13,7 @@ import com.tsijee01.persistence.model.Contenido;
 import com.tsijee01.persistence.model.Evento;
 import com.tsijee01.persistence.model.Pelicula;
 import com.tsijee01.persistence.model.Serie;
+import com.tsijee01.persistence.model.TemporadaSerie;
 import com.tsijee01.rest.dto.ContenidoDTO;
 import com.tsijee01.rest.dto.EpisodioDTO;
 
@@ -81,5 +82,7 @@ public interface ContenidoService {
 	void agregarPrecio(Long id, int precio);
 	
 	List<CapituloSerie> obtenerEpisodiosSeries(Long idSerie);
+	
+	TemporadaSerie findTemporada(long id);
 
 }
