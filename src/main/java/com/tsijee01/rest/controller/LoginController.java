@@ -69,9 +69,11 @@ public class LoginController {
 	@RequestMapping(path = "/loginUsuarioFinalGmail/", method = RequestMethod.POST)
 	public ResponseEntity<?> loginUsuarioFinalGmail(HttpServletRequest request,
 			@RequestParam(name = "email", required = false) String email,
+			@RequestParam(name = "nombre", required = false) String nombre,
+			@RequestParam(name = "apellido", required = false) String apellido,
 			@RequestParam(name = "id", required = false) String id) {
 
-		Optional<Usuario> usuario = loginService.altaOLoginConGmail(id, email);
+		Optional<Usuario> usuario = loginService.altaOLoginConGmail(id, email,nombre, apellido);
 		if (usuario.isPresent()) {
 			HttpSession sesion = request.getSession();
 			sesion.setAttribute("USUARIO", email);

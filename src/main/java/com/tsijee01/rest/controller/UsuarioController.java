@@ -37,7 +37,7 @@ public class UsuarioController {
 			@RequestParam(name = "nombre", required = true) String nombre,
 			@RequestParam(name = "apellido", required = true) String apellido) {
 
-		if (userService.crearUser(email, password, nombre, apellido)) {
+		if (userService.crearUser(email, password, nombre, apellido,null)) {
 			return new ResponseEntity<Object>(HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Object>(HttpStatus.CONFLICT);

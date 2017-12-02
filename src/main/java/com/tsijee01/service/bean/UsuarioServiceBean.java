@@ -138,7 +138,7 @@ public class UsuarioServiceBean implements UsuarioService{
 		return false;
 	}
 	@Override
-	public boolean crearUser(String email, String password, String nombre, String apellido) {
+	public boolean crearUser(String email, String password, String nombre, String apellido, String gmailId) {
 
 		Optional<SuperAdmin> sa = superadminRepository.findOneByEmail(email);
 		if (sa.isPresent()){
@@ -152,14 +152,19 @@ public class UsuarioServiceBean implements UsuarioService{
 		if(u.isPresent()){
 			//Si el usuario ya existe
 			return false;
-		}else{
+		}else{	
 			Usuario user= new Usuario();
 			user.setApellido(apellido);
 			user.setEmail(email);
 			user.setHabilitado(true);
 			user.setNombre(nombre);
-			user.setPassowd(passwordUtil.hasherPassword(password));
-			sendEmail(email, nombre);
+			if (gmailId!=null){
+				user.setGmailToken(passwordUtil.hasherPassword(gmailId));
+			}else {
+				user.setPassowd(passwordUtil.hasherPassword(password));
+				
+			}
+//			sendEmail(email, nombre);
 			usuarioRepository.save(user);
 			return true;
 		}

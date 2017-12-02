@@ -11,6 +11,6 @@ public interface LoginService {
 
 	Long obtenerId(String email);
 
-	Optional<Usuario> altaOLoginConGmail(String id, String email);
+	Optional<Usuario> altaOLoginConGmail(String id, String email, String nombre, String apellido);
 
 }
