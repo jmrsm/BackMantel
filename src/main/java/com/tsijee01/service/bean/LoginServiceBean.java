@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 
+import org.h2.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -63,12 +64,18 @@ public class LoginServiceBean implements LoginService {
 		Optional<Usuario> u = usuarioRepository.findOneByEmail(email);
 		if (u.isPresent()) {
 			if (passwordUtil.checkearPassword(password, u.get().getPassowd()) && u.get().isHabilitado()) {
-				//if (this.estaAlDia(u.get().getAgreementId())){
+				if (u.get().getAgreementId() == null) {
+					return Optional.of(TipoUsuarioEnum.NO_PAGO);
+				}
+				else if (this.estaAlDia(u.get().getAgreementId())){
 					return Optional.of(TipoUsuarioEnum.USUARIO);
-				//}
-				//	return Optional.of(TipoUsuarioEnum.NO_PAGO);
-			//} else {
-			//	return Optional.of(TipoUsuarioEnum.Forbbiden);
+				}
+				else {
+					return Optional.of(TipoUsuarioEnum.NO_PAGO);
+				}
+			}
+			else {
+				return Optional.of(TipoUsuarioEnum.Forbbiden);
 			}
 		}
 		return Optional.empty();
@@ -125,16 +132,10 @@ public class LoginServiceBean implements LoginService {
 		
 	RestTemplate restTemplate = new RestTemplate();
 	HttpHeaders headers = new HttpHeaders();
-	String str = "AZLd59EEDCSAKB0XEEFx0EedYoNOJrNRb3anFHdpiuyMcJdYXymDE2GPm9C6O01xJ-vqOrT3rES7pFAT:EHdx9CNQvyZsD13vOJiHDEbvVRgPhadRLyDh41mRctwK0l1mZATpEXGR-R_ZEmeqFEPAdKiVaxMtjyic";
-//	byte[]   bytesEncoded = Base64.encodeBase64(str .getBytes());
-//	byte[] encodedBytes = Base64.encodeBase64(str.getBytes());
-	
 	
 	headers.add("Authorization", "Basic QVpMZDU5RUVEQ1NBS0IwWEVFRngwRWVkWW9OT0pyTlJiM2FuRkhkcGl1eU1jSmRZWHltREUyR1BtOUM2TzAxeEotdnFPclQzckVTN3BGQVQ6RUhkeDlDTlF2eVpzRDEzdk9KaUhERWJ2VlJnUGhhZFJMeURoNDFtUmN0d0swbDFtWkFUcEVYR1ItUl9aRW1lcUZFUEFkS2lWYXhNdGp5aWM=");
 	headers.add("Content-Type", "application/json");
 	HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
-	
-	//I-6EDLAK447HV9
 	
 	ResponseEntity<Object> respEntity = restTemplate.exchange("https://api.sandbox.paypal.com/v1/payments/billing-agreements/" + aggrementId , HttpMethod.GET, entity, Object.class);
 
