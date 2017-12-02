@@ -157,7 +157,18 @@
 			<artifactId>rest-api-sdk</artifactId>
 			<version>1.14.0</version>
 		</dependency>
-
+<!-- 		Pa los mail -->
+		<dependency>
+		    <groupId>it.ozimov</groupId>
+		    <artifactId>spring-boot-email-core</artifactId>
+		    <version>0.6.3</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>it.ozimov</groupId>
+		    <artifactId>spring-boot-freemarker-email</artifactId>
+		    <version>0.6.3</version>
+		</dependency>
 
 	</dependencies>
 	<build>
