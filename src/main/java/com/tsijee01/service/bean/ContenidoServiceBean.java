@@ -141,7 +141,7 @@ public class ContenidoServiceBean implements ContenidoService {
 		contenido.setFotoPortada(poster);
 		String path = contenido.getPath(); 
 		path = path.replace("%26token", "&token");
-		path = path.replace("/o/imagenes/", "/o/imagenes%2F");
+		path = path.replace("/o/videos/", "/o/videos%2F");
 		contenido.setPath(path);
 		if (tcEnum.equals(TipoContenidoEnum.EVENTO_DEPORTIVO)) {
 			EventoDeportivo eventoDeportivo = mapper.map(contenido, EventoDeportivo.class);
@@ -149,8 +149,12 @@ public class ContenidoServiceBean implements ContenidoService {
 			if (contenido.getEsPago()) {
 				eventoDeportivo.setEsPago(true);
 				eventoDeportivo.setPrecio(contenido.getPrecio());
-				eventoDeportivo.setFechaInicio(contenido.getFechaInicio());
 			}
+			else {
+				eventoDeportivo.setEsPago(false);
+				eventoDeportivo.setPrecio(0);
+			}
+			eventoDeportivo.setFechaInicio(contenido.getFechaInicio());
 			eventoDeportivo.setNombreEquipoLocal(contenido.getEventoDeportivoNombreEquipoLocal());
 			eventoDeportivo.setNombreEquipoVisitante(contenido.getEventoDeportivoNombreEquipoVisitante());
 			eventoDeportivo.setNombreDeporte(contenido.getEventoDeportivoNombreDeporte());
@@ -162,9 +166,12 @@ public class ContenidoServiceBean implements ContenidoService {
 			if (contenido.getEsPago()) {
 				espectaculo.setEsPago(true);
 				espectaculo.setPrecio(contenido.getPrecio());
-				espectaculo.setFechaInicio(contenido.getFechaInicio());
 			}
-
+			else {
+				espectaculo.setEsPago(false);
+				espectaculo.setPrecio(0);
+			}
+			espectaculo.setFechaInicio(contenido.getFechaInicio());
 			eventoEspectaculoRepositoy.save(espectaculo);
 		} else if (tcEnum.equals(TipoContenidoEnum.PELICULA)) {
 			Pelicula peli = mapper.map(contenido, Pelicula.class);
@@ -621,6 +628,11 @@ public class ContenidoServiceBean implements ContenidoService {
 			res.addAll(aux);
 		}
 		return res;
+	}
+
+	@Override
+	public TemporadaSerie findTemporada(long id) {
+		return temporadaSerieRepository.findOne(id);
 	}
 
 }

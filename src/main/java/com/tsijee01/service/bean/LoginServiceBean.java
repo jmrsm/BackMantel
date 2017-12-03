@@ -3,8 +3,6 @@ package com.tsijee01.service.bean;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -13,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.paypal.base.codec.binary.Base64;
 import com.tsijee01.persistence.model.AdminTenant;
 import com.tsijee01.persistence.model.SuperAdmin;
 import com.tsijee01.persistence.model.TipoUsuarioEnum;
@@ -21,6 +18,7 @@ import com.tsijee01.persistence.model.Usuario;
 import com.tsijee01.persistence.repository.AdminTenantRepository;
 import com.tsijee01.persistence.repository.SuperAdminRepository;
 import com.tsijee01.persistence.repository.UsuarioRepository;
+import com.tsijee01.service.UsuarioService;
 import com.tsijee01.service.LoginService.LoginService;
 import com.tsijee01.util.Password;
 
@@ -38,6 +36,9 @@ public class LoginServiceBean implements LoginService {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+
+	@Autowired
+	private UsuarioService usuarioService;
 
 	@Override
 	public Optional<TipoUsuarioEnum> login(String email, String password) {
@@ -63,12 +64,15 @@ public class LoginServiceBean implements LoginService {
 		Optional<Usuario> u = usuarioRepository.findOneByEmail(email);
 		if (u.isPresent()) {
 			if (passwordUtil.checkearPassword(password, u.get().getPassowd()) && u.get().isHabilitado()) {
-				//if (this.estaAlDia(u.get().getAgreementId())){
+				if (u.get().getAgreementId() == null) {
+					return Optional.of(TipoUsuarioEnum.NO_PAGO);
+				} else if (this.estaAlDia(u.get().getAgreementId())) {
 					return Optional.of(TipoUsuarioEnum.USUARIO);
-				//}
-				//	return Optional.of(TipoUsuarioEnum.NO_PAGO);
-			//} else {
-			//	return Optional.of(TipoUsuarioEnum.Forbbiden);
+				} else {
+					return Optional.of(TipoUsuarioEnum.NO_PAGO);
+				}
+			} else {
+				return Optional.of(TipoUsuarioEnum.Forbbiden);
 			}
 		}
 		return Optional.empty();
@@ -97,57 +101,45 @@ public class LoginServiceBean implements LoginService {
 	}
 
 	@Override
-	public Optional<Usuario> altaOLoginConGmail(String id, String email) {
+	public Optional<Usuario> altaOLoginConGmail(String id, String email, String nombre, String apellido) {
 		Optional<Usuario> usr = usuarioRepository.findByEmail(email);
-		if (!usr.isPresent()){
-			Usuario dtos = new Usuario();
-			dtos.setEmail(email);
-			dtos.setGmailToken(id);
-			return this.altaUsuario(dtos);
+		if (!usr.isPresent()) {
+			usuarioService.crearUser(email, null, nombre, apellido, id);
+			return usuarioRepository.findByEmail(email);
 		}
-		if (usr.get().getGmailToken() == null || usr.get().getGmailToken().length() < 3) {
-			usr.get().setGmailToken(id);
+		if (usr.get().getGmailToken() == null) {
+			usr.get().setGmailToken(passwordUtil.hasherPassword(id));
 			usuarioRepository.save(usr.get());
-		} else if (!usr.get().getGmailToken().equals(org.apache.commons.codec.digest.DigestUtils.sha256Hex(id))) {
-			return Optional.empty();
+		} else if (passwordUtil.checkearPassword(id, usr.get().getGmailToken())) {
+			return usr;
 		}
-		return usr;
+		return Optional.empty();
 	}
-
-	private Optional<Usuario> altaUsuario(Usuario dtos) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 
 	@SuppressWarnings("unchecked")
-	private boolean estaAlDia(String aggrementId){
-		
-	RestTemplate restTemplate = new RestTemplate();
-	HttpHeaders headers = new HttpHeaders();
-	String str = "AZLd59EEDCSAKB0XEEFx0EedYoNOJrNRb3anFHdpiuyMcJdYXymDE2GPm9C6O01xJ-vqOrT3rES7pFAT:EHdx9CNQvyZsD13vOJiHDEbvVRgPhadRLyDh41mRctwK0l1mZATpEXGR-R_ZEmeqFEPAdKiVaxMtjyic";
-//	byte[]   bytesEncoded = Base64.encodeBase64(str .getBytes());
-//	byte[] encodedBytes = Base64.encodeBase64(str.getBytes());
-	
-	
-	headers.add("Authorization", "Basic QVpMZDU5RUVEQ1NBS0IwWEVFRngwRWVkWW9OT0pyTlJiM2FuRkhkcGl1eU1jSmRZWHltREUyR1BtOUM2TzAxeEotdnFPclQzckVTN3BGQVQ6RUhkeDlDTlF2eVpzRDEzdk9KaUhERWJ2VlJnUGhhZFJMeURoNDFtUmN0d0swbDFtWkFUcEVYR1ItUl9aRW1lcUZFUEFkS2lWYXhNdGp5aWM=");
-	headers.add("Content-Type", "application/json");
-	HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
-	
-	//I-6EDLAK447HV9
-	
-	ResponseEntity<Object> respEntity = restTemplate.exchange("https://api.sandbox.paypal.com/v1/payments/billing-agreements/" + aggrementId , HttpMethod.GET, entity, Object.class);
+	private boolean estaAlDia(String aggrementId) {
 
-	Object resp = respEntity.getBody();
-	Map<String , String> campos = (Map<String, String>) resp;
-	String state = campos.get("state");
-	boolean isActive = false;
-	if (state.equalsIgnoreCase("Active")){
-		isActive = true;
+		RestTemplate restTemplate = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders();
+
+		headers.add("Authorization",
+				"Basic QVpMZDU5RUVEQ1NBS0IwWEVFRngwRWVkWW9OT0pyTlJiM2FuRkhkcGl1eU1jSmRZWHltREUyR1BtOUM2TzAxeEotdnFPclQzckVTN3BGQVQ6RUhkeDlDTlF2eVpzRDEzdk9KaUhERWJ2VlJnUGhhZFJMeURoNDFtUmN0d0swbDFtWkFUcEVYR1ItUl9aRW1lcUZFUEFkS2lWYXhNdGp5aWM=");
+		headers.add("Content-Type", "application/json");
+		HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
+
+		ResponseEntity<Object> respEntity = restTemplate.exchange(
+				"https://api.sandbox.paypal.com/v1/payments/billing-agreements/" + aggrementId, HttpMethod.GET, entity,
+				Object.class);
+
+		Object resp = respEntity.getBody();
+		Map<String, String> campos = (Map<String, String>) resp;
+		String state = campos.get("state");
+		boolean isActive = false;
+		if (state.equalsIgnoreCase("Active")) {
+			isActive = true;
+		}
+		return isActive;
+
 	}
-	return isActive;
-	
-	}
-	
-	
+
 }

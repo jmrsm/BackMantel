@@ -21,7 +21,7 @@ public interface UsuarioService {
 	
 	boolean login(String email,String password);
 	
-	boolean crearUser(String email,String password,String nombre,String apellido);
+	boolean crearUser(String email,String password,String nombre,String apellido, String gmailId);
 
 	List<Contenido> listarFavoritos(Long id);
 

@@ -8,6 +8,8 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
+import it.ozimov.springboot.mail.configuration.EnableEmailTools;
+@EnableEmailTools
 @SpringBootApplication
 public class MantelApplication extends SpringBootServletInitializer {
 
@@ -15,6 +17,7 @@ public class MantelApplication extends SpringBootServletInitializer {
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 		return application.sources(MantelApplication.class);
 	}
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(MantelApplication.class, args);

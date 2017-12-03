@@ -56,7 +56,7 @@ public class Usuario {
 	@Column(length = 50, nullable = false)
 	private String email;
 
-	@Column(length = 512, nullable = false)
+	@Column(length = 512, nullable = true)
 	private String passowd;
 
 	@Column(length = 50, nullable = false)

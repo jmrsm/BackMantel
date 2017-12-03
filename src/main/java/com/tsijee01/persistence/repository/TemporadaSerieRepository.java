@@ -13,5 +13,6 @@ public interface TemporadaSerieRepository extends BaseRepository<TemporadaSerie 
 
 	Optional<TemporadaSerie> findByTemporadaAndSerie(int temporada, Serie serie);
 	List<TemporadaSerie> findBySerie(Serie serie);
+	TemporadaSerie findOne(long id);
 
 }

@@ -1,23 +1,21 @@
 package com.tsijee01.service.bean;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
+import javax.mail.internet.InternetAddress;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.paypal.base.codec.binary.Base64;
+import com.google.common.collect.Lists;
 import com.tsijee01.persistence.model.AdminTenant;
 import com.tsijee01.persistence.model.Contenido;
 import com.tsijee01.persistence.model.HistorialContenido;
@@ -29,6 +27,10 @@ import com.tsijee01.persistence.repository.SuperAdminRepository;
 import com.tsijee01.persistence.repository.UsuarioRepository;
 import com.tsijee01.service.UsuarioService;
 import com.tsijee01.util.Password;
+
+import it.ozimov.springboot.mail.model.Email;
+import it.ozimov.springboot.mail.model.defaultimpl.DefaultEmail;
+import it.ozimov.springboot.mail.service.EmailService;
 
 @Service
 public class UsuarioServiceBean implements UsuarioService{
@@ -57,7 +59,27 @@ public class UsuarioServiceBean implements UsuarioService{
 	@Autowired
 	private HistorialContenidoRepository historialContenidoRepository; 
 	
+	@Autowired
+	public EmailService emailService;
 
+	public void sendEmail(String destino, String nombre){
+	   Email email;
+	try {
+		email = DefaultEmail.builder()
+		        .from(new InternetAddress("MantelTsi2Java@gmail.com", "Mantel "))
+		        .to(Lists.newArrayList(new InternetAddress(destino, nombre)))
+		        .subject("Bienvenido a Mantel")
+		        .body("Felicitaciones, ahora es usuario/a de la mejor plataforma de contenido multimedia.")
+		        .encoding("UTF-8").build();
+		emailService.send(email);
+	} catch (UnsupportedEncodingException e) {
+		e.printStackTrace();
+	}
+
+	   
+	}
+	
+	
 	@Override
 	public Page<Usuario> listarUsuarios(Pageable pag) {
 		return usuarioRepository.findAll(pag);
@@ -116,7 +138,7 @@ public class UsuarioServiceBean implements UsuarioService{
 		return false;
 	}
 	@Override
-	public boolean crearUser(String email, String password, String nombre, String apellido) {
+	public boolean crearUser(String email, String password, String nombre, String apellido, String gmailId) {
 
 		Optional<SuperAdmin> sa = superadminRepository.findOneByEmail(email);
 		if (sa.isPresent()){
@@ -130,13 +152,19 @@ public class UsuarioServiceBean implements UsuarioService{
 		if(u.isPresent()){
 			//Si el usuario ya existe
 			return false;
-		}else{
+		}else{	
 			Usuario user= new Usuario();
 			user.setApellido(apellido);
 			user.setEmail(email);
 			user.setHabilitado(true);
 			user.setNombre(nombre);
-			user.setPassowd(passwordUtil.hasherPassword(password));
+			if (gmailId!=null){
+				user.setGmailToken(passwordUtil.hasherPassword(gmailId));
+			}else {
+				user.setPassowd(passwordUtil.hasherPassword(password));
+				
+			}
+//			sendEmail(email, nombre);
 			usuarioRepository.save(user);
 			return true;
 		}

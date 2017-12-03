@@ -30,6 +30,7 @@ import com.tsijee01.persistence.model.Contenido;
 import com.tsijee01.persistence.model.Evento;
 import com.tsijee01.persistence.model.Pelicula;
 import com.tsijee01.persistence.model.Serie;
+import com.tsijee01.persistence.model.TemporadaSerie;
 import com.tsijee01.rest.dto.CategoriaDTO;
 import com.tsijee01.rest.dto.ContenidoDTO;
 import com.tsijee01.rest.dto.EpisodioDTO;
@@ -646,8 +647,13 @@ public class ContenidoController {
 	public ResponseEntity<List<EpisodioDTO>> ObtenerEpisodiosSerie(HttpServletRequest request,
 			@RequestParam(name = "serieId", required = true) Long idSerie) {
 		List<CapituloSerie> capitulosSerie = contenidoService.obtenerEpisodiosSeries(idSerie);
+		List<EpisodioDTO> aux = mapper.mapAsList(capitulosSerie, EpisodioDTO.class);
+		for (EpisodioDTO epi: aux) {
+			TemporadaSerie ts = contenidoService.findTemporada(epi.getIdTemporada());
+			epi.setTemporadaN(ts.getTemporada());
+		}
 		
-		return new ResponseEntity<List<EpisodioDTO>>(mapper.mapAsList(capitulosSerie, EpisodioDTO.class), HttpStatus.OK);
+		return new ResponseEntity<List<EpisodioDTO>>(aux, HttpStatus.OK);
 		
 	}
 	
