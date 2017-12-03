@@ -85,4 +85,6 @@ public interface ContenidoService {
 	
 	TemporadaSerie findTemporada(long id);
 
+	List<Contenido> recomendarContenido(String email);
+
 }

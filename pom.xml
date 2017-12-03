@@ -6,7 +6,7 @@
 	<groupId>com.tsijee01.mantel</groupId>
 	<artifactId>TSI2</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>Mantel</name>
 
 
@@ -176,8 +176,16 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				 <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
 			</plugin>
 		</plugins>
+		
 	</build>
 
 </project>

@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -135,11 +137,11 @@ public class ContenidoServiceBean implements ContenidoService {
 	public boolean altaContenido(ContenidoDTO contenido) {
 
 		TipoContenidoEnum tcEnum = contenido.getTipoContenido();
-		String poster = contenido.getFotoPortada(); 
+		String poster = contenido.getFotoPortada();
 		poster = poster.replace("%26token", "&token");
 		poster = poster.replace("/o/imagenes/", "/o/imagenes%2F");
 		contenido.setFotoPortada(poster);
-		String path = contenido.getPath(); 
+		String path = contenido.getPath();
 		path = path.replace("%26token", "&token");
 		path = path.replace("/o/videos/", "/o/videos%2F");
 		contenido.setPath(path);
@@ -149,8 +151,7 @@ public class ContenidoServiceBean implements ContenidoService {
 			if (contenido.getEsPago()) {
 				eventoDeportivo.setEsPago(true);
 				eventoDeportivo.setPrecio(contenido.getPrecio());
-			}
-			else {
+			} else {
 				eventoDeportivo.setEsPago(false);
 				eventoDeportivo.setPrecio(0);
 			}
@@ -166,8 +167,7 @@ public class ContenidoServiceBean implements ContenidoService {
 			if (contenido.getEsPago()) {
 				espectaculo.setEsPago(true);
 				espectaculo.setPrecio(contenido.getPrecio());
-			}
-			else {
+			} else {
 				espectaculo.setEsPago(false);
 				espectaculo.setPrecio(0);
 			}
@@ -192,7 +192,7 @@ public class ContenidoServiceBean implements ContenidoService {
 		Optional<ProveedorContenido> pc = proveedorContenidoRepository.findOne(cont.getProveedorContenido().getId());
 		cont.setProveedorContenido(pc.get());
 		List<Actor> actores = new ArrayList<Actor>();
-		if (cont.getActores() !=null){
+		if (cont.getActores() != null) {
 			cont.getActores().forEach(act -> {
 				Actor a = new Actor();
 				a.setId(act.getId());
@@ -205,8 +205,8 @@ public class ContenidoServiceBean implements ContenidoService {
 				cont.getActores().add(actorDB);
 			});
 		}
-		
-		if (cont.getCategorias() != null){
+
+		if (cont.getCategorias() != null) {
 			List<Categoria> categorias = new ArrayList<Categoria>();
 			cont.getCategorias().forEach(cat -> {
 				Categoria c = new Categoria();
@@ -221,21 +221,20 @@ public class ContenidoServiceBean implements ContenidoService {
 			});
 
 		}
-		if (cont.getDirectores()!=null){
-		List<Director> directores = new ArrayList<Director>();
-		cont.getDirectores().forEach(dir -> {
-			Director d = new Director();
-			d.setId(dir.getId());
-			directores.add(d);
-		});
-		directores.forEach(dir -> {
-			cont.getDirectores().remove(dir);
-			Director direcotrDB = directorRepository.findOne(dir.getId()).get();
-			direcotrDB.getContenido().add(cont);
-			cont.getDirectores().add(direcotrDB);
-		});
+		if (cont.getDirectores() != null) {
+			List<Director> directores = new ArrayList<Director>();
+			cont.getDirectores().forEach(dir -> {
+				Director d = new Director();
+				d.setId(dir.getId());
+				directores.add(d);
+			});
+			directores.forEach(dir -> {
+				cont.getDirectores().remove(dir);
+				Director direcotrDB = directorRepository.findOne(dir.getId()).get();
+				direcotrDB.getContenido().add(cont);
+				cont.getDirectores().add(direcotrDB);
+			});
 		}
-		
 
 		return cont;
 	}
@@ -318,12 +317,6 @@ public class ContenidoServiceBean implements ContenidoService {
 		return categoriaRepository.findAll();
 	}
 
-	public List<Pelicula> recomendarAUsuario(Long usuarioId) {
-//		Optional<Usuario> usuario = usuarioRepository.findOne(usuarioId);
-//		List<HistorialContenido> contenido = historialContenidoRepository.findByUsuario(usuario.get());
-		return null;
-	}
-
 	@Override
 	public void marcarDestacado(Long contenidoId, Boolean esDestacado) {
 		Optional<Contenido> cont = contenidoRepository.findOne(contenidoId);
@@ -347,15 +340,15 @@ public class ContenidoServiceBean implements ContenidoService {
 		Optional<HistorialContenido> h = historialContenidoRepository.findByContenidoAndUsuario(cont.get(), u.get());
 
 		if (h.isPresent()) {
-			if (h.get().isVisto()){
+			if (h.get().isVisto()) {
 				h.get().setTiempoDeReproduccion(tiempo);
 				historialContenidoRepository.save(h.get());
-			}else {
+			} else {
 				h.get().setVisto(true);
 				h.get().setTiempoDeReproduccion(tiempo);
 				historialContenidoRepository.save(h.get());
 			}
-			
+
 		} else {
 			HistorialContenido hn = new HistorialContenido();
 			hn.setFechaReproduccion(new Date());
@@ -423,7 +416,7 @@ public class ContenidoServiceBean implements ContenidoService {
 	public Page<Pelicula> buscarTodasLasPeliculas(Pageable pag) {
 		return peliculaRepositoy.findByEsBloqueadoFalse(pag);
 	}
-	
+
 	@Override
 	public Page<Serie> buscarTodasLasSeries(Pageable pag) {
 		return serieRepositoy.findByEsBloqueadoFalse(pag);
@@ -573,18 +566,17 @@ public class ContenidoServiceBean implements ContenidoService {
 		}
 
 	}
-	
 
 	@Override
 	public Page<Evento> listarEventos(Pageable pag) {
 		return eventoRepository.findAll(pag);
-		
+
 	}
 
 	@Override
 	public Page<Evento> listarEventosConBusqueda(Pageable pag, String query) {
 		return eventoRepository.findByTituloContainingOrDescipcionContaining(pag, query, query);
-		
+
 	}
 
 	@Override
@@ -595,35 +587,35 @@ public class ContenidoServiceBean implements ContenidoService {
 	@Override
 	public Page<Serie> buscarSerie(Pageable pag, String query) {
 		return serieRepository.findByTituloContainingOrDescipcionContaining(pag, query, query);
-		
-		
+
 	}
 
 	@Override
 	public Page<Serie> listarSeries(Pageable pag) {
 		return serieRepository.findAll(pag);
 	}
+
 	@Override
 	public Contenido verDatoContenido(Long idContenido) {
-		Optional<Contenido> cont= contenidoRepository.findOne(idContenido);
+		Optional<Contenido> cont = contenidoRepository.findOne(idContenido);
 		return cont.get();
 	}
 
 	@Override
 	public void agregarPrecio(Long id, int precio) {
-		Optional<Contenido> cont= contenidoRepository.findOne(id);
+		Optional<Contenido> cont = contenidoRepository.findOne(id);
 		cont.get().setEsPago(true);
 		cont.get().setPrecio(precio);
-		
+
 		contenidoRepository.save(cont.get());
 	}
-	
+
 	@Override
 	public List<CapituloSerie> obtenerEpisodiosSeries(Long idSerie) {
 		List<CapituloSerie> res = new ArrayList<CapituloSerie>();
 		Optional<Serie> s = serieRepository.findOne(idSerie);
 		List<TemporadaSerie> t = temporadaSerieRepository.findBySerie(s.get());
-		for (TemporadaSerie temp: t) {
+		for (TemporadaSerie temp : t) {
 			List<CapituloSerie> aux = capituloRepository.findByTemporada(temp);
 			res.addAll(aux);
 		}
@@ -633,6 +625,23 @@ public class ContenidoServiceBean implements ContenidoService {
 	@Override
 	public TemporadaSerie findTemporada(long id) {
 		return temporadaSerieRepository.findOne(id);
+	}
+
+	@Override
+	public List<Contenido> recomendarContenido(String email) {
+
+		Usuario user = usuarioRepository.findByEmail(email).get();
+		List<HistorialContenido> historial = historialContenidoRepository.findByUsuario(user);
+		if (historial.isEmpty()) {
+			peliculaRepositoy.findAll();
+		} else {
+			Set<Contenido> contenidos = historial.stream().filter(h -> h.isFavorito() && !h.isVisto())
+					.map(hist -> hist.getContenido()).collect(Collectors.toSet());
+			contenidos.addAll(historial.stream().filter(h -> !h.isFavorito() && !h.isVisto() && h.getPuntuacion()>4  )
+					.map(hist -> hist.getContenido()).collect(Collectors.toSet()));
+		}
+
+		return null;
 	}
 
 }

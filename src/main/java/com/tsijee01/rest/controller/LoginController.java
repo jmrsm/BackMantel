@@ -67,7 +67,7 @@ public class LoginController {
 	}
 
 	@RequestMapping(path = "/loginUsuarioFinalGmail/", method = RequestMethod.POST)
-	public ResponseEntity<?> loginUsuarioFinalGmail(HttpServletRequest request,
+	public ResponseEntity<Long> loginUsuarioFinalGmail(HttpServletRequest request,
 			@RequestParam(name = "email", required = false) String email,
 			@RequestParam(name = "nombre", required = false) String nombre,
 			@RequestParam(name = "apellido", required = false) String apellido,
@@ -77,10 +77,10 @@ public class LoginController {
 		if (usuario.isPresent()) {
 			HttpSession sesion = request.getSession();
 			sesion.setAttribute("USUARIO", email);
-			return new ResponseEntity<Object>(HttpStatus.OK);
+			return new ResponseEntity<Long>(usuario.get().getId(), HttpStatus.OK);
 
 		}
-		return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+		return new ResponseEntity<Long>(HttpStatus.FORBIDDEN);
 	}
 
 }
