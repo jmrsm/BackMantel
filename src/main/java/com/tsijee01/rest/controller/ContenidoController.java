@@ -650,5 +650,6 @@ public class ContenidoController {
 		return new ResponseEntity<List<EpisodioDTO>>(mapper.mapAsList(capitulosSerie, EpisodioDTO.class), HttpStatus.OK);
 		
 	}
+	
 
 }

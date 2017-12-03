@@ -192,6 +192,23 @@ public class SuperAdminController {
 		return null;
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
+	@RequestMapping(path = "api/superAdmin/bloquearContenido", method = RequestMethod.PUT)
+	public ResponseEntity<?> bloquearContenido(HttpServletRequest request, 
+			@RequestParam(name = "id", required = true) String id,
+			@RequestParam(name = "bloquear", required = true) Boolean bloquear) {
+		
+//		String mailSuperAdmin = (String) request.getSession().getAttribute("SUPER_ADMIN");
+//		if (mailSuperAdmin == null) {
+//			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+//		}
+		
+		Long i = Long.parseLong(id);
+		superAdminService.bloquearContenido(i, bloquear);
+		return null;
+	}
+	
+	
 	
 }
 
