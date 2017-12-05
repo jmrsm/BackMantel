@@ -72,7 +72,7 @@ public class SuperAdminServiceBean implements SuperAdminService {
 	}
 
 	@Override
-	public void bloquearUsuario(String mail, Boolean habilitado) {
+	public Boolean bloquearUsuario(String mail, Boolean habilitado) {
 		
 		Optional <Usuario> u = usuarioRepository.findByEmail(mail);
 		
@@ -80,14 +80,14 @@ public class SuperAdminServiceBean implements SuperAdminService {
 			u.get().setHabilitado(habilitado);
 		}
 		else {
-		return;
+		return false;
 		}
-		
 		usuarioRepository.save(u.get());
+		return true;
 	}
 
 	@Override
-	public void bloquearContenido(Long idContenido, Boolean bloquear) {
+	public Boolean bloquearContenido(Long idContenido, Boolean bloquear) {
 		
 		Optional <Contenido> cont = contenidoRepository.findOne(idContenido);
 		
@@ -95,11 +95,11 @@ public class SuperAdminServiceBean implements SuperAdminService {
 			cont.get().setEsBloqueado(bloquear);
 		}
 		else {
-		return;
+		return false;
 		}
 		
 		contenidoRepository.save(cont.get());
-		
+		return true;
 	}
 
 }

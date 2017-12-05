@@ -179,7 +179,7 @@ public class SuperAdminController {
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/superAdmin/bloquearUsuario", method = RequestMethod.PUT)
-	public ResponseEntity<?> bloquearUsuario(HttpServletRequest request, 
+	public ResponseEntity<Boolean> bloquearUsuario(HttpServletRequest request, 
 			@RequestParam(name = "email", required = true) String email,
 			@RequestParam(name = "bloquear", required = true) Boolean habilitado) {
 		
@@ -188,8 +188,8 @@ public class SuperAdminController {
 //			return new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
 //		}
 		
-		superAdminService.bloquearUsuario(email, habilitado);
-		return null;
+			return new ResponseEntity<Boolean>(superAdminService.bloquearUsuario(email, habilitado), HttpStatus.OK);
+
 	}
 	
 	@CrossOrigin(origins = "http://localhost:4200")
@@ -204,8 +204,8 @@ public class SuperAdminController {
 //		}
 		
 		Long i = Long.parseLong(id);
-		superAdminService.bloquearContenido(i, bloquear);
-		return null;
+		return new ResponseEntity<Boolean>(superAdminService.bloquearContenido(i, bloquear), HttpStatus.OK);
+
 	}
 	
 	
