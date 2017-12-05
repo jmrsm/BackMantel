@@ -29,7 +29,7 @@ public class LoginController {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 
-	@CrossOrigin(origins = "http://localhost:4200")
+//	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/public/login", method = RequestMethod.GET)
 	public ResponseEntity<LoginDTO> loginAdministradorTenant(HttpServletRequest request,
 			@RequestParam(name = "email", required = true) String email,

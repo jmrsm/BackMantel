@@ -29,7 +29,7 @@ public class UsuarioController {
 	@Autowired
 	private MapperFacade mapper;
 
-	@CrossOrigin(origins = "http://localhost:4200")
+//	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(path = "api/public/altaUsuario", method = RequestMethod.POST)
 	public ResponseEntity<?> createUser(HttpServletRequest request,
 			@RequestParam(name = "email", required = true) String email,
@@ -37,6 +37,12 @@ public class UsuarioController {
 			@RequestParam(name = "nombre", required = true) String nombre,
 			@RequestParam(name = "apellido", required = true) String apellido) {
 
+		System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+		System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+		System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+		System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+		System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+		
 		if (userService.crearUser(email, password, nombre, apellido,null)) {
 			return new ResponseEntity<Object>(HttpStatus.OK);
 		} else {
